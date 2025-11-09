@@ -37,7 +37,8 @@ window._DEFAULT_SITE_DATA = {
    Utility kecil
 ----------------------------*/
 const safeQuery = (sel, ctx = document) => ctx.querySelector(sel);
-const safeQueryAll = (sel, ctx = document) => Array.from((ctx || document).querySelectorAll(sel || []));
+const safeQueryAll = (sel, ctx = document) =>
+  Array.from((ctx || document).querySelectorAll(sel || []));
 
 /* ---------------------------
    DATA LOADING
@@ -48,50 +49,46 @@ async function loadData() {
   try {
     if (window.location.protocol === 'file:') {
       console.warn('Running locally — skip fetch and use fallback.');
-      siteData = window._DEFAULT_SITE_DATA;  // langsung fallback
+      siteData = window._DEFAULT_SITE_DATA; // fallback lokal
     } else {
       const res = await fetch('package.json', { cache: 'no-cache' });
       if (!res.ok) throw new Error(`Fetch failed (${res.status})`);
       const json = await res.json();
       siteData = json.content ? json.content : json;
-      console.info('Loaded data from package.json');
+      console.info('✅ Loaded data from package.json');
     }
   } catch (err) {
-    console.warn('package.json fetch failed — using embedded fallback.', err);
+    console.warn('⚠️ package.json fetch failed — using fallback.', err);
     siteData = window._DEFAULT_SITE_DATA;
   } finally {
     siteData = siteData || window._DEFAULT_SITE_DATA;
     initializePage();
   }
 }
+
 console.log("✅ initializePage() started");
-
-
 
 /* ---------------------------
    INITIALIZE PAGE (populate + inits)
 ----------------------------*/
 function initializePage() {
-  // If siteData not ready, guard
   if (!siteData) siteData = window._DEFAULT_SITE_DATA;
 
-  // Populate dynamic content if placeholders exist
-// Populate dynamic content if placeholders exist
-try {
-  if (safeQuery('.hero-slider')) populateHero();
-  if (safeQuery('#aboutPara1')) populateAbout();
-  if (safeQuery('#aboutGallery')) populateAboutGallery(); // ✅ tambahan
-  if (safeQuery('#programsGrid')) populatePrograms();
-  if (safeQuery('#newsSlider')) populateNews();
-  if (safeQuery('#testimonialsGrid')) populateTestimonials();
-  if (safeQuery('#faqList')) populateFAQ();
-  populateFooter();
-} catch (e) {
-  console.error('Error when populating content (non-fatal)', e);
-}
+  // === Populate dynamic content ===
+  try {
+    if (safeQuery('.hero-slider')) populateHero();
+    if (safeQuery('#aboutPara1')) populateAbout();
+    if (safeQuery('#aboutGallery')) populateAboutGallery(); // tambahan
+    if (safeQuery('#programsGrid')) populatePrograms();
+    if (safeQuery('#newsSlider')) populateNews();
+    if (safeQuery('#testimonialsGrid')) populateTestimonials();
+    if (safeQuery('#faqList')) populateFAQ();
+    populateFooter();
+  } catch (e) {
+    console.error('Error when populating content (non-fatal):', e);
+  }
 
-
-  // Initialize UI components
+  // === Initialize UI components ===
   try {
     if (safeQuery('.hero-slider')) initSliders();
     if (safeQuery('.stats')) initStats();
@@ -101,41 +98,45 @@ try {
   } catch (e) {
     console.warn('Some inits failed:', e);
   }
-}
 
-
-  
-  // Global inits
-  initMobileMenu();
-  initDropdowns(); // ✅ tambahkan baris ini di sini, bukan bikin fungsi baru
+  // === Global inits ===
+  initMobileMenu();      // versi kamu
+  initDropdowns();       // menu dropdown
   initScrollTop();
   initSmoothScroll();
   initHeader();
-  initRouting(); // set up SPA routing (intercepts nav links)
+  initRouting();
+}
 
-/* === DROPDOWN BEHAVIOR === */
+/* ---------------------------
+   DROPDOWN BEHAVIOR (mobile + desktop)
+----------------------------*/
 function initDropdowns() {
   const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
 
-  dropdownToggles.forEach(toggle => {
+  dropdownToggles.forEach((toggle) => {
     toggle.addEventListener('click', (e) => {
       const menu = toggle.nextElementSibling;
 
-      // --- MOBILE BEHAVIOR ---
+      // === MOBILE BEHAVIOR ===
       if (window.innerWidth <= 1024) {
         if (!menu.classList.contains('active')) {
           // klik pertama → buka dropdown
           e.preventDefault();
           menu.classList.add('active');
         } else {
-          // klik kedua → jalankan navigasi link
+          // klik kedua → jalankan navigasi link internal
           const target = toggle.getAttribute('href');
           if (target && target.startsWith('#')) {
             e.preventDefault();
             showSection(target);
             history.pushState({ section: target }, '', target);
             setActiveNav(target);
-            document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
+
+            // tutup dropdown & menu
+            document
+              .querySelectorAll('.dropdown-menu.active')
+              .forEach((m) => m.classList.remove('active'));
             document.body.classList.remove('menu-open');
           }
         }
@@ -143,26 +144,32 @@ function initDropdowns() {
     });
   });
 
-  // Close dropdowns if click outside (mobile)
+  // === Close dropdown if click outside ===
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.nav-item')) {
-      document.querySelectorAll('.dropdown-menu.active').forEach(menu => menu.classList.remove('active'));
+      document
+        .querySelectorAll('.dropdown-menu.active')
+        .forEach((menu) => menu.classList.remove('active'));
     }
   });
 
-  // --- DESKTOP LINKS / DROPDOWN LINKS ---
-  document.querySelectorAll('.nav-link[href^="#"], .dropdown-link[href^="#"]').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const target = link.getAttribute('href');
-      showSection(target);
-      history.pushState({ section: target }, '', target);
-      setActiveNav(target);
-      const nav = document.getElementById('mainNav');
-      nav?.classList.remove('active');
-      document.body.classList.remove('menu-open');
+  // === Handle internal links (both nav & dropdown) ===
+  document
+    .querySelectorAll('.nav-link[href^="#"], .dropdown-link[href^="#"]')
+    .forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = link.getAttribute('href');
+        showSection(target);
+        history.pushState({ section: target }, '', target);
+        setActiveNav(target);
+
+        // tutup menu dan hilangkan scroll lock
+        const nav = document.getElementById('mainNav');
+        nav?.classList.remove('active');
+        document.body.classList.remove('menu-open');
+      });
     });
-  });
 }
 
 
@@ -848,3 +855,38 @@ document.querySelectorAll('.gallery-item img').forEach((img) => {
     }
   });
 });
+function initMobileMenu() {
+  const menuBtn = document.getElementById("mobileMenuBtn");
+  const nav = document.getElementById("mainNav");
+  const body = document.body;
+
+  if (!menuBtn || !nav) return;
+
+  // buka/tutup menu
+  menuBtn.addEventListener("click", () => {
+    nav.classList.toggle("active");
+    body.classList.toggle("menu-open");
+  });
+
+  // dropdown behavior di mobile
+  document.querySelectorAll(".dropdown-toggle").forEach((toggle) => {
+    toggle.addEventListener("click", (e) => {
+      if (window.innerWidth <= 1024) {
+        e.preventDefault();
+        const dropdown = toggle.nextElementSibling;
+        document.querySelectorAll(".dropdown-menu.active").forEach((m) => {
+          if (m !== dropdown) m.classList.remove("active");
+        });
+        dropdown.classList.toggle("active");
+      }
+    });
+  });
+
+  // tutup menu ketika link diklik
+  document.querySelectorAll(".nav-link, .dropdown-link").forEach((link) => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("active");
+      body.classList.remove("menu-open");
+    });
+  });
+}

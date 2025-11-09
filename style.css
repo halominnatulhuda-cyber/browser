@@ -262,8 +262,8 @@ body {
   position: relative;
   height: 450px; /* tinggi banner */
   overflow: hidden;
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
   box-shadow: 0 8px 25px rgba(0,0,0,0.08);
 
   margin-top: 0;    /* tempel ke header */
@@ -630,77 +630,133 @@ section {
     line-height: 1.6;
 }
 
-.news {
-    background: var(--bg-light);
-}
+/* ==== NEWS SECTION IMPROVED ==== */
 
-.news-slider {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    margin-bottom: 40px;
-}
-
+/* interaktif saat hover / clickable */
 .news-card {
-    background: var(--bg-white);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition);
+  background: var(--bg-white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  cursor: pointer; /* biar terasa bisa diklik */
 }
 
 .news-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
 }
 
-.news-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
+/* gaya judul saat hover */
+.news-card:hover .news-title {
+  color: var(--accent-color);
 }
 
-.news-content {
-    padding: 25px;
+/* ==== MODAL DETAIL BERITA ==== */
+
+#newsModal.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
 }
 
-.news-date {
-    color: var(--accent-color);
-    font-size: 0.9rem;
-    margin-bottom: 10px;
+#newsModal.modal.active {
+  display: flex;
 }
 
-.news-title {
-    font-size: 1.2rem;
-    color: var(--primary-color);
-    margin-bottom: 10px;
+#newsModal .modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
 }
 
-.news-description {
-    color: var(--text-light);
-    line-height: 1.6;
+#newsModal .modal-content {
+  position: relative;
+  background: var(--bg-white);
+  border-radius: var(--radius-lg);
+  max-width: 800px;
+  width: 90%;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  animation: modalFadeIn 0.35s ease;
+  z-index: 1;
 }
 
-.news-nav {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
+#newsModal .modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  z-index: 2;
 }
 
-.news-nav-btn {
-    background: var(--primary-color);
-    border: none;
-    color: var(--text-white);
-    padding: 12px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: var(--transition);
+#newsModal .modal-close:hover {
+  background: rgba(0, 0, 0, 0.8);
+  transform: rotate(90deg);
 }
 
-.news-nav-btn:hover {
-    background: var(--primary-dark);
-    transform: scale(1.1);
+#newsModal .modal-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
 }
+
+#newsModal .modal-body {
+  padding: 30px;
+}
+
+#newsModal .modal-title {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+#newsModal .modal-text {
+  color: var(--text-light);
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+/* efek animasi muncul */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* responsive */
+@media (max-width: 768px) {
+  #newsModal .modal-image {
+    height: 220px;
+  }
+  #newsModal .modal-body {
+    padding: 20px;
+  }
+  #newsModal .modal-title {
+    font-size: 1.5rem;
+  }
+}
+
 
 .testimonials-grid {
     display: grid;

@@ -97,6 +97,7 @@ try {
     if (safeQuery('.stats')) initStats();
     if (safeQuery('.faq-question')) initFAQ();
     if (safeQuery('#programModal')) initModal();
+    if (safeQuery('#newsModal')) initNewsModal();
   } catch (e) {
     console.warn('Some inits failed:', e);
   }
@@ -282,6 +283,42 @@ function populateNews() {
     `;
   }).join('');
 }
+
+/* ----------------------------------------
+   NEWS MODAL HANDLING
+---------------------------------------- */
+/* ----------------------------------------
+   NEWS MODAL HANDLING
+---------------------------------------- */
+function initNewsModal() {
+  const modal = document.getElementById("newsModal");
+  const modalImg = document.getElementById("newsModalImage");
+  const modalTitle = document.getElementById("newsModalTitle");
+  const modalText = document.getElementById("newsModalText");
+  const modalClose = modal.querySelector(".modal-close");
+  const overlay = modal.querySelector(".modal-overlay");
+
+  const closeModal = () => modal.classList.remove("active");
+  modalClose.addEventListener("click", closeModal);
+  overlay.addEventListener("click", closeModal);
+
+  // Tambahkan click listener ke semua news-card
+  document.querySelectorAll(".news-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      const img = card.querySelector(".news-image")?.src || "";
+      const title = card.querySelector(".news-title")?.textContent || "";
+      const desc = card.querySelector(".news-description")?.textContent || "";
+      const date = card.querySelector(".news-date")?.textContent || "";
+
+      modalImg.src = img;
+      modalTitle.textContent = title;
+      modalText.innerHTML = `<strong>${date}</strong><br><br>${desc}`;
+      modal.classList.add("active");
+    });
+  });
+}
+
+
 
 function populateTestimonials() {
   const testimonialsGrid = document.getElementById('testimonialsGrid');

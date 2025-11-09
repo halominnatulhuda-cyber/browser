@@ -108,6 +108,9 @@ function initializePage() {
     console.warn('Some inits failed:', e);
   }
 
+
+
+  
   // Global inits
   initMobileMenu();
   initScrollTop();
@@ -120,6 +123,46 @@ function initializePage() {
 
   // Run page-specific initializers (fallback: keep previous behavior)
   initCurrentPage();
+}
+/* === DROPDOWN BEHAVIOR === */
+function initDropdowns() {
+  const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+  dropdownToggles.forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+      if (window.innerWidth <= 1024) {
+        e.preventDefault();
+        const menu = toggle.nextElementSibling;
+        menu.classList.toggle('active');
+      }
+    });
+  });
+
+  // close dropdowns when clicking outside (mobile)
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-item')) {
+      document.querySelectorAll('.dropdown-menu.active').forEach(menu => menu.classList.remove('active'));
+    }
+  });
+
+  // handle internal links (like #tentang)
+  document.querySelectorAll('.nav-link[href^="#"], .dropdown-link[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = link.getAttribute('href');
+      showSection(target);
+      history.pushState({ section: target }, '', target);
+      setActiveNav(target);
+      const nav = document.getElementById('mainNav');
+      nav?.classList.remove('active');
+      document.body.classList.remove('menu-open');
+    });
+  });
+}
+
+/* panggil di initializePage() */
+function initializePage() {
+  ...
+  initDropdowns(); // tambahkan baris ini di bagian inisialisasi
 }
 
 /* ---------------------------

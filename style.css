@@ -756,7 +756,10 @@ section {
     flex-direction: column;
     gap: 30px;
     text-align: center;
-  }/* ==== PROGRAM SECTION ==== */
+  }
+  
+  
+  /* ==== PROGRAM SECTION ==== */
 .programs-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));

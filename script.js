@@ -72,6 +72,13 @@ async function loadData() {
 
 console.log("✅ initializePage() started");
 
+
+
+
+
+
+
+
 /* ---------------------------
    INITIALIZE PAGE (populate + inits)
 ----------------------------*/
@@ -88,7 +95,6 @@ function initializePage() {
     if (safeQuery('#testimonialsGrid')) populateTestimonials();
     if (safeQuery('#faqList')) populateFAQ();
     if (safeQuery('.about-detail')) populateAboutDetail();
-
     populateFooter();
   } catch (e) {
     console.error('Error when populating content (non-fatal):', e);
@@ -106,63 +112,53 @@ function initializePage() {
   }
 
   // === Global inits ===
-  initMobileMenu();      // versi kamu
-  initDropdowns();    
+  initDropdowns();
+  initMobileMenu();
   initScrollTop();
   initSmoothScroll();
   initHeader();
   initRouting();
 }
+
 /* ---------------------------
    DROPDOWN BEHAVIOR (mobile + desktop)
 ----------------------------*/
 function initDropdowns() {
   const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-  const nav = document.getElementById('mainNav');
-  const mobileBtn = document.getElementById('mobileMenuBtn');
 
   dropdownToggles.forEach(toggle => {
     toggle.addEventListener('click', (e) => {
       const menu = toggle.nextElementSibling;
       const isMobile = window.innerWidth <= 1024;
 
-      // === MOBILE MODE ===
       if (isMobile) {
         e.preventDefault();
 
-        // Jika dropdown belum aktif, buka & tutup dropdown lain
-        if (!menu.classList.contains('active')) {
-          document.querySelectorAll('.dropdown-menu.active').forEach(m => {
-            if (m !== menu) m.classList.remove('active');
-          });
-          menu.classList.add('active');
-        } else {
-          // Jika dropdown sudah aktif dan diklik link-nya, biarkan JS routing
-          const href = toggle.getAttribute('href');
-          if (href && href.startsWith('#')) {
-            showSection(href);
-            history.pushState({ section: href }, '', href);
-            setActiveNav(href);
-            closeMobileMenu(); // hanya tutup saat benar-benar berpindah
-          }
-        }
-      }
-      // === DESKTOP MODE (biarkan hover CSS) ===
-      else {
+        // Tutup dropdown lain agar hanya satu terbuka
+        document.querySelectorAll('.dropdown-menu.active').forEach(m => {
+          if (m !== menu) m.classList.remove('active');
+        });
+
+        // Toggle dropdown ini
+        menu.classList.toggle('active');
+      } else {
+        // Untuk desktop, biarkan CSS hover yang mengatur
         menu.classList.remove('active');
       }
     });
   });
 
-  // === Klik link dalam dropdown (pindah halaman) ===
+  // === Klik link dalam dropdown ===
   document.querySelectorAll('.dropdown-link[href^="#"]').forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
       const target = link.getAttribute('href');
-      showSection(target);
-      history.pushState({ section: target }, '', target);
-      setActiveNav(target);
-      closeMobileMenu();
+      if (target) {
+        showSection(target);
+        history.pushState({ section: target }, '', target);
+        setActiveNav(target);
+        closeMobileMenu();
+      }
     });
   });
 }
@@ -173,8 +169,11 @@ function initDropdowns() {
 function initMobileMenu() {
   const mobileBtn = document.getElementById('mobileMenuBtn');
   const nav = document.getElementById('mainNav');
+  const body = document.body;
 
-  // === Buat overlay area gelap ===
+  if (!mobileBtn || !nav) return;
+
+  // === Buat overlay (jika belum ada) ===
   let overlay = document.querySelector('.nav-overlay');
   if (!overlay) {
     overlay = document.createElement('div');
@@ -182,16 +181,37 @@ function initMobileMenu() {
     document.body.appendChild(overlay);
   }
 
-  mobileBtn.addEventListener('click', () => {
+  // === Tombol toggle menu ===
+  mobileBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
     const isActive = nav.classList.toggle('active');
     mobileBtn.classList.toggle('active', isActive);
-    document.body.classList.toggle('menu-open', isActive);
+    body.classList.toggle('menu-open', isActive);
     overlay.classList.toggle('active', isActive);
+
+    // Tutup semua dropdown saat menutup menu
+    if (!isActive) {
+      document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
+    }
   });
 
   // === Klik overlay menutup menu ===
-  overlay.addEventListener('click', () => {
-    closeMobileMenu();
+  overlay.addEventListener('click', closeMobileMenu);
+
+  // === Klik link di menu menutup menu (mobile only) ===
+  document.querySelectorAll('.nav-link, .dropdown-link').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 1024) closeMobileMenu();
+    });
+  });
+
+  // === Klik di luar nav menutup menu (untuk keamanan tambahan) ===
+  document.addEventListener('click', (e) => {
+    const insideNav = e.target.closest('#mainNav');
+    const insideBtn = e.target.closest('#mobileMenuBtn');
+    if (!insideNav && !insideBtn && nav.classList.contains('active')) {
+      closeMobileMenu();
+    }
   });
 }
 
@@ -202,15 +222,21 @@ function closeMobileMenu() {
   const nav = document.getElementById('mainNav');
   const mobileBtn = document.getElementById('mobileMenuBtn');
   const overlay = document.querySelector('.nav-overlay');
+  const body = document.body;
 
-  if (overlay) overlay.classList.remove('active');
   if (nav) nav.classList.remove('active');
   if (mobileBtn) mobileBtn.classList.remove('active');
-  document.body.classList.remove('menu-open');
+  if (overlay) overlay.classList.remove('active');
+  body.classList.remove('menu-open');
 
   // Tutup semua dropdown aktif
   document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
 }
+
+
+
+
+
 
 /* ---------------------------
    POPULATE FUNCTIONS (keep original logic — slightly guarded)
@@ -663,84 +689,6 @@ function initModal() {
   });
 }
 
-/* ---------------------------
-   MOBILE MENU (improved)
-----------------------------*/
-/* === DROPDOWN BEHAVIOR (Final Hierarchical Mobile Menu) === */
-function initDropdowns() {
-  const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-  const nav = document.getElementById('mainNav');
-  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-
-  // === Klik item utama (mis. "Tentang", "Unit", dll) ===
-  dropdownToggles.forEach(toggle => {
-    toggle.addEventListener('click', (e) => {
-      const menu = toggle.nextElementSibling;
-
-      if (window.innerWidth <= 1024) {
-        e.preventDefault();
-
-        // Tutup dropdown lain agar hanya satu aktif
-        document.querySelectorAll('.dropdown-menu.active').forEach(m => {
-          if (m !== menu) m.classList.remove('active');
-        });
-
-        // Toggle dropdown yang diklik
-        menu.classList.toggle('active');
-      }
-    });
-  });
-
-  // === Klik link di dalam dropdown (mis. "Profil", "Kurikulum", dll) ===
-  document.querySelectorAll('.dropdown-link[href]').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const target = link.getAttribute('href');
-      if (target) {
-        // Navigasi ke link yang dituju
-        window.location.href = target;
-
-        // Tutup menu setelah klik sub-item
-        closeMobileMenu();
-      }
-    });
-  });
-
-  // === Klik link utama non-dropdown (mis. "Kontak", "Login") ===
-  document.querySelectorAll('.nav-link:not(.dropdown-toggle)[href]').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const target = link.getAttribute('href');
-      if (target) {
-        window.location.href = target;
-        closeMobileMenu();
-      }
-    });
-  });
-
-  // === Klik area gelap di luar nav menutup menu ===
-  document.addEventListener('click', (e) => {
-    const isInsideNav = e.target.closest('.nav');
-    const isMenuBtn = e.target.closest('#mobileMenuBtn');
-    if (!isInsideNav && !isMenuBtn && nav.classList.contains('active')) {
-      closeMobileMenu();
-    }
-  });
-}
-
-/* === Tutup menu mobile + reset === */
-function closeMobileMenu() {
-  const nav = document.getElementById('mainNav');
-  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-
-  document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
-  nav?.classList.remove('active');
-  mobileMenuBtn?.classList.remove('active');
-  document.body.classList.remove('menu-open');
-
-  // Kembalikan aksesibilitas
-  document.querySelectorAll('[aria-hidden="true"]').forEach(el => el.removeAttribute('aria-hidden'));
-}
 
 /* ---------------------------
    SCROLL TOP BUTTON
@@ -998,38 +946,3 @@ document.querySelectorAll('.gallery-item img').forEach((img) => {
     }
   });
 });
-function initMobileMenu() {
-  const menuBtn = document.getElementById("mobileMenuBtn");
-  const nav = document.getElementById("mainNav");
-  const body = document.body;
-
-  if (!menuBtn || !nav) return;
-
-  // buka/tutup menu
-  menuBtn.addEventListener("click", () => {
-    nav.classList.toggle("active");
-    body.classList.toggle("menu-open");
-  });
-
-  // dropdown behavior di mobile
-  document.querySelectorAll(".dropdown-toggle").forEach((toggle) => {
-    toggle.addEventListener("click", (e) => {
-      if (window.innerWidth <= 1024) {
-        e.preventDefault();
-        const dropdown = toggle.nextElementSibling;
-        document.querySelectorAll(".dropdown-menu.active").forEach((m) => {
-          if (m !== dropdown) m.classList.remove("active");
-        });
-        dropdown.classList.toggle("active");
-      }
-    });
-  });
-
-  // tutup menu ketika link diklik
-  document.querySelectorAll(".nav-link, .dropdown-link").forEach((link) => {
-    link.addEventListener("click", () => {
-      nav.classList.remove("active");
-      body.classList.remove("menu-open");
-    });
-  });
-}

@@ -76,17 +76,20 @@ function initializePage() {
   if (!siteData) siteData = window._DEFAULT_SITE_DATA;
 
   // Populate dynamic content if placeholders exist
-  try {
-    if (safeQuery('.hero-slider')) populateHero();
-    if (safeQuery('#aboutPara1')) populateAbout();
-    if (safeQuery('#programsGrid')) populatePrograms();
-    if (safeQuery('#newsSlider')) populateNews();
-    if (safeQuery('#testimonialsGrid')) populateTestimonials();
-    if (safeQuery('#faqList')) populateFAQ();
-    populateFooter();
-  } catch (e) {
-    console.error('Error when populating content (non-fatal)', e);
-  }
+// Populate dynamic content if placeholders exist
+try {
+  if (safeQuery('.hero-slider')) populateHero();
+  if (safeQuery('#aboutPara1')) populateAbout();
+  if (safeQuery('#aboutGallery')) populateAboutGallery(); // ✅ tambahan
+  if (safeQuery('#programsGrid')) populatePrograms();
+  if (safeQuery('#newsSlider')) populateNews();
+  if (safeQuery('#testimonialsGrid')) populateTestimonials();
+  if (safeQuery('#faqList')) populateFAQ();
+  populateFooter();
+} catch (e) {
+  console.error('Error when populating content (non-fatal)', e);
+}
+
 
   // Initialize UI components
   try {
@@ -214,6 +217,35 @@ function populateAbout() {
     }
   }
 }
+
+function populateAboutGallery() {
+  const galleryContainer = document.getElementById("aboutGallery");
+  if (!galleryContainer || !siteData.galleries) return;
+
+  galleryContainer.innerHTML = siteData.galleries
+    .map((url, index) => `
+      <img src="${url}" 
+           alt="Galeri ${index + 1}" 
+           loading="lazy"
+           class="about-gallery-img"
+           data-index="${index}">
+    `)
+    .join("");
+
+  // Event klik tiap gambar
+  galleryContainer.querySelectorAll(".about-gallery-img").forEach((img, idx) => {
+    img.addEventListener("click", () => {
+      if (idx === 0) {
+        // jika Galeri 1 → buka YouTube
+        window.open("https://www.youtube.com/watch?v=YOUR_VIDEO_ID", "_blank");
+      } else {
+        // selainnya → buka fullscreen seperti biasa
+        openImageFullscreen(siteData.galleries[idx], `Galeri ${idx + 1}`);
+      }
+    });
+  });
+}
+
 
 function populatePrograms() {
   const programsGrid = document.getElementById('programsGrid');
@@ -748,4 +780,16 @@ function init_scroll_animations() {
 document.addEventListener('DOMContentLoaded', () => {
   loadData();
   init_scroll_animations();
+});
+// === GALERI CLICK HANDLING ===
+document.querySelectorAll('.gallery-item img').forEach((img) => {
+  img.addEventListener('click', (e) => {
+    const altText = img.alt?.trim() || "";
+    if (altText === "Galeri 1") {
+      window.open("https://www.youtube.com/watch?v=YOUR_VIDEO_ID", "_blank");
+    } else {
+      // buka gambar penuh (fungsi modal default)
+      openImageFullscreen(img.src, altText);
+    }
+  });
 });

@@ -112,8 +112,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px 0;
+    padding: 10px 0; /* sebelumnya 15px 0 agar header lebih rapat */
 }
+
 
 .logo-img {
     height: 50px;
@@ -238,12 +239,14 @@ body {
 /* ==== HERO SECTION (modern smooth version) ==== */
 .hero {
   position: relative;
-  height: 600px;
+  height: 450px; /* sebelumnya 600px supaya banner tidak terlalu tinggi */
   overflow: hidden;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
   box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  margin-top: 0; /* pastikan tidak ada jarak dengan header */
 }
+
 
 /* wrapper utama */
 .hero-slider {
@@ -446,7 +449,7 @@ body {
 }
 
 section {
-    padding: 80px 0;
+    padding: 40px 0;
 }
 
 /* Transisi antar section (untuk pergantian halaman halus) */
@@ -1615,4 +1618,27 @@ body.menu-open {
   .dropdown-link {
     padding-left: 30px;
   }
+}
+/* --- About Gallery (custom) --- */
+.about-gallery {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.about-gallery-img {
+  width: 100%;
+  max-width: 280px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.about-gallery-img:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
 }

@@ -689,39 +689,79 @@ section {
     margin: 0 auto;
 }
 
+/* === ABOUT SECTION === */
 .about {
-    background: var(--bg-light);
+  background: var(--bg-light);
+  padding: 60px 0;
 }
 
 .about-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+/* teks dan tombol */
+.about-text {
+  order: 1;
 }
 
 .about-paragraph {
-    margin-bottom: 20px;
-    color: var(--text-light);
-    line-height: 1.8;
+  margin-bottom: 20px;
+  color: var(--text-light);
+  line-height: 1.8;
 }
 
+/* galeri */
 .about-gallery {
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  order: 2;
 }
 
 .gallery-slider {
-    position: relative;
-    height: 400px;
+  position: relative;
+  height: 400px;
 }
 
 .gallery-slider img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: opacity 0.5s ease;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.5s ease;
+}
+
+/* === RESPONSIVE LAYOUT === */
+@media (max-width: 768px) {
+  .about-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    text-align: center;
+  }
+
+  .about-gallery {
+    order: 1; /* gambar di atas */
+  }
+
+  .about-text {
+    order: 2; /* deskripsi di bawah gambar */
+  }
+
+  .about-paragraph {
+    text-align: justify;
+  }
+
+  .about .btn {
+    align-self: center;
+    margin-top: 10px;
+  }
+
+  .gallery-slider {
+    height: 250px;
+  }
 }
 
 .programs-grid {

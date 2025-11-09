@@ -116,24 +116,41 @@ try {
 /* === DROPDOWN BEHAVIOR === */
 function initDropdowns() {
   const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+
   dropdownToggles.forEach(toggle => {
     toggle.addEventListener('click', (e) => {
+      const menu = toggle.nextElementSibling;
+
+      // --- MOBILE BEHAVIOR ---
       if (window.innerWidth <= 1024) {
-        e.preventDefault();
-        const menu = toggle.nextElementSibling;
-        menu.classList.toggle('active');
+        if (!menu.classList.contains('active')) {
+          // klik pertama → buka dropdown
+          e.preventDefault();
+          menu.classList.add('active');
+        } else {
+          // klik kedua → jalankan navigasi link
+          const target = toggle.getAttribute('href');
+          if (target && target.startsWith('#')) {
+            e.preventDefault();
+            showSection(target);
+            history.pushState({ section: target }, '', target);
+            setActiveNav(target);
+            document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
+            document.body.classList.remove('menu-open');
+          }
+        }
       }
     });
   });
 
-  // close dropdowns when clicking outside (mobile)
+  // Close dropdowns if click outside (mobile)
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.nav-item')) {
       document.querySelectorAll('.dropdown-menu.active').forEach(menu => menu.classList.remove('active'));
     }
   });
 
-  // handle internal links (like #tentang)
+  // --- DESKTOP LINKS / DROPDOWN LINKS ---
   document.querySelectorAll('.nav-link[href^="#"], .dropdown-link[href^="#"]').forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
@@ -147,6 +164,7 @@ function initDropdowns() {
     });
   });
 }
+
 
 /* ---------------------------
    POPULATE FUNCTIONS (keep original logic — slightly guarded)

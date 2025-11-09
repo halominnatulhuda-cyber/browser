@@ -144,11 +144,6 @@ function initDropdowns() {
   });
 }
 
-/* panggil di initializePage() */
-function initializePage() {
-  initDropdowns(); // tambahkan baris ini di bagian inisialisasi
-}
-
 /* ---------------------------
    POPULATE FUNCTIONS (keep original logic — slightly guarded)
    (Jika Anda punya implementasi asli, ini akan dipakai; saya hanya pastikan tidak crash)

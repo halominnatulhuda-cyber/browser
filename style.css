@@ -116,11 +116,31 @@ body {
 }
 
 
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* jarak antara logo dan teks */
+}
+
+
 .logo-img {
     height: 50px;
     width: auto;
 }
 
+.logo-text {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .logo-text {
+    font-size: 1.1rem;
+  }
+}
 
 
 /* === NAVIGATION REVISED === */

@@ -142,6 +142,10 @@ body {
     font-size: 1.1rem;
   }
 }
+
+
+
+
 /* === NAVIGATION REVISED (FINAL) === */
 
 /* Struktur dasar navigasi */
@@ -311,6 +315,23 @@ body {
     font-weight: 600;
     text-align: left;
   }
+
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 900;
+}
+
+.nav-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
 
   /* === DROPDOWN di MOBILE === */
   .dropdown-menu {
@@ -759,6 +780,7 @@ section {
   }
 }
 
+
 .programs-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -893,13 +915,45 @@ section {
 
 /* responsive */
 @media (max-width: 768px) {
-  .news-slider {
-    grid-template-columns: 1fr;
+
+  /* === PROGRAM UNGGULAN: ubah ke horizontal scroll === */
+  .programs-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 10px;
   }
+
+  .program-card {
+    flex: 0 0 80%;
+    scroll-snap-align: start;
+  }
+
+  /* === BERITA: ubah ke horizontal scroll === */
+  .news-slider {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 10px;
+  }
+
   .news-card {
+    flex: 0 0 80%;
+    scroll-snap-align: start;
     border-radius: 12px;
   }
+
+  /* sembunyikan scrollbar agar tampilan bersih */
+  .programs-grid::-webkit-scrollbar,
+  .news-slider::-webkit-scrollbar {
+    display: none;
+  }
 }
+
 
 
 .testimonials-grid {
@@ -967,6 +1021,32 @@ section {
     color: var(--text-light);
     font-size: 0.85rem;
 }
+
+/* ==== RESPONSIVE - TESTIMONIAL SLIDER ==== */
+@media (max-width: 768px) {
+  .testimonials-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 10px;
+  }
+
+  .testimonial-card {
+    flex: 0 0 80%;
+    scroll-snap-align: start;
+  }
+
+  /* sembunyikan scrollbar agar tampil bersih */
+  .testimonials-grid::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+
+
+
 
 .faq {
     background: var(--bg-light);

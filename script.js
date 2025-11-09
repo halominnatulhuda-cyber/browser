@@ -33,6 +33,10 @@ window._DEFAULT_SITE_DATA = {
   galleryItems: []
 };
 
+
+
+
+
 /* ---------------------------
    Utility kecil
 ----------------------------*/
@@ -103,85 +107,110 @@ function initializePage() {
 
   // === Global inits ===
   initMobileMenu();      // versi kamu
-  initDropdowns();       // menu dropdown
+  initDropdowns();    
   initScrollTop();
   initSmoothScroll();
   initHeader();
   initRouting();
 }
-
 /* ---------------------------
    DROPDOWN BEHAVIOR (mobile + desktop)
 ----------------------------*/
-/* === DROPDOWN BEHAVIOR (Mobile + Desktop) === */
 function initDropdowns() {
   const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+  const nav = document.getElementById('mainNav');
+  const mobileBtn = document.getElementById('mobileMenuBtn');
 
   dropdownToggles.forEach(toggle => {
     toggle.addEventListener('click', (e) => {
       const menu = toggle.nextElementSibling;
+      const isMobile = window.innerWidth <= 1024;
 
       // === MOBILE MODE ===
-      if (window.innerWidth <= 1024) {
-        // Jika menu belum aktif → buka, tapi jangan tutup menu utama
+      if (isMobile) {
+        e.preventDefault();
+
+        // Jika dropdown belum aktif, buka & tutup dropdown lain
         if (!menu.classList.contains('active')) {
-          e.preventDefault();
-          // Tutup dropdown lain lebih dulu
           document.querySelectorAll('.dropdown-menu.active').forEach(m => {
             if (m !== menu) m.classList.remove('active');
           });
           menu.classList.add('active');
         } else {
-          // Kalau dropdown sudah terbuka → klik lagi = navigasi
-          const target = toggle.getAttribute('href');
-          if (target && target.startsWith('#')) {
-            e.preventDefault();
-            showSection(target);
-            history.pushState({ section: target }, '', target);
-            setActiveNav(target);
-
-            // Tutup semua menu & kembalikan scroll
-            closeMobileMenu();
+          // Jika dropdown sudah aktif dan diklik link-nya, biarkan JS routing
+          const href = toggle.getAttribute('href');
+          if (href && href.startsWith('#')) {
+            showSection(href);
+            history.pushState({ section: href }, '', href);
+            setActiveNav(href);
+            closeMobileMenu(); // hanya tutup saat benar-benar berpindah
           }
         }
+      }
+      // === DESKTOP MODE (biarkan hover CSS) ===
+      else {
+        menu.classList.remove('active');
       }
     });
   });
 
-  // === Klik area gelap (overlay) menutup menu mobile ===
-  document.addEventListener('click', (e) => {
-    const nav = document.getElementById('mainNav');
-    const isInsideNav = e.target.closest('.nav');
-    const isMenuBtn = e.target.closest('#mobileMenuBtn');
-    if (!isInsideNav && !isMenuBtn && nav.classList.contains('active')) {
-      closeMobileMenu();
-    }
-  });
-
-  // === Klik link internal langsung tutup menu ===
-  document.querySelectorAll('.nav-link[href^="#"], .dropdown-link[href^="#"]').forEach(link => {
+  // === Klik link dalam dropdown (pindah halaman) ===
+  document.querySelectorAll('.dropdown-link[href^="#"]').forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
       const target = link.getAttribute('href');
       showSection(target);
       history.pushState({ section: target }, '', target);
       setActiveNav(target);
-
-      // Tutup semua dropdown & menu utama
       closeMobileMenu();
     });
   });
 }
 
-/* === Fungsi bantu sederhana === */
-function closeMobileMenu() {
-  document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
-  document.getElementById('mainNav')?.classList.remove('active');
-  document.body.classList.remove('menu-open');
+/* ---------------------------
+   MOBILE MENU TOGGLE & OVERLAY
+----------------------------*/
+function initMobileMenu() {
   const mobileBtn = document.getElementById('mobileMenuBtn');
-  if (mobileBtn) mobileBtn.classList.remove('active');
+  const nav = document.getElementById('mainNav');
+
+  // === Buat overlay area gelap ===
+  let overlay = document.querySelector('.nav-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.className = 'nav-overlay';
+    document.body.appendChild(overlay);
+  }
+
+  mobileBtn.addEventListener('click', () => {
+    const isActive = nav.classList.toggle('active');
+    mobileBtn.classList.toggle('active', isActive);
+    document.body.classList.toggle('menu-open', isActive);
+    overlay.classList.toggle('active', isActive);
+  });
+
+  // === Klik overlay menutup menu ===
+  overlay.addEventListener('click', () => {
+    closeMobileMenu();
+  });
 }
 
+/* ---------------------------
+   CLOSE MOBILE MENU (universal)
+----------------------------*/
+function closeMobileMenu() {
+  const nav = document.getElementById('mainNav');
+  const mobileBtn = document.getElementById('mobileMenuBtn');
+  const overlay = document.querySelector('.nav-overlay');
+
+  if (overlay) overlay.classList.remove('active');
+  if (nav) nav.classList.remove('active');
+  if (mobileBtn) mobileBtn.classList.remove('active');
+  document.body.classList.remove('menu-open');
+
+  // Tutup semua dropdown aktif
+  document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
+}
 
 /* ---------------------------
    POPULATE FUNCTIONS (keep original logic — slightly guarded)

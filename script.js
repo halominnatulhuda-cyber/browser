@@ -83,6 +83,8 @@ function initializePage() {
     if (safeQuery('#newsSlider')) populateNews();
     if (safeQuery('#testimonialsGrid')) populateTestimonials();
     if (safeQuery('#faqList')) populateFAQ();
+    if (safeQuery('.about-detail')) populateAboutDetail();
+
     populateFooter();
   } catch (e) {
     console.error('Error when populating content (non-fatal):', e);
@@ -397,6 +399,70 @@ function populateFAQ() {
     </div>
   `).join('');
 }
+
+/* ---------------------------
+   POPULATE ABOUT DETAIL PAGE
+----------------------------*/
+function populateAboutDetail() {
+  if (!siteData || !siteData.aboutPage) {
+    console.warn("⚠️ aboutPage data not found in package.json");
+    return;
+  }
+
+  const about = siteData.aboutPage;
+
+  // === Visi & Misi ===
+  if (safeQuery("#visionText")) {
+    safeQuery("#visionText").textContent = about.vision || "Visi belum tersedia.";
+  }
+
+  if (safeQuery("#missionList") && Array.isArray(about.mission)) {
+    safeQuery("#missionList").innerHTML = about.mission
+      .map(m => `<li>${m}</li>`)
+      .join("");
+  }
+
+  // === Nilai Inti ===
+  if (safeQuery("#coreValuesGrid") && Array.isArray(about.coreValues)) {
+    safeQuery("#coreValuesGrid").innerHTML = about.coreValues
+      .map(
+        v => `
+        <div class="core-value-card">
+          <h4>${v.title}</h4>
+          <p>${v.desc}</p>
+        </div>
+      `
+      )
+      .join("");
+  }
+
+  // === Kurikulum ===
+  if (safeQuery("#curriculumText")) {
+    safeQuery("#curriculumText").textContent = about.curriculum || "Kurikulum belum tersedia.";
+  }
+
+  // === Tim Kami ===
+  if (safeQuery("#teamGrid") && Array.isArray(about.team)) {
+    safeQuery("#teamGrid").innerHTML = about.team
+      .map(
+        t => `
+        <div class="team-card">
+          <img src="${t.photo}" alt="${t.name}" class="team-photo">
+          <h4 class="team-name">${t.name}</h4>
+          <p class="team-role">${t.role}</p>
+        </div>
+      `
+      )
+      .join("");
+  }
+
+  // === Profil (opsional jika kamu mau tampilkan di sini juga) ===
+  if (safeQuery("#aboutProfile") && about.profile) {
+    safeQuery("#aboutProfile").innerHTML = `<p>${about.profile}</p>`;
+  }
+}
+
+
 
 function populateFooter() {
   const footerTagline = document.getElementById('footerTagline');

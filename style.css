@@ -1222,137 +1222,221 @@ body.menu-open {
     opacity: 0.95;
 }
 
+/* === ABOUT DETAIL SECTION === */
 .about-detail {
-    padding: 80px 0;
+  padding: 80px 0;
 }
 
+/* setiap blok bagian */
 .about-section {
-    margin-bottom: 80px;
+  margin-bottom: 70px;
 }
 
+.about-section:last-child {
+  margin-bottom: 0;
+}
+
+/* === VISI & MISI === */
 .vision-mission {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 40px;
-    margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 40px;
+  margin-top: 40px;
 }
 
-.vision-box, .mission-box {
-    background: var(--bg-light);
-    padding: 40px;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
+.vision-box,
+.mission-box {
+  background: var(--bg-white);
+  padding: 35px;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.vision-box h3, .mission-box h3 {
-    color: var(--primary-color);
-    margin-bottom: 20px;
-    font-size: 1.5rem;
+.vision-box:hover,
+.mission-box:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.vision-box h3,
+.mission-box h3 {
+  color: var(--primary-color);
+  margin-bottom: 16px;
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 
 .vision-box p {
-    color: var(--text-light);
-    line-height: 1.8;
+  color: var(--text-light);
+  line-height: 1.8;
+  font-size: 1rem;
+  text-align: justify;
 }
 
 .mission-box ul {
-    list-style: none;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .mission-box li {
-    padding: 12px 0;
-    padding-left: 30px;
-    position: relative;
-    color: var(--text-light);
-    line-height: 1.7;
+  padding: 10px 0 10px 32px;
+  position: relative;
+  color: var(--text-light);
+  line-height: 1.7;
 }
 
 .mission-box li::before {
-    content: '✓';
-    position: absolute;
-    left: 0;
-    color: var(--accent-color);
-    font-weight: bold;
-    font-size: 1.2rem;
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--accent-color);
+  font-weight: bold;
+  font-size: 1.1rem;
 }
 
+/* === NILAI INTI === */
 .core-values-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
 }
 
-.value-card {
-    background: var(--bg-white);
-    padding: 30px;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    text-align: center;
-    transition: var(--transition);
+.value-card,
+.core-value-card {
+  background: var(--bg-white);
+  padding: 30px;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.value-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
+.value-card:hover,
+.core-value-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
-.value-card h4 {
-    color: var(--primary-color);
-    margin-bottom: 15px;
-    font-size: 1.3rem;
+.value-card h4,
+.core-value-card h4 {
+  color: var(--primary-color);
+  margin-bottom: 12px;
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 
-.value-card p {
-    color: var(--text-light);
-    line-height: 1.6;
+.value-card p,
+.core-value-card p {
+  color: var(--text-light);
+  line-height: 1.6;
+  font-size: 0.95rem;
 }
 
+/* === KURIKULUM === */
 .curriculum-text {
-    color: var(--text-light);
-    line-height: 1.8;
-    max-width: 900px;
-    margin: 40px auto 0;
-    text-align: justify;
+  color: var(--text-light);
+  line-height: 1.85;
+  max-width: 850px;
+  margin: 40px auto 0;
+  text-align: justify;
+  font-size: 1rem;
+  background: var(--bg-white);
+  padding: 25px 30px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
 }
 
+/* === TIM KAMI === */
 .team-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
 }
 
 .team-card {
-    background: var(--bg-white);
-    padding: 30px;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    text-align: center;
-    transition: var(--transition);
+  background: var(--bg-white);
+  padding: 30px;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .team-card:hover {
-    box-shadow: var(--shadow-md);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
 }
 
 .team-photo {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    margin: 0 auto 20px;
-    border: 4px solid var(--accent-light);
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin: 0 auto 16px;
+  border: 4px solid var(--accent-light);
+  object-fit: cover;
 }
 
 .team-card h4 {
-    color: var(--primary-color);
-    margin-bottom: 10px;
+  color: var(--primary-color);
+  margin-bottom: 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 .team-card p {
-    color: var(--text-light);
-    font-size: 0.95rem;
+  color: var(--text-light);
+  font-size: 0.95rem;
 }
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .about-detail {
+    padding: 60px 0;
+  }
+
+  .about-section {
+    margin-bottom: 50px;
+  }
+
+  .vision-box,
+  .mission-box,
+  .value-card,
+  .core-value-card,
+  .curriculum-text,
+  .team-card {
+    padding: 20px;
+  }
+
+  .vision-mission {
+    grid-template-columns: 1fr;
+  }
+
+  .core-values-grid,
+  .team-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .curriculum-text {
+    margin: 30px 0 0;
+  }
+
+  .team-photo {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .core-values-grid,
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 .achievements {
     padding: 60px 0 80px;

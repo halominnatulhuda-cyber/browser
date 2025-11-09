@@ -277,7 +277,7 @@ body {
   inset: 0;
   background: linear-gradient(135deg, rgba(45,95,63,0.7) 0%, rgba(79,179,191,0.4) 100%);
   mix-blend-mode: multiply;
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(0px);
   margin: 0;  /* pastikan overlay benar-benar 0 jarak */
   padding: 0;
 }

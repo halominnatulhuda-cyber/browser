@@ -1,7 +1,7 @@
 {
   "name": "minnatul-huda-website",
   "version": "1.0.0",
-  "description": "Website resmi Pondok Pesantren Minnatul Huda - Modern, edukatif, dan responsif",
+  "description": "Website resmi Pondok Pesantren & SMP BP Minnatul Huda - Pendidikan terpadu: agama, akademik, dan agrobisnis",
   "scripts": {
     "dev": "npx live-server --port=5000 --host=0.0.0.0"
   },
@@ -9,55 +9,56 @@
     "siteInfo": {
       "name": "Pondok Pesantren Minnatul Huda",
       "tagline": "Membentuk Generasi Qurani Berakhlakul Karimah",
-      "description": "Lembaga pendidikan Islam terpadu yang menggabungkan kurikulum nasional dengan pendidikan Al-Qur'an dan akhlak",
-      "phone": "+62 812-3456-7890",
-      "email": "info@minnatulhuda.sch.id",
-      "address": "Jl. Pesantren No. 123, Kota, Provinsi 12345"
+      "description": "Lembaga pendidikan Islam terpadu yang menggabungkan kurikulum nasional, pesantren modern, dan program agrobisnis untuk kemandirian ekonomi santri.",
+      "phone": "+62 821-XXXX-XXXX",
+      "email": "info@minnatul-huda.ponpes.id",
+      "address": "Jl. Gang Coklat (Kp. Cibogo Peuntas) RT 018/RW 010, Desa Cibogo Hilir, Kec. Plered, Purwakarta, Jawa Barat 41162",
+      "website": "https://www.minnatul-huda.ponpes.id"
     },
     "hero": [
       {
         "image": "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=1200&h=675&fit=crop",
-        "title": "Selamat Datang di Minnatul Huda",
-        "subtitle": "Pesantren Modern dengan Pendidikan Berkualitas"
+        "title": "Selamat Datang di Pondok Pesantren Minnatul Huda",
+        "subtitle": "Pesantren Modern — Pendidikan Formal & Agrobisnis Terpadu"
       },
       {
         "image": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200&h=675&fit=crop",
-        "title": "Pendidikan Qurani Terpadu",
-        "subtitle": "Menghafal Al-Qur'an dengan Metode Modern"
+        "title": "Pendidikan Qurani & Kitab Kuning",
+        "subtitle": "Tahfidz, Kajian Kitab, dan Pengasuhan 24 jam"
       },
       {
         "image": "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1200&h=675&fit=crop",
-        "title": "Fasilitas Lengkap & Modern",
-        "subtitle": "Mendukung Pembelajaran yang Optimal"
+        "title": "Unit Agrobisnis & Greenhouse",
+        "subtitle": "Pembelajaran praktik pertanian, hidroponik, dan kewirausahaan santri"
       }
     ],
     "stats": [
       {
         "icon": "users",
-        "label": "Santri & Siswa",
-        "value": 850
+        "label": "Santri & Siswa (total semua jenjang)",
+        "value": 840
       },
       {
         "icon": "award",
-        "label": "Guru & Ustadz",
-        "value": 65
+        "label": "Tenaga Pendidik & Staf",
+        "value": 85
       },
       {
         "icon": "activity",
-        "label": "Ekstrakurikuler",
-        "value": 24
+        "label": "Unit Usaha & Program",
+        "value": 12
       },
       {
         "icon": "trophy",
-        "label": "Prestasi",
-        "value": 142
+        "label": "Prestasi / Penghargaan",
+        "value": 20
       }
     ],
     "about": {
       "title": "Tentang Kami",
       "paragraphs": [
-        "Pondok Pesantren Minnatul Huda adalah lembaga pendidikan Islam terpadu yang berdiri sejak tahun 2005. Kami berkomitmen untuk membentuk generasi Qurani yang berakhlakul karimah, cerdas, dan berprestasi. Dengan menggabungkan kurikulum nasional dan kurikulum pesantren, kami menghasilkan lulusan yang unggul dalam akademik maupun spiritual.",
-        "Dengan fasilitas modern dan tenaga pengajar yang kompeten, Minnatul Huda telah mencetak ribuan alumni yang tersebar di berbagai perguruan tinggi terkemuka dan berkontribusi positif bagi masyarakat. Visi kami adalah menjadi pusat pendidikan Islam terdepan yang mengintegrasikan ilmu agama dan sains untuk kemaslahatan umat."
+        "Pondok Pesantren Minnatul Huda adalah lembaga pendidikan Islam terpadu yang berdiri dan berkembang dalam lingkungan pesantren sejak akhir 2000-an, dengan fokus mengintegrasikan pendidikan agama (tahfidz, kitab kuning) dan pendidikan formal (SD/ SMP / SMK).",
+        "Selain pengajaran agama dan akademik, pesantren mengembangkan unit agrobisnis (pertanian, greenhouse, perkebunan, peternakan, perikanan) sebagai sarana praktik santri dan sumber pendanaan mandiri yayasan."
       ],
       "galleries": [
         "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=600&h=400&fit=crop",
@@ -68,236 +69,133 @@
     "programs": [
       {
         "id": "pg-001",
-        "title": "Program Tahfidz Al-Qur'an",
-        "short": "Program unggulan hafalan Al-Qur'an dengan metode Tikrar dan Talaqqi",
+        "title": "Program Tahfidz & Kitab Kuning",
+        "short": "Tahfidz 30 juz & kajian kitab kuning (sistem asrama/pendampingan intensif)",
         "image": "https://images.unsplash.com/photo-1609599006353-e629aaabfeae?w=600&h=400&fit=crop",
-        "detail": "Program Tahfidz Al-Qur'an adalah program unggulan kami yang menggunakan metode Tikrar (pengulangan) dan Talaqqi (setoran langsung kepada guru). Santri dibimbing untuk menghafal 30 juz dengan target 3-4 tahun. Dengan pendampingan intensif dan suasana kondusif, program ini telah menghasilkan ratusan hafidz dan hafidzah berkualitas."
+        "detail": "Santri menjalani program tahfidz dengan target personal; kajian kitab kuning diajarkan dalam kelas pesantren modern untuk membentuk kader berilmu agama yang aplikatif."
       },
       {
         "id": "pg-002",
-        "title": "Bahasa Arab & Inggris",
-        "short": "Program dwi bahasa untuk komunikasi global dan pemahaman kitab kuning",
+        "title": "Kurikulum Terpadu (K13 + Pesantren + SMK Vocational)",
+        "short": "Integrasi kurikulum nasional, pesantren, dan program kejuruan agrobisnis/IT",
         "image": "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=600&h=400&fit=crop",
-        "detail": "Program Bahasa Arab dan Inggris dirancang untuk membekali santri dengan kemampuan komunikasi internasional. Bahasa Arab diajarkan untuk memahami Al-Qur'an dan kitab-kitab klasik, sedangkan Bahasa Inggris untuk menghadapi tantangan global. Metode pembelajaran aktif dengan praktek percakapan sehari-hari menciptakan lingkungan dwi bahasa yang efektif."
+        "detail": "Sistem pembelajaran memadukan mata pelajaran umum K13 dan penguatan pesantren (fiqih, aqidah, hadits, bahasa Arab) serta keterampilan praktis (agrobisnis, IT) sesuai kebutuhan pasar kerja."
       },
       {
         "id": "pg-003",
-        "title": "Kepemimpinan & Soft Skills",
-        "short": "Pembinaan karakter dan jiwa kepemimpinan melalui organisasi santri",
-        "image": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop",
-        "detail": "Program Kepemimpinan dan Soft Skills mengembangkan karakter santri melalui kegiatan organisasi, public speaking, problem solving, dan teamwork. Santri diberikan kesempatan untuk memimpin berbagai kegiatan dan acara, sehingga terbentuk jiwa pemimpin yang bertanggung jawab, komunikatif, dan solutif."
+        "title": "Agrobisnis & Greenhouse",
+        "short": "Praktik pertanian, hidroponik, pembibitan dan pemasaran produk pertanian",
+        "image": "https://images.unsplash.com/photo-1524594154904-7e4c2bfb5b17?w=600&h=400&fit=crop",
+        "detail": "Unit agrobisnis dikelola sebagai laboratorium praktik santri dan sumber pendanaan pesantren: budidaya sayur, cabai, melon, dan produksi greenhouse dengan luas terkelola ribuan meter persegi."
       },
       {
         "id": "pg-004",
-        "title": "Teknologi & Digital",
-        "short": "Penguasaan teknologi informasi dan media digital untuk era modern",
+        "title": "Keterampilan Digital & Kewirausahaan",
+        "short": "Pelatihan IT, digital marketing, dan pengemasan produk hasil agrobisnis",
         "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&h=400&fit=crop",
-        "detail": "Program Teknologi dan Digital membekali santri dengan keterampilan coding, desain grafis, video editing, dan literasi digital. Di era digital ini, santri tidak hanya menguasai ilmu agama tetapi juga mampu berdakwah dan berkontribusi melalui media digital dengan konten yang positif dan edukatif."
+        "detail": "Santri mengikuti pelatihan coding dasar, desain grafis, manajemen toko online & pemasaran media sosial untuk mendukung penjualan produk pesantren."
       }
     ],
     "news": [
       {
         "id": "news-001",
-        "title": "Wisuda Tahfidz 30 Juz Angkatan ke-15",
-        "short": "Sebanyak 45 santri berhasil menyelesaikan hafalan 30 juz Al-Qur'an",
-        "image": "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=600&h=400&fit=crop",
-        "date": "2025-10-15",
-        "content": "Alhamdulillah, Pondok Pesantren Minnatul Huda kembali meluluskan 45 santri hafidz dan hafidzah 30 juz pada wisuda tahfidz angkatan ke-15. Acara berlangsung khidmat dengan dihadiri para wali santri, dewan guru, dan tokoh masyarakat."
+        "title": "Keberhasilan Unit Agrobisnis",
+        "short": "Produksi sayur dan buah (termasuk melon dan cabai) sebagai sumber pendapatan pesantren",
+        "image": "https://images.unsplash.com/photo-1524594154904-7e4c2bfb5b17?w=600&h=400&fit=crop",
+        "date": "2021-03-25",
+        "content": "Liputan lokal menyoroti bagaimana santri mempelajari praktik pertanian dan bagaimana pemasaran produk memberi kontribusi pendanaan pesantren. (sumber: liputan lokal)."
       },
       {
         "id": "news-002",
-        "title": "Juara 1 Olimpiade Sains Nasional",
-        "short": "Santri Minnatul Huda meraih medali emas OSN tingkat nasional",
-        "image": "https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=600&h=400&fit=crop",
-        "date": "2025-09-20",
-        "content": "Muhammad Rizki, santri kelas XI berhasil meraih medali emas pada Olimpiade Sains Nasional bidang Matematika. Prestasi ini membuktikan bahwa santri pesantren mampu bersaing di tingkat nasional dalam bidang akademik."
-      },
-      {
-        "id": "news-003",
-        "title": "Peluncuran Program Beasiswa Tahfidz",
-        "short": "100 beasiswa penuh untuk calon santri berprestasi",
-        "image": "https://images.unsplash.com/photo-1531537571171-a707bf2683da?w=600&h=400&fit=crop",
-        "date": "2025-08-10",
-        "content": "Yayasan Minnatul Huda meluncurkan program beasiswa tahfidz untuk 100 calon santri berprestasi dari keluarga kurang mampu. Program ini bertujuan untuk memberikan akses pendidikan berkualitas bagi semua kalangan."
-      },
-      {
-        "id": "news-004",
-        "title": "Peresmian Masjid dan Aula Baru",
-        "short": "Fasilitas baru berkapasitas 2000 jamaah",
-        "image": "https://images.unsplash.com/photo-1564769610726-5b8f03bf7371?w=600&h=400&fit=crop",
-        "date": "2025-07-05",
-        "content": "Masjid dan aula baru dengan kapasitas 2000 jamaah diresmikan untuk menunjang kegiatan ibadah dan pembelajaran. Fasilitas dilengkapi dengan AC, sound system modern, dan perpustakaan digital."
-      },
-      {
-        "id": "news-005",
-        "title": "Kerjasama dengan Universitas Terkemuka",
-        "short": "MoU dengan 5 perguruan tinggi untuk jalur prestasi",
-        "image": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&h=400&fit=crop",
-        "date": "2025-06-18",
-        "content": "Minnatul Huda menjalin kerjasama dengan 5 universitas terkemuka untuk memberikan jalur prestasi bagi alumni. Kerjasama ini membuka peluang santri melanjutkan ke perguruan tinggi berkualitas."
-      },
-      {
-        "id": "news-006",
-        "title": "Pelatihan Guru Metode Pembelajaran Digital",
-        "short": "Seluruh guru mengikuti workshop teknologi pendidikan",
-        "image": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&h=400&fit=crop",
-        "date": "2025-05-22",
-        "content": "Seluruh guru dan ustadz mengikuti pelatihan metode pembelajaran digital selama 3 hari. Workshop ini meningkatkan kompetensi pengajar dalam memanfaatkan teknologi untuk pembelajaran yang lebih efektif dan menarik."
+        "title": "Pengembangan Greenhouse & Hidroponik",
+        "short": "Penerapan greenhouse untuk pembelajaran & produksi",
+        "image": "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&h=400&fit=crop",
+        "date": "2020-11-01",
+        "content": "Pengembangan greenhouse sebagai pusat pembibitan dan produksi sayuran. Program ini menjadi sarana pelatihan bagi santri dan sumber pemasukan yayasan."
       }
     ],
     "testimonials": [
       {
-        "name": "H. Ahmad Fauzi",
+        "name": "Wali Santri (contoh)",
         "role": "Wali Santri",
         "photo": "https://i.pravatar.cc/150?img=12",
         "rating": 5,
-        "comment": "Alhamdulillah, anak saya berkembang sangat baik di Minnatul Huda. Tidak hanya hafalannya yang meningkat, akhlak dan prestasinya juga luar biasa. Terima kasih para ustadz dan ustadzah yang telah mendidik dengan penuh kesabaran.",
-        "date": "2025-10-01"
-      },
-      {
-        "name": "Siti Aminah, S.Pd",
-        "role": "Alumni 2018",
-        "photo": "https://i.pravatar.cc/150?img=45",
-        "rating": 5,
-        "comment": "Pengalaman terbaik dalam hidup saya adalah mondok di Minnatul Huda. Ilmu agama yang kuat, ditambah prestasi akademik yang baik, membuat saya diterima di PTN favorit. Jazakumullahu khairan kepada semua guru saya.",
-        "date": "2025-09-15"
-      },
-      {
-        "name": "Dr. Muhammad Hakim",
-        "role": "Tokoh Masyarakat",
-        "photo": "https://i.pravatar.cc/150?img=33",
-        "rating": 5,
-        "comment": "Minnatul Huda adalah contoh pesantren modern yang berhasil mengintegrasikan pendidikan agama dan umum. Lulusannya berakhlak mulia dan siap berkontribusi untuk masyarakat. Sangat recommended!",
-        "date": "2025-08-28"
-      },
-      {
-        "name": "Dewi Kartika",
-        "role": "Wali Santri",
-        "photo": "https://i.pravatar.cc/150?img=47",
-        "rating": 5,
-        "comment": "Fasilitas lengkap, guru profesional, dan lingkungan yang kondusif membuat anak saya betah belajar. Komunikasi dengan orang tua juga baik. Sangat puas dengan perkembangan anak di sini.",
-        "date": "2025-07-20"
+        "comment": "Anak saya berkembang secara agama dan keterampilan praktis — khususnya di bidang pertanian dan kewirausahaan.",
+        "date": "2021-06-20"
       }
     ],
     "faqs": [
       {
-        "q": "Bagaimana cara mendaftar di Minnatul Huda?",
-        "a": "Anda dapat mendaftar melalui form pendaftaran online di website kami atau datang langsung ke kantor pendaftaran. Lengkapi dokumen yang diperlukan seperti akta kelahiran, kartu keluarga, dan foto."
+        "q": "Bagaimana pendaftaran?",
+        "a": "Pendaftaran dibuka online dan offline melalui kantor pendaftaran pesantren. Dokumen: akta kelahiran, KK, pas foto, rapor terakhir."
       },
       {
-        "q": "Berapa biaya pendidikan di Minnatul Huda?",
-        "a": "Biaya bervariasi tergantung jenjang pendidikan. Untuk informasi detail, silakan hubungi bagian administrasi kami. Kami juga menyediakan program beasiswa untuk santri berprestasi dan kurang mampu."
+        "q": "Apakah ada program beasiswa?",
+        "a": "Ya — program beasiswa tahfidz dan prestasi disediakan oleh yayasan dan donatur mitra."
       },
       {
-        "q": "Apakah tersedia program beasiswa?",
-        "a": "Ya, kami menyediakan berbagai program beasiswa seperti beasiswa prestasi akademik, beasiswa tahfidz, dan beasiswa untuk keluarga kurang mampu. Silakan hubungi kami untuk informasi lebih lanjut."
-      },
-      {
-        "q": "Apa saja fasilitas yang tersedia?",
-        "a": "Kami memiliki fasilitas lengkap: asrama nyaman, masjid, laboratorium komputer, perpustakaan, lapangan olahraga, kantin, klinik kesehatan, dan ruang kelas ber-AC dengan multimedia."
-      },
-      {
-        "q": "Bagaimana sistem pembelajaran di Minnatul Huda?",
-        "a": "Kami menggabungkan kurikulum nasional dengan kurikulum pesantren. Pembelajaran dibagi menjadi pendidikan formal (pagi-siang) dan kegiatan pesantren (sore-malam) yang meliputi tahfidz, kajian kitab, dan pengembangan diri."
-      },
-      {
-        "q": "Apakah santri boleh membawa HP?",
-        "a": "HP dikumpulkan dan hanya boleh digunakan pada waktu tertentu dengan pengawasan ustadz. Hal ini untuk menjaga fokus belajar dan menghindari dampak negatif penggunaan gadget berlebihan."
-      },
-      {
-        "q": "Berapa lama program tahfidz di Minnatul Huda?",
-        "a": "Program tahfidz 30 juz dirancang untuk diselesaikan dalam waktu 3-4 tahun, tergantung kemampuan dan konsistensi santri. Setiap santri dibimbing secara individual oleh guru tahfidz berpengalaman."
-      },
-      {
-        "q": "Apakah ada ekstrakurikuler?",
-        "a": "Ya, kami memiliki 24 ekstrakurikuler seperti pramuka, hadroh, futsal, basket, badminton, panahan, desain grafis, coding, jurnalistik, dan masih banyak lagi. Santri bebas memilih sesuai minat."
-      },
-      {
-        "q": "Bagaimana sistem keamanan di pesantren?",
-        "a": "Keamanan 24 jam dengan petugas security, CCTV di area strategis, sistem akses terkontrol, dan pengawasan ustadz/ustadzah yang tinggal di lingkungan pesantren. Keamanan santri adalah prioritas utama kami."
-      },
-      {
-        "q": "Apakah orang tua boleh berkunjung?",
-        "a": "Ya, orang tua dapat berkunjung pada waktu yang telah ditentukan, biasanya setiap dua minggu sekali atau satu bulan sekali tergantung kebijakan. Kami juga menyediakan sistem pelaporan berkala tentang perkembangan santri."
+        "q": "Apa fokus unit usaha pesantren?",
+        "a": "Pertanian, greenhouse/hidroponik, peternakan, perikanan, serta usaha kantin dan minimarket (Minna Mart)."
       }
     ],
     "telegram": {
-      "botComment": "Terima kasih telah mendaftar di Pondok Pesantren Minnatul Huda. Tim kami akan segera menghubungi Anda.",
+      "botComment": "Terima kasih telah menghubungi Pondok Pesantren Minnatul Huda. Tim administrasi akan merespon secepatnya.",
       "groupId": "-1001234567890"
     },
     "aboutPage": {
-      "vision": "Menjadi pusat pendidikan Islam terdepan yang mengintegrasikan ilmu agama dan sains untuk kemaslahatan umat.",
+      "vision": "Terwujudnya generasi yang beriman, berakhlak mulia, mandiri secara ekonomi, dan berprestasi di bidang ilmu pengetahuan serta keterampilan.",
       "mission": [
-        "Menyelenggarakan pendidikan Islam berkualitas yang menggabungkan kurikulum nasional dan pesantren",
-        "Membentuk generasi Qurani yang hafal Al-Qur'an dan berakhlakul karimah",
-        "Mengembangkan potensi santri dalam bidang akademik, keterampilan, dan kepemimpinan",
-        "Mencetak lulusan yang siap berkontribusi positif bagi masyarakat dan bangsa"
+        "Menyelenggarakan pendidikan Islam berkualitas yang mengintegrasikan kurikulum nasional dan pesantren.",
+        "Mengembangkan potensi santri melalui tahfidz, kitab kuning, dan keterampilan vokasional (agrobisnis & IT).",
+        "Mewujudkan kemandirian yayasan melalui unit usaha produktif yang mendukung pembiayaan pendidikan."
       ],
       "coreValues": [
-        {"title": "Religius", "desc": "Menjadikan nilai-nilai Islam sebagai landasan dalam setiap aktivitas"},
-        {"title": "Integritas", "desc": "Berkomitmen pada kejujuran dan tanggung jawab"},
-        {"title": "Prestasi", "desc": "Berorientasi pada pencapaian yang unggul dan berkualitas"},
-        {"title": "Kolaborasi", "desc": "Membangun kerjasama yang sinergis untuk kemajuan bersama"}
+        {"title": "Religius", "desc": "Nilai Islam sebagai landasan pendidikan dan pengasuhan."},
+        {"title": "Kemandirian", "desc": "Pengembangan unit usaha untuk mendukung keberlanjutan lembaga."},
+        {"title": "Integritas", "desc": "Kejujuran dan profesionalisme pengelolaan lembaga."},
+        {"title": "Inovasi", "desc": "Adaptasi teknologi dalam pendidikan dan produksi agribisnis."}
       ],
-      "curriculum": "Kurikulum kami mengintegrasikan Kurikulum Nasional (Kemendikbud) dengan Kurikulum Pesantren Modern. Santri mempelajari mata pelajaran umum seperti Matematika, IPA, IPS, Bahasa Indonesia, dan Bahasa Inggris, serta mata pelajaran agama seperti Tahfidz Al-Qur'an, Fiqih, Aqidah, Hadits, Bahasa Arab, dan kajian kitab kuning. Pembelajaran dilakukan dengan metode aktif, kreatif, dan inovatif yang disesuaikan dengan perkembangan zaman.",
-      "team": [
-        {"name": "KH. Abdul Rahman, M.Pd.I", "role": "Pengasuh Pesantren", "photo": "https://i.pravatar.cc/150?img=11"},
-        {"name": "Drs. Muhammad Yusuf", "role": "Kepala Madrasah", "photo": "https://i.pravatar.cc/150?img=13"},
-        {"name": "Ustadzah Fatimah, S.Pd.I", "role": "Koordinator Tahfidz", "photo": "https://i.pravatar.cc/150?img=44"},
-        {"name": "Ustadz Ahmad Fauzi, S.Kom", "role": "Koordinator IT & Digital", "photo": "https://i.pravatar.cc/150?img=15"}
-      ]
+      "curriculum": "Mengintegrasikan Kurikulum 2013 (K13) dengan kurikulum pesantren modern dan muatan lokal (kitab kuning & praktik agrobisnis)."
     },
     "achievements": [
-      {"id": "ach-001", "title": "Juara 1 MTQ Nasional 2024", "category": "Tahfidz", "image": "https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=600&h=400&fit=crop", "detail": "Santri kami meraih juara 1 pada Musabaqah Tilawatil Quran tingkat nasional kategori Hifdzil Quran 30 Juz"},
-      {"id": "ach-002", "title": "Medali Emas OSN Matematika", "category": "Akademik", "image": "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=600&h=400&fit=crop", "detail": "Muhammad Rizki berhasil meraih medali emas pada Olimpiade Sains Nasional bidang Matematika"},
-      {"id": "ach-003", "title": "Juara Haul 1 Lomba Kitab Kuning", "category": "Agama", "image": "https://images.unsplash.com/photo-1531537571171-a707bf2683da?w=600&h=400&fit=crop", "detail": "Tim santri Minnatul Huda juara 1 lomba pembacaan dan pemahaman kitab kuning tingkat provinsi"},
-      {"id": "ach-004", "title": "Best Innovation Award 2024", "category": "Teknologi", "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&h=400&fit=crop", "detail": "Aplikasi pengelolaan pesantren karya santri meraih penghargaan inovasi terbaik"},
-      {"id": "ach-005", "title": "Juara 1 Pramuka Nasional", "category": "Ekstrakurikuler", "image": "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&h=400&fit=crop", "detail": "Regu Pramuka Minnatul Huda juara 1 Jambore Nasional 2024"},
-      {"id": "ach-006", "title": "Pesantren Terbaik Jawa Tengah", "category": "Institusi", "image": "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600&h=400&fit=crop", "detail": "Minnatul Huda meraih penghargaan Pesantren Terbaik tingkat Provinsi Jawa Tengah 2024"}
+      {
+        "id": "ach-agr-001",
+        "title": "Unit Agrobisnis Produktif",
+        "category": "Agrobisnis",
+        "image": "https://images.unsplash.com/photo-1524594154904-7e4c2bfb5b17?w=600&h=400&fit=crop",
+        "detail": "Produksi sayur, cabai, dan melon untuk konsumsi dan pemasaran; bukti model pesantren produktif."
+      }
     ],
     "units": [
       {
         "id": "yayasan",
-        "name": "Yayasan Minnatul Huda",
-        "desc": "Lembaga induk yang menaungi seluruh unit pendidikan",
-        "stats": {"established": "2005", "graduates": "2500+", "facilities": "25+"},
-        "facilities": ["Masjid Besar", "Aula Serbaguna", "Perpustakaan Digital", "Klinik Kesehatan"],
-        "programs": ["Program Beasiswa", "Pelatihan Guru", "Pengembangan Infrastruktur"]
-      },
-      {
-        "id": "sdit",
-        "name": "SD IT Minnatul Huda",
-        "desc": "Sekolah Dasar Islam Terpadu dengan kurikulum nasional dan tahfidz",
-        "stats": {"students": "320", "teachers": "24", "classrooms": "12"},
-        "facilities": ["Ruang Kelas Multimedia", "Lab Komputer", "Perpustakaan", "Playground"],
-        "programs": ["Tahfidz 5 Juz", "Bilingual Program", "Creative Learning"]
+        "name": "Yayasan Pendidikan Minnatul Huda",
+        "desc": "Lembaga induk yang menaungi Pondok Pesantren dan unit pendidikan formal.",
+        "stats": {"established": "2009", "graduates": "1500+", "facilities": "20+"},
+        "facilities": ["Masjid", "Aula Serbaguna", "Perpustakaan", "Klinik Kesehatan"],
+        "programs": ["Beasiswa Tahfidz", "Pelatihan Guru", "Pengembangan Infrastruktur"]
       },
       {
         "id": "smpbp",
-        "name": "SMP Boarding Pesantren",
-        "desc": "SMP berasrama dengan pendidikan karakter dan tahfidz intensif",
-        "stats": {"students": "280", "teachers": "22", "dormitories": "6"},
-        "facilities": ["Asrama Putra & Putri", "Lab IPA", "Lapangan Olahraga", "Masjid"],
-        "programs": ["Tahfidz 10 Juz", "English & Arabic Day", "Leadership Training"]
+        "name": "SMP BP Minnatul Huda",
+        "desc": "SMP Berbasis Pesantren (boarding) yang memadukan pendidikan formal dan pesantren.",
+        "stats": {"students": 84, "teachers": 16, "classrooms": 5},
+        "facilities": ["Asrama", "Laboratorium Komputer", "Perpustakaan", "Lapangan Olahraga"],
+        "programs": ["Tahfidz Intensif", "Kitab Kuning", "Ekstrakurikuler & Kepemimpinan"]
       },
       {
         "id": "smk",
-        "name": "SMK Teknologi Informatika",
-        "desc": "SMK dengan fokus pada teknologi informasi dan kewirausahaan",
-        "stats": {"students": "250", "teachers": "19", "labs": "4"},
-        "facilities": ["Lab Programming", "Lab Multimedia", "Lab Jaringan", "Inkubator Bisnis"],
-        "programs": ["Coding Bootcamp", "Digital Marketing", "Tahfidz 5 Juz"]
+        "name": "SMK (Unit Vocational)",
+        "desc": "SMK dengan jurusan Teknik Komputer & Jaringan, Akuntansi, dan Agrobisnis (model integratif).",
+        "stats": {"students": 200, "teachers": 20, "labs": 3},
+        "facilities": ["Lab Jaringan", "Lab Multimedia", "Inkubator Bisnis"],
+        "programs": ["Praktek Agrobisnis", "Coding & IT Support", "Magang Industri"]
       }
     ],
     "galleryItems": [
       {"id": "gal-001", "title": "Masjid Utama", "category": "fasilitas", "image": "https://images.unsplash.com/photo-1564769610726-5b8f03bf7371?w=800&h=600&fit=crop"},
-      {"id": "gal-002", "title": "Ruang Kelas Modern", "category": "fasilitas", "image": "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=800&h=600&fit=crop"},
-      {"id": "gal-003", "title": "Perpustakaan Digital", "category": "fasilitas", "image": "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=800&h=600&fit=crop"},
-      {"id": "gal-004", "title": "Asrama Santri", "category": "fasilitas", "image": "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&h=600&fit=crop"},
-      {"id": "gal-005", "title": "Wisuda Tahfidz 2024", "category": "event", "image": "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&h=600&fit=crop"},
-      {"id": "gal-006", "title": "Kegiatan Pembelajaran", "category": "event", "image": "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=800&h=600&fit=crop"},
-      {"id": "gal-007", "title": "Olimpiade Sains", "category": "event", "image": "https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=800&h=600&fit=crop"},
-      {"id": "gal-008", "title": "Ekstrakurikuler Pramuka", "category": "event", "image": "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&h=600&fit=crop"}
+      {"id": "gal-002", "title": "Greenhouse & Kebun", "category": "fasilitas", "image": "https://images.unsplash.com/photo-1524594154904-7e4c2bfb5b17?w=800&h=600&fit=crop"},
+      {"id": "gal-003", "title": "Ruang Kelas & Asrama", "category": "fasilitas", "image": "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=800&h=600&fit=crop"}
     ]
   },
   "dependencies": {

@@ -764,121 +764,164 @@ section {
   }
 }
 
-/* ============================
-   Testimonials Section (Real & Professional)
-   ============================ */
+.testimonials-section {
+  padding: 4rem 0;
+  position: relative;
+}
+
+/* Container Grid - Desktop Defaults */
 .testimonials-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
-  padding: 1rem 0.5rem;
+  padding: 1.5rem 0.5rem; /* Padding for shadow breathing room */
 }
 
+/* ============================
+   Realistic Testimonial Card
+   ============================ */
 .testimonial-card {
-  background: var(--bg-white);
-  border-radius: var(--radius-lg);
-  padding: 2.5rem;
+  background: var(--bg-white, #fff);
+  border-radius: 1rem; /* Modern rounded corners */
+  padding: 2rem;
   display: flex;
   flex-direction: column;
-  position: relative;
-  
-  /* The requested 'garis sisi tipis' (Thin side border accent) */
-  border-left: 4px solid var(--accent-color);
-  
-  /* Base 3D shadow */
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 
-              0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   height: 100%;
+  
+  /* Realism: Subtle thin border + soft shadow base */
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
+              0 2px 4px -1px rgba(0, 0, 0, 0.03);
+              
+  /* 3D Smooth Transition */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
-/* 3D Hover Effect for Testimonials */
+/* 3D Hover Effect */
 .testimonial-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
               0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  border-color: transparent; /* Optional: Let shadow define edges on hover */
 }
 
-/* Header Area: Avatar + Name/Role */
+/* --- Header: Image & Meta Info --- */
 .testimonial-header {
   display: flex;
   align-items: center;
+  gap: 1rem;
   margin-bottom: 1.5rem;
 }
 
-/* Circular Avatar Image */
+/* Circle Profile Image */
 .testimonial-avatar {
   width: 64px;
   height: 64px;
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 1rem;
-  border: 3px solid rgba(0,0,0,0.03); /* Subtle ring for definition */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Makes avatar 'pop' slightly */
+  border: 2px solid var(--bg-white, #fff);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Slight lift for avatar */
+  flex-shrink: 0;
 }
 
-/* Name & Role Wrapper */
-.testimonial-author-info {
+/* Meta Container (Right of Image) */
+.testimonial-meta {
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
+/* Nama (Bold) */
 .testimonial-name {
   font-size: 1.125rem;
   font-weight: 700;
-  color: var(--primary-color);
+  color: var(--primary-color-t);
   line-height: 1.2;
+  margin-bottom: 0.25rem;
 }
 
+/* Sub Nama (Role) - Bold but lower opacity (grayish) */
 .testimonial-role {
-  font-size: 0.875rem;
-  color: var(--accent-color); /* Using accent color for role looks professional */
-  font-weight: 500;
+  font-size: 0.95rem;
+  font-weight: 600; /* Bold-ish */
+  color: var(--text-light-t); /* Agak samar/hitam tidak pekat */
+  opacity: 0.9;
+  line-height: 1.3;
+}
+
+/* Tanggal - Even more subtle, placed under role */
+.testimonial-date {
+  font-size: 0.8rem;
+  color: #9ca3af; /* gray-400 for very subtle date */
   margin-top: 0.25rem;
+  font-weight: 500;
 }
 
-/* Star Rating Container */
-.testimonial-rating {
-  color: #fbbf24; /* Standard Amber/Gold color for stars */
-  margin-bottom: 1rem;
-  font-size: 1.25rem; /* Slightly larger stars */
-  letter-spacing: 2px;
+/* --- Body: Ulasan --- */
+.testimonial-body {
+  flex-grow: 1; /* Pushes rating to bottom if heights vary */
+  margin-bottom: 1.5rem;
 }
 
-/* The Review Text */
 .testimonial-text {
   font-size: 1rem;
-  line-height: 1.75; /* More breathing room for text */
-  color: var(--text-light);
-  font-style: italic; /* Adds a 'voice' to the text */
-  margin-bottom: 2rem;
-  flex-grow: 1; /* Pushes date to the bottom */
+  line-height: 1.65;
+  color: #374151; /* gray-700 for good readability */
+  font-style: normal; /* Or italic if preferred */
+  position: relative;
 }
 
-/* Date Footer */
-.testimonial-date {
-  font-size: 0.875rem;
-  color: #9ca3af; /* Subtle gray for less important meta-info */
-  text-align: right; /* Aligned right for a clean finish */
-  font-weight: 500;
-  border-top: 1px solid rgba(0,0,0,0.05);
+/* Optional: Add a subtle quote icon for extra realism */
+.testimonial-text::before {
+  content: "“";
+  font-size: 4rem;
+  position: absolute;
+  top: -2rem;
+  left: -1rem;
+  opacity: 0.05;
+  font-family: serif;
+  color: var(--primary-color-t);
+  pointer-events: none;
+}
+
+/* --- Footer: Rating --- */
+.testimonial-footer {
   padding-top: 1rem;
+  border-top: 1px solid rgba(0,0,0,0.05); /* Very subtle separator */
+  display: flex;
+  align-items: center;
 }
 
-/* Mobile Responsive for Testimonials */
+.testimonial-rating {
+  display: flex;
+  gap: 0.25rem;
+  color: var(--star-color);
+  font-size: 1.1rem;
+}
+
+/* ============================
+   Mobile Responsive (Perfect Horizontal Scroll)
+   ============================ */
 @media (max-width: 768px) {
   .testimonials-grid {
     display: flex;
+    /* Enable smooth horizontal scrolling */
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch; /* Momentum scroll on iOS */
+    
     gap: 1.5rem;
-    /* Full bleed with padding for shadows */
+    padding: 2rem 1.5rem 3rem; /* Generous padding for shadows to not clip */
+    
+    /* Full-bleed effect */
     margin: 0 -1.5rem;
-    padding: 1rem 1.5rem 2.5rem;
     scroll-padding-left: 1.5rem;
-    -webkit-overflow-scrolling: touch;
   }
 
+  /* Hide scrollbars for clean look */
   .testimonials-grid::-webkit-scrollbar {
     display: none;
   }
@@ -888,14 +931,16 @@ section {
   }
 
   .testimonial-card {
-    min-width: 85vw; /* Peeking effect */
-    max-width: 380px;
+    min-width: 85vw; /* Show 85% of card to encourage scrolling */
+    max-width: 380px; /* Prevent getting too huge on larger phones */
     flex-shrink: 0;
-    scroll-snap-align: start;
-    padding: 2rem; /* Slightly less padding on mobile if needed */
+    scroll-snap-align: center; /* Center the active card */
+    
+    /* Ensure 3D effect works on mobile too if desired, 
+       or simplify shadows for performance if needed. 
+       Keeping realistic shadows here. */
   }
 }
-
 /* ============================
    FAQ Section
    ============================ */

@@ -270,74 +270,86 @@ body {
   transform: scale(1.1);
 }
 
-/* ==== RESPONSIVE BEHAVIOR ==== */
 @media (max-width: 1024px) {
-  .mobile-menu-btn {
-    display: block;
-    z-index: 1100;
-  }
-
+  /* === Struktur dasar menu mobile === */
   .nav {
     position: fixed;
     top: 70px;
     left: 0;
     right: 0;
     background: rgba(255, 255, 255, 0.96);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(8px);
     flex-direction: column;
     overflow-y: auto;
     max-height: 0;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-    transition: max-height 0.4s ease, padding 0.3s ease;
+    transition: max-height 0.4s ease;
     z-index: 1000;
-    padding: 0 20px;
   }
 
-  /* aktif: buka menu */
   .nav.active {
-    max-height: 80vh;
-    padding: 20px;
+    max-height: 85vh;
+    padding: 20px 0;
   }
 
   .nav-list {
     flex-direction: column;
     align-items: flex-start;
-    width: 100%;
+    padding: 0 20px;
     gap: 10px;
   }
 
   .nav-link {
     width: 100%;
+    padding: 10px 8px;
     font-size: 1.1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    font-weight: 600;
+    text-align: left;
   }
 
-  /* dropdown versi mobile */
+  /* === DROPDOWN di dalam menu mobile === */
   .dropdown-menu {
     position: static;
-    box-shadow: none;
     background: rgba(0, 0, 0, 0.04);
     border-radius: 8px;
-    margin-top: 6px;
-    padding-left: 10px;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
+    margin-top: 4px;
+    padding: 6px 0 6px 16px;
     display: none;
+    flex-direction: column;
+    gap: 4px;
+    transition: all 0.3s ease;
   }
 
   .dropdown-menu.active {
     display: flex;
-    flex-direction: column;
   }
 
+  .dropdown-link {
+    font-size: 1rem;
+    color: var(--text-dark);
+    text-decoration: none;
+    padding: 6px 0;
+    display: block;
+    width: 100%;
+    transition: color 0.2s ease;
+  }
+
+  .dropdown-link:hover {
+    color: var(--primary-color);
+  }
+
+  /* panah pada toggle */
   .dropdown-toggle::after {
+    content: "▼";
+    font-size: 0.75rem;
+    margin-left: 6px;
     transition: transform 0.3s ease;
+    display: inline-block;
   }
 
-  .dropdown-menu.active + .dropdown-toggle::after {
+  /* saat menu aktif, panah berputar ke atas */
+  .dropdown-menu.active ~ .dropdown-toggle::after,
+  .dropdown-toggle.active::after {
     transform: rotate(180deg);
   }
 
@@ -346,8 +358,6 @@ body {
     overflow: hidden;
   }
 }
-
-
 
 
 

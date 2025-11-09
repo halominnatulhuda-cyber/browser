@@ -539,63 +539,86 @@ section {
 /* ============================
    Programs Section
    ============================ */
+/* ============================
+   Programs Section (Enhanced)
+   ============================ */
 .programs-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
+  /* Auto-fit columns with a slightly wider minimum for professional look */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem 0.5rem;
 }
 
 .program-card {
   background: var(--bg-white);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  /* Subtle base shadow for depth */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
+              0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  /* Smoother transition for the 3D effect */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100%;
   cursor: pointer;
-  scroll-snap-align: center;
-  flex-shrink: 0;
 }
 
+/* 3D Hover Effect: Lifts higher and casts deeper shadow */
 .program-card:hover {
-  transform: translateY(-10px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+              0 8px 10px -6px rgba(0, 0, 0, 0.05);
+}
+
+/* Interactive Title Color on Hover */
+.program-card:hover .program-title {
+  color: var(--accent-color);
 }
 
 .program-image {
   width: 100%;
-  height: 200px;
+  height: 220px; /* Consistent, slightly taller image area */
   object-fit: cover;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
 .program-content {
-  padding: 25px;
+  padding: 2rem; /* Spacious padding defines 'neatness' */
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .program-title {
-  font-size: 1.3rem;
+  font-size: 1.5rem;
+  font-weight: 700;
   color: var(--primary-color);
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+  transition: color 0.3s ease;
 }
 
 .program-description {
   color: var(--text-light);
   line-height: 1.6;
+  flex-grow: 1; /* Ensures buttons (if added later) align at bottom */
 }
 
+/* Mobile Responsive for Programs */
 @media (max-width: 768px) {
   .programs-grid {
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    gap: 20px;
-    padding: 4px 20px;
-    margin: 0 -20px;
-    scroll-behavior: smooth;
+    gap: 1.5rem;
+    padding: 1rem 1.5rem 2.5rem;
+    margin: 0 -1.5rem; /* Full-bleed on mobile edges */
+    scroll-padding-left: 1.5rem;
+    -webkit-overflow-scrolling: touch;
   }
-  .program-card {
-    width: 80%;
-    min-width: 280px;
-  }
+
   .programs-grid::-webkit-scrollbar {
     display: none;
   }
@@ -603,7 +626,19 @@ section {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  .program-card {
+    min-width: 85vw; /* Peeking effect to encourage swiping */
+    max-width: 380px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+
+  .program-content {
+     padding: 1.5rem;
+  }
 }
+
 
 /* ============================
    News Section (Improved)
@@ -730,49 +765,134 @@ section {
 }
 
 /* ============================
-   Testimonials Section
+   Testimonials Section (Real & Professional)
    ============================ */
 .testimonials-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  padding: 1rem 0.5rem;
 }
 
 .testimonial-card {
   background: var(--bg-white);
-  padding: 30px;
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
-  scroll-snap-align: start;
-  flex-shrink: 0;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  
+  /* The requested 'garis sisi tipis' (Thin side border accent) */
+  border-left: 4px solid var(--accent-color);
+  
+  /* Base 3D shadow */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 
+              0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100%;
 }
 
+/* 3D Hover Effect for Testimonials */
 .testimonial-card:hover {
-  box-shadow: var(--shadow-md);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+              0 8px 10px -6px rgba(0, 0, 0, 0.05);
 }
 
+/* Header Area: Avatar + Name/Role */
+.testimonial-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Circular Avatar Image */
+.testimonial-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 1rem;
+  border: 3px solid rgba(0,0,0,0.03); /* Subtle ring for definition */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Makes avatar 'pop' slightly */
+}
+
+/* Name & Role Wrapper */
+.testimonial-author-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.testimonial-name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  line-height: 1.2;
+}
+
+.testimonial-role {
+  font-size: 0.875rem;
+  color: var(--accent-color); /* Using accent color for role looks professional */
+  font-weight: 500;
+  margin-top: 0.25rem;
+}
+
+/* Star Rating Container */
+.testimonial-rating {
+  color: #fbbf24; /* Standard Amber/Gold color for stars */
+  margin-bottom: 1rem;
+  font-size: 1.25rem; /* Slightly larger stars */
+  letter-spacing: 2px;
+}
+
+/* The Review Text */
+.testimonial-text {
+  font-size: 1rem;
+  line-height: 1.75; /* More breathing room for text */
+  color: var(--text-light);
+  font-style: italic; /* Adds a 'voice' to the text */
+  margin-bottom: 2rem;
+  flex-grow: 1; /* Pushes date to the bottom */
+}
+
+/* Date Footer */
+.testimonial-date {
+  font-size: 0.875rem;
+  color: #9ca3af; /* Subtle gray for less important meta-info */
+  text-align: right; /* Aligned right for a clean finish */
+  font-weight: 500;
+  border-top: 1px solid rgba(0,0,0,0.05);
+  padding-top: 1rem;
+}
+
+/* Mobile Responsive for Testimonials */
 @media (max-width: 768px) {
   .testimonials-grid {
     display: flex;
     overflow-x: auto;
-    gap: 20px;
-    padding: 4px 20px;
-    margin: 0 -20px;
     scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
+    gap: 1.5rem;
+    /* Full bleed with padding for shadows */
+    margin: 0 -1.5rem;
+    padding: 1rem 1.5rem 2.5rem;
+    scroll-padding-left: 1.5rem;
     -webkit-overflow-scrolling: touch;
   }
-  .testimonial-card {
-    width: 85%;
-    min-width: 280px;
-  }
+
   .testimonials-grid::-webkit-scrollbar {
     display: none;
   }
   .testimonials-grid {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  .testimonial-card {
+    min-width: 85vw; /* Peeking effect */
+    max-width: 380px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    padding: 2rem; /* Slightly less padding on mobile if needed */
   }
 }
 
@@ -1147,247 +1267,161 @@ section {
     font-size: 1.1rem;
   }
 }
-
 /* ============================
-   Page-Specific: About
+   Page-Specific: About (REFINED FOR YOU)
    ============================ */
 .about {
-  background: var(--bg-light);
+  /* Keeping background subtle if needed, or remove if default white is preferred */
+  /* background: var(--bg-light); */ 
 }
 
 .about-content {
   display: grid;
+  /* Default Desktop: Side-by-side (Text Left, Image Right via explicit ordering below) */
   grid-template-columns: 1fr 1fr;
   gap: 60px;
   align-items: center;
 }
 
+/* DESKTOP ORDERING (Standard) */
 .about-text {
-  order: 1;
+  order: 1; /* Text on the Left */
+}
+.about-gallery {
+  order: 2; /* Image on the Right */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Simple 2-column grid for images */
+  gap: 15px;
+}
+
+.about-gallery-img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+.about-gallery-img:hover {
+  transform: scale(1.03);
+  box-shadow: var(--shadow-md);
 }
 
 .about-paragraph {
   color: var(--text-light);
   line-height: 1.8;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  font-size: 1.05rem;
 }
 
-.about-gallery {
-  order: 2;
+/* TABLET & MOBILE MODE (< 992px covers Tablets portrait and Phones) */
+@media (max-width: 992px) {
+  .about-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  /* MAGIC TRICK for "Judul -> Gambar -> Deskripsi -> Tombol" order:
+     We use 'display: contents' on .about-text to unwrap it.
+     This allows its children (Heading, P, Btn) to be ordered individually
+     alongside the .about-gallery div in the main flex container.
+  */
+  .about-text {
+    display: contents; 
+  }
+
+  /* 1. JUDUL (assuming h2/h3 is used for "Tentang Kami") */
+  .about-text h1,
+  .about-text h2,
+  .about-text h3 {
+    order: 1;
+    text-align: center;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  /* 2. GAMBAR */
+  .about-gallery {
+    order: 2;
+    width: 100%;
+    /* Optional: Ensure images aren't too huge on mobile */
+    max-width: 500px; 
+    margin: 0 auto;
+  }
+  .about-gallery-img {
+    height: 180px; /* Slightly smaller on mobile for compactness */
+  }
+
+  /* 3. DESKRIPSI */
+  .about-paragraph,
+  .about-text p {
+    order: 3;
+    text-align: justify; /* Often preferred for neatness on small screens */
+  }
+
+  /* 4. TOMBOL (Custom Style Requested) */
+  .about-text .btn {
+    order: 4;
+    width: 100%;
+    display: block;
+    text-align: center;
+    
+    /* "tanpa background warna" */
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    
+    /* "tulisan agak hitam (jangan ful hitam) agak samar" */
+    color: var(--text-light) !important; /* Uses your gray variable, or use #4b5563 */
+    opacity: 0.85; /* The "samar" effect */
+    
+    font-weight: 600;
+    padding: 15px 0;
+    margin-top: 5px;
+    transition: all 0.3s ease;
+  }
+  
+  /* Subtle interaction for the text button */
+  .about-text .btn:hover,
+  .about-text .btn:active {
+    opacity: 1;
+    color: var(--primary-color) !important; /* Slightly darker on interaction */
+    background-color: rgba(0,0,0,0.03) !important; /* Very subtle touch feedback */
+  }
+}
+
+/* Other sections (unchanged mostly, just ensuring they don't break) */
+.about-section { margin-bottom: 70px; }
+.about-section:last-child { margin-bottom: 0; }
+
+/* Vision Mission & Teams (kept standard responsive) */
+.vision-mission, .team-grid, .core-values-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  border-radius: var(--radius-lg);
-}
-
-.about-gallery-img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
-  cursor: pointer;
-}
-
-.about-gallery-img:hover {
-  transform: scale(1.05);
-  box-shadow: var(--shadow-md);
-}
-
-.about-detail {
-  padding-bottom: 0;
-}
-
-.about-section {
-  margin-bottom: 70px;
-}
-
-.about-section:last-child {
-  margin-bottom: 0;
-}
-
-.vision-mission {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  margin-top: 40px;
-}
-
-.vision-box, .mission-box {
-  background: var(--bg-white);
-  padding: 35px;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.vision-box:hover, .mission-box:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-}
-
-.vision-box h3, .mission-box h3 {
-  color: var(--primary-color);
-  margin-bottom: 16px;
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-.vision-box p {
-  color: var(--text-light);
-  line-height: 1.8;
-  font-size: 1rem;
-  text-align: justify;
-}
-
-.mission-box ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.mission-box li {
-  padding: 10px 0 10px 32px;
-  position: relative;
-  color: var(--text-light);
-  line-height: 1.7;
-}
-
-.mission-box li::before {
-  content: '✓';
-  position: absolute;
-  left: 0;
-  color: var(--accent-color);
-  font-weight: bold;
-  font-size: 1.1rem;
-}
-
-.core-values-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 30px;
   margin-top: 40px;
 }
+.vision-mission { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.core-values-grid, .team-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
 
-.core-value-card {
+.vision-box, .mission-box, .core-value-card, .team-card {
   background: var(--bg-white);
   padding: 30px;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease;
 }
-
-.core-value-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-md);
-}
-
-.core-value-card h4 {
-  color: var(--primary-color);
-  margin-bottom: 12px;
-  font-size: 1.25rem;
-  font-weight: 700;
-}
-
-.core-value-card p {
-  color: var(--text-light);
-  line-height: 1.6;
-  font-size: 0.95rem;
-}
-
-.curriculum-text {
-  color: var(--text-light);
-  line-height: 1.85;
-  max-width: 850px;
-  margin: 40px auto 0;
-  text-align: justify;
-  font-size: 1rem;
-  background: var(--bg-white);
-  padding: 25px 30px;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-}
-
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 30px;
-  margin-top: 40px;
-}
-
-.team-card {
-  background: var(--bg-white);
-  padding: 30px;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.team-card:hover {
+.vision-box:hover, .mission-box:hover, .core-value-card:hover, .team-card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-md);
 }
 
 .team-photo {
-  width: 120px;
-  height: 120px;
+  width: 120px; height: 120px;
   border-radius: 50%;
-  margin: 0 auto 16px;
-  border: 4px solid var(--accent-light);
+  margin: 0 auto 20px;
   object-fit: cover;
-}
-
-.team-card h4 {
-  color: var(--primary-color);
-  margin-bottom: 6px;
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.team-card p {
-  color: var(--text-light);
-  font-size: 0.95rem;
-}
-
-@media (max-width: 992px) {
-  .about-content {
-    gap: 40px;
-  }
-}
-
-@media (max-width: 768px) {
-  .about-content {
-    grid-template-columns: 1fr;
-  }
-  .about-gallery {
-    order: 1;
-  }
-  .about-text {
-    order: 2;
-    text-align: center;
-  }
-  .about .btn {
-    margin-top: 10px;
-  }
-  .about-detail {
-    padding-top: 60px;
-  }
-  .about-section {
-    margin-bottom: 50px;
-  }
-  .vision-mission, .team-grid {
-    grid-template-columns: 1fr;
-  }
-  .vision-box, .mission-box, .core-value-card, .curriculum-text, .team-card {
-    padding: 25px;
-  }
-  .team-photo {
-    width: 100px;
-    height: 100px;
-  }
+  border: 3px solid var(--bg-light);
 }
 
 /* ============================

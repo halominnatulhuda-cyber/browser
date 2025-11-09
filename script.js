@@ -1,17 +1,3 @@
-/**
- * script.js (UPDATED)
- * - CORS-safe loadData (tries package.json with mode:'cors', falls back to embedded default)
- * - SPA routing: show only the selected section, update hash & history
- * - Mobile menu: toggle nav.active + body.menu-open + aria-hidden on main
- * - Safe guards so missing elements don't throw errors
- * - Keeps and uses your original populate*/init* functions (kept below; if you override them, keep names)
- */
-
-/* ---------------------------
-   EMBEDDED FALLBACK DATA
-   (Dipakai bila fetch package.json gagal)
-   Tambahkan pasangan key/value secukupnya agar populate* tidak crash.
-----------------------------*/
 window._DEFAULT_SITE_DATA = {
   // Struktur minimal yang dipakai oleh populate functions
   hero: [
@@ -161,7 +147,6 @@ function initDropdowns() {
 
 /* panggil di initializePage() */
 function initializePage() {
-  ...
   initDropdowns(); // tambahkan baris ini di bagian inisialisasi
 }
 

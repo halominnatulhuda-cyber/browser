@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pendaftaran Santri Baru Pondok Pesantren Minnatul Huda">
+    <title>Pendaftaran - Pondok Pesantren Minnatul Huda</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="https://via.placeholder.com/240x135/2d5f3f/ffffff?text=Minnatul+Huda" alt="Logo Minnatul Huda" class="logo-img">
+                </div>
+                <nav class="nav" id="mainNav">
+                    <ul class="nav-list">
+                        <li><a href="index.html" class="nav-link">Beranda</a></li>
+                        <li><a href="tentang.html" class="nav-link">Tentang</a></li>
+                        <li><a href="prestasi.html" class="nav-link">Prestasi</a></li>
+                        <li><a href="unit.html" class="nav-link">Unit</a></li>
+                        <li><a href="gallery.html" class="nav-link">Galeri</a></li>
+                        <li><a href="daftar.html" class="nav-link">Pendaftaran</a></li>
+                    </ul>
+                </nav>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="page-hero">
+        <div class="container">
+            <h1 class="page-title">Pendaftaran Santri Baru</h1>
+            <p class="page-subtitle">Daftarkan putra-putri Anda sekarang</p>
+        </div>
+    </section>
+
+    <section class="registration">
+        <div class="container">
+            <div class="registration-content">
+                <div class="registration-info">
+                    <h2>Informasi Pendaftaran</h2>
+                    <p>Pendaftaran santri baru Pondok Pesantren Minnatul Huda dibuka sepanjang tahun. Silakan isi formulir pendaftaran dengan lengkap dan benar.</p>
+                    <h3>Syarat Pendaftaran:</h3>
+                    <ul>
+                        <li>Fotokopi Akta Kelahiran (2 lembar)</li>
+                        <li>Fotokopi Kartu Keluarga (2 lembar)</li>
+                        <li>Pas Foto 3x4 (4 lembar)</li>
+                        <li>Surat Keterangan Sehat dari Dokter</li>
+                        <li>Fotokopi Raport terakhir (bagi yang sudah sekolah)</li>
+                    </ul>
+                </div>
+                <div class="registration-form">
+                    <form id="registrationForm">
+                        <div class="form-group">
+                            <label for="namaLengkap">Nama Lengkap Calon Santri *</label>
+                            <input type="text" id="namaLengkap" name="namaLengkap" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tempatLahir">Tempat Lahir *</label>
+                            <input type="text" id="tempatLahir" name="tempatLahir" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tanggalLahir">Tanggal Lahir *</label>
+                            <input type="date" id="tanggalLahir" name="tanggalLahir" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="jenisKelamin">Jenis Kelamin *</label>
+                            <select id="jenisKelamin" name="jenisKelamin" required>
+                                <option value="">Pilih...</option>
+                                <option value="Laki-laki">Laki-laki</option>
+                                <option value="Perempuan">Perempuan</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="unit">Unit Pendidikan *</label>
+                            <select id="unit" name="unit" required>
+                                <option value="">Pilih...</option>
+                                <option value="SD IT">SD IT Minnatul Huda</option>
+                                <option value="SMP BP">SMP Boarding Pesantren</option>
+                                <option value="SMK">SMK Teknologi Informatika</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="namaOrangTua">Nama Orang Tua / Wali *</label>
+                            <input type="text" id="namaOrangTua" name="namaOrangTua" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nomorHP">Nomor HP/WA *</label>
+                            <input type="tel" id="nomorHP" name="nomorHP" pattern="[0-9]+" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="alamat">Alamat Lengkap *</label>
+                            <textarea id="alamat" name="alamat" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="catatan">Catatan Tambahan</label>
+                            <textarea id="catatan" name="catatan" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Daftar Sekarang</button>
+                    </form>
+                    <div id="formMessage" class="form-message"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3 class="footer-title">Minnatul Huda</h3>
+                    <p class="footer-text" id="footerTagline">Membentuk Generasi Qurani Berakhlakul Karimah</p>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Kontak Kami</h4>
+                    <ul class="footer-contact">
+                        <li><span id="footerPhone">+62 812-3456-7890</span></li>
+                        <li><span id="footerEmail">info@minnatulhuda.sch.id</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="currentYear">2025</span> Pondok Pesantren Minnatul Huda</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

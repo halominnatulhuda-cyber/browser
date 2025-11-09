@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Galeri Pondok Pesantren Minnatul Huda">
+    <title>Galeri - Pondok Pesantren Minnatul Huda</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="https://via.placeholder.com/240x135/2d5f3f/ffffff?text=Minnatul+Huda" alt="Logo Minnatul Huda" class="logo-img">
+                </div>
+                <nav class="nav" id="mainNav">
+                    <ul class="nav-list">
+                        <li><a href="index.html" class="nav-link">Beranda</a></li>
+                        <li><a href="tentang.html" class="nav-link">Tentang</a></li>
+                        <li><a href="prestasi.html" class="nav-link">Prestasi</a></li>
+                        <li><a href="unit.html" class="nav-link">Unit</a></li>
+                        <li><a href="gallery.html" class="nav-link">Galeri</a></li>
+                        <li><a href="daftar.html" class="nav-link">Pendaftaran</a></li>
+                    </ul>
+                </nav>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="page-hero">
+        <div class="container">
+            <h1 class="page-title">Galeri Foto</h1>
+            <p class="page-subtitle">Dokumentasi kegiatan dan fasilitas kami</p>
+        </div>
+    </section>
+
+    <section class="gallery-page">
+        <div class="container">
+            <div class="gallery-filter">
+                <button class="filter-btn active" data-filter="all">Semua</button>
+                <button class="filter-btn" data-filter="fasilitas">Fasilitas</button>
+                <button class="filter-btn" data-filter="event">Event</button>
+            </div>
+            <div class="gallery-grid" id="galleryGrid"></div>
+        </div>
+    </section>
+
+    <div class="modal fullscreen-modal" id="galleryModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content fullscreen">
+            <button class="modal-close" aria-label="Close modal">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <img src="" alt="" id="fullscreenImage">
+            <p id="fullscreenCaption"></p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3 class="footer-title">Minnatul Huda</h3>
+                    <p class="footer-text" id="footerTagline">Membentuk Generasi Qurani Berakhlakul Karimah</p>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Kontak Kami</h4>
+                    <ul class="footer-contact">
+                        <li><span id="footerPhone">+62 812-3456-7890</span></li>
+                        <li><span id="footerEmail">info@minnatulhuda.sch.id</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="currentYear">2025</span> Pondok Pesantren Minnatul Huda</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

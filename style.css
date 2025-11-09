@@ -438,44 +438,76 @@ body {
 
 
 
+/* ==== STAT SECTION (modern glass effect) ==== */
 .stats {
-    background: var(--primary-color);
-    color: var(--text-white);
-    padding-top: 0px;
-    padding-bottom: 40px;
+  position: relative;
+  background: linear-gradient(135deg, rgba(45,95,63,0.95) 0%, rgba(79,179,191,0.85) 100%);
+  color: var(--text-white);
+  padding-top: 0;
+  padding-bottom: 60px;
+  margin-top: 0; /* tempel ke hero */
+  z-index: 2; /* biar tetap di atas hero jika overlap */
 }
 
+.stats::before {
+  content: "";
+  position: absolute;
+  top: -50px; /* sedikit overlap ke hero */
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, rgba(45,95,63,0.3), transparent);
+  z-index: -1;
+}
 
 .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 40px;
+  position: relative;
+  z-index: 2;
 }
 
+/* ==== STAT CARD ==== */
 .stat-card {
-    text-align: center;
+  background: rgba(255, 255, 255, 0.15); /* semi-transparan glass white */
+  backdrop-filter: blur(8px); /* efek kaca */
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px; /* tidak siku-siku */
+  padding: 30px 20px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
 }
 
 .stat-icon {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .stat-icon .icon {
-    width: 48px;
-    height: 48px;
-    stroke: var(--accent-light);
+  width: 48px;
+  height: 48px;
+  stroke: var(--accent-light);
 }
 
 .stat-number {
-    font-size: 3rem;
-    font-weight: 700;
-    margin-bottom: 10px;
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #fff;
 }
 
 .stat-label {
-    font-size: 1.1rem;
-    opacity: 0.9;
+  font-size: 1.1rem;
+  opacity: 0.9;
 }
+
 
 section {
     padding: 40px 0;

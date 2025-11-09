@@ -544,73 +544,103 @@ body {
 
 
 /* ==== STAT SECTION (modern glass effect) ==== */
+/* === STATS SECTION === */
 .stats {
-  position: relative;
-  background: linear-gradient(135deg, rgba(45,95,63,0.95) 0%, rgba(79,179,191,0.85) 100%);
+  background: var(--primary-color);
   color: var(--text-white);
-  padding-top: 60px;
-  padding-bottom: 60px;
-  margin-top: 0; /* tempel ke hero */
-  z-index: 2; /* biar tetap di atas hero jika overlap */
+  padding: 40px 0;
+  overflow: hidden;
 }
 
-.stats::before {
-  content: "";
-  position: absolute;
-  top: -50px; /* sedikit overlap ke hero */
-  left: 0;
-  right: 0;
-  height: 80px;
-  background: linear-gradient(to bottom, rgba(45,95,63,0.3), transparent);
-  z-index: -1;
-}
-
+/* grid selalu 4 kolom tapi responsif mengecil */
 .stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 40px;
-  position: relative;
-  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 20px;
+  padding: 0 20px;
+  flex-wrap: nowrap; /* pastikan 1 baris */
 }
 
-/* ==== STAT CARD ==== */
 .stat-card {
-  background: rgba(255, 255, 255, 0.15); /* semi-transparan glass white */
-  backdrop-filter: blur(8px); /* efek kaca */
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: 16px; /* tidak siku-siku */
-  padding: 30px 20px;
+  flex: 1; /* agar semua membagi lebar sama rata */
+  max-width: 250px; /* batas maksimum lebar tiap card */
+  min-width: 0; /* cegah melar berlebih */
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
   text-align: center;
-  color: #fff;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  padding: 20px 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6px);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .stat-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
 .stat-icon {
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .stat-icon .icon {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   stroke: var(--accent-light);
 }
 
 .stat-number {
-  font-size: 2.8rem;
+  font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 10px;
-  color: #fff;
+  margin-bottom: 6px;
 }
 
 .stat-label {
-  font-size: 1.1rem;
+  font-size: 1rem;
   opacity: 0.9;
+}
+
+/* === RESPONSIVE BEHAVIOR === */
+@media (max-width: 900px) {
+  .stats-grid {
+    gap: 14px;
+  }
+
+  .stat-card {
+    padding: 16px 8px;
+  }
+
+  .stat-number {
+    font-size: 1.6rem;
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .stats {
+    padding: 30px 0;
+  }
+
+  .stats-grid {
+    gap: 10px;
+  }
+
+  .stat-card {
+    padding: 14px 6px;
+    border-radius: 12px;
+  }
+
+  .stat-number {
+    font-size: 1.4rem;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+  }
 }
 
 

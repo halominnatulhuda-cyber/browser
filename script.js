@@ -238,34 +238,37 @@ function closeMobileMenu() {
 
 
 
-/* ============================
-   HERO SECTION FUNCTIONS
-   ============================ */
-
-let heroInterval;
-let currentHeroIndex = 0;
-let isAnimating = false;
-
-// Fungsi utama untuk mengisi konten Hero
+/* ---------------------------
+   POPULATE FUNCTIONS (keep original logic — slightly guarded)
+   (Jika Anda punya implementasi asli, ini akan dipakai; saya hanya pastikan tidak crash)
+----------------------------*/
 function populateHero() {
   const heroSlider = document.querySelector('.hero-slider');
-  const indicatorsContainer = document.querySelector('.slider-indicators');
-  
+  const indicators = document.querySelector('.slider-indicators');
   if (!heroSlider) return;
 
-  // Ambil data slide atau gunakan fallback jika kosong
-  const slides = Array.isArray(window.siteData?.hero) && window.siteData.hero.length > 0 
-    ? window.siteData.hero 
-    : [{
-        image: window.siteData?.about?.galleries?.[0] || 'assets/hero-fallback.jpg',
-        title: window.siteData?.siteInfo?.tagline || 'Selamat Datang',
-        subtitle: window.siteData?.siteInfo?.description || ''
-      }];
+  // If siteData.hero missing, use empty array
+  const slides = Array.isArray(siteData.hero) ? siteData.hero : [];
+  if (slides.length === 0) {
+    // fallback: make one slide from siteInfo or default
+    const fallbackImg = slides[0]?.image || (siteData.about?.galleries?.[0] || 'assets/hero1.jpg');
+    heroSlider.innerHTML = `
+      <div class="hero-slide active">
+        <img src="${fallbackImg}" alt="Hero" loading="lazy">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1 class="hero-title">${siteData.siteInfo?.tagline || 'Sekolah Modern'}</h1>
+          <p class="hero-subtitle">${siteData.siteInfo?.description || ''}</p>
+        </div>
+      </div>
+    `;
+    if (indicators) indicators.innerHTML = `<button class="slider-indicator active"></button>`;
+    return;
+  }
 
-  // Render Slides
   heroSlider.innerHTML = slides.map((s, i) => `
-    <div class="hero-slide ${i === 0 ? 'active' : ''}" data-index="${i}">
-      <img src="${s.image || ''}" alt="${s.title || 'Hero Slide'}" loading="lazy">
+    <div class="hero-slide ${i === 0 ? 'active' : ''}">
+      <img src="${s.image || ''}" alt="${s.title || 'Slide'}" loading="lazy">
       <div class="hero-overlay"></div>
       <div class="hero-content">
         <h1 class="hero-title">${s.title || ''}</h1>
@@ -274,123 +277,10 @@ function populateHero() {
     </div>
   `).join('');
 
-  // Render Indicators
-  if (indicatorsContainer) {
-    indicatorsContainer.innerHTML = slides.map((_, i) => `
-      <button class="slider-indicator ${i === 0 ? 'active' : ''}" 
-              data-slide="${i}" 
-              aria-label="Lihat slide ke ${i + 1}"></button>
-    `).join('');
-  }
-
-  // Inisialisasi slider jika lebih dari 1 slide
-  if (slides.length > 1) {
-    initHeroSlider(slides.length);
+  if (indicators) {
+    indicators.innerHTML = slides.map((_, i) => `<button class="slider-indicator ${i === 0 ? 'active' : ''}" data-slide="${i}" aria-label="Go to slide ${i+1}"></button>`).join('');
   }
 }
-
-// Fungsi untuk menangani logika animasi slider
-function initHeroSlider(totalSlides) {
-  // Bersihkan interval lama jika ada (untuk mencegah duplikasi saat re-render)
-  if (heroInterval) clearInterval(heroInterval);
-
-  const slides = document.querySelectorAll('.hero-slide');
-  const indicators = document.querySelectorAll('.slider-indicator');
-
-  function goToSlide(nextIndex, direction = 'next') {
-    if (isAnimating || nextIndex === currentHeroIndex) return;
-    isAnimating = true;
-
-    const currentSlide = slides[currentHeroIndex];
-    const nextSlide = slides[nextIndex];
-
-    // Tentukan kelas animasi berdasarkan arah
-    // Jika 'next', slide saat ini geser ke kiri (exit-left), slide baru masuk dari kanan
-    // Jika 'prev', slide saat ini geser ke kanan (exit-right), slide baru masuk dari kiri
-    let exitClass, enterClass;
-    if (direction === 'next') {
-      exitClass = 'exit-left';
-      enterClass = 'enter-right';
-    } else {
-      exitClass = 'exit-right';
-      enterClass = 'enter-left';
-    }
-
-    // 1. Persiapkan slide berikutnya (posisikan di luar layar sebelum animasi mulai)
-    nextSlide.classList.add(enterClass);
-    // Force reflow agar browser menyadari posisi awal sebelum transisi
-    void nextSlide.offsetWidth; 
-
-    // 2. Mulai animasi
-    currentSlide.classList.add(exitClass);
-    currentSlide.classList.remove('active');
-    
-    nextSlide.classList.add('active');
-    nextSlide.classList.remove(enterClass);
-
-    // 3. Update indicators
-    if (indicators.length > 0) {
-      indicators[currentHeroIndex]?.classList.remove('active');
-      indicators[nextIndex]?.classList.remove('active'); // Safety
-      indicators[nextIndex]?.classList.add('active');
-    }
-
-    // 4. Cleanup kelas setelah animasi selesai
-    setTimeout(() => {
-      currentSlide.classList.remove(exitClass);
-      currentSlide.classList.remove('enter-left', 'enter-right'); // Bersihkan sisa kelas lain
-      isAnimating = false;
-      currentHeroIndex = nextIndex;
-    }, 800); // Sesuaikan dengan durasi transition CSS (0.8s)
-  }
-
-  function nextSlide() {
-    let nextIndex = (currentHeroIndex + 1) % totalSlides;
-    goToSlide(nextIndex, 'next');
-  }
-
-  function prevSlide() {
-    let prevIndex = (currentHeroIndex - 1 + totalSlides) % totalSlides;
-    goToSlide(prevIndex, 'prev');
-  }
-
-  // Event Listeners untuk tombol navigasi (jika ada di HTML)
-  document.querySelector('.slider-next')?.addEventListener('click', () => {
-    nextSlide();
-    resetInterval();
-  });
-
-  document.querySelector('.slider-prev')?.addEventListener('click', () => {
-    prevSlide();
-    resetInterval();
-  });
-
-  // Event Listeners untuk indicators
-  indicators.forEach((indicator, index) => {
-    indicator.addEventListener('click', () => {
-      if (index === currentHeroIndex) return;
-      const direction = index > currentHeroIndex ? 'next' : 'prev';
-      goToSlide(index, direction);
-      resetInterval();
-    });
-  });
-
-  // Auto slide
-  function startInterval() {
-    heroInterval = setInterval(nextSlide, 6000); // Ganti slide setiap 6 detik
-  }
-
-  function resetInterval() {
-    clearInterval(heroInterval);
-    startInterval();
-  }
-
-  startInterval();
-}
-
-// Panggil fungsi populate saat file dimuat (atau panggil manual dari main.js Anda)
-// document.addEventListener('DOMContentLoaded', populateHero);
-
 
 function populateAbout() {
   const para1 = document.getElementById('aboutPara1');

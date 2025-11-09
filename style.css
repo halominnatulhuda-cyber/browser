@@ -257,16 +257,30 @@ body {
 
 
 /* ==== HERO SECTION (modern smooth version) ==== */
+
 .hero {
   position: relative;
-  height: 450px; /* sebelumnya 600px supaya banner tidak terlalu tinggi */
+  height: 450px; /* tinggi banner */
   overflow: hidden;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
   box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-  margin-top: 0; /* pastikan tidak ada jarak dengan header */
+
+  margin-top: 0;    /* tempel ke header */
+  margin-bottom: 0; /* tempel ke section berikutnya (stats) */
+  padding: 0;       /* hilangkan ruang dalam agar overlay menempel rapat */
 }
 
+/* overlay efek kaca */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(45,95,63,0.7) 0%, rgba(79,179,191,0.4) 100%);
+  mix-blend-mode: multiply;
+  backdrop-filter: blur(2px);
+  margin: 0;  /* pastikan overlay benar-benar 0 jarak */
+  padding: 0;
+}
 
 /* wrapper utama */
 .hero-slider {
@@ -304,14 +318,7 @@ body {
   transform: scale(1);
 }
 
-/* overlay efek kaca */
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(45,95,63,0.7) 0%, rgba(79,179,191,0.4) 100%);
-  mix-blend-mode: multiply;
-  backdrop-filter: blur(2px);
-}
+
 
 /* konten tengah */
 .hero-content {
@@ -434,8 +441,10 @@ body {
 .stats {
     background: var(--primary-color);
     color: var(--text-white);
-    padding: 60px 0;
+    padding-top: 0px;
+    padding-bottom: 40px;
 }
+
 
 .stats-grid {
     display: grid;
@@ -469,7 +478,7 @@ body {
 }
 
 section {
-    padding: 0px 0;
+    padding: 40px 0;
 }
 
 /* Transisi antar section (untuk pergantian halaman halus) */

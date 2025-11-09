@@ -578,34 +578,47 @@ function initMobileMenu() {
 
   if (!mobileMenuBtn || !nav) return;
 
-  mobileMenuBtn.addEventListener('click', () => {
-    const isActive = nav.classList.toggle('active');
-    document.body.classList.toggle('menu-open', isActive);
-    // accessibility: hide main when menu open
-    if (isActive) main.setAttribute('aria-hidden', 'true');
-    else main.removeAttribute('aria-hidden');
-  });
+ mobileMenuBtn.addEventListener('click', () => {
+  const isActive = nav.classList.toggle('active');
+  document.body.classList.toggle('menu-open', isActive);
 
-  // close nav on link click and remove body lock
-  document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-      if (nav.classList.contains('active')) {
-        nav.classList.remove('active');
-        document.body.classList.remove('menu-open');
-        main.removeAttribute('aria-hidden');
-      }
-    });
-  });
+  // ✅ Accessibility: sembunyikan elemen utama saat menu aktif (bukan <body>)
+  const mainContent = document.querySelectorAll('header, section, footer');
+  if (isActive) {
+    mainContent.forEach(el => el.setAttribute('aria-hidden', 'true'));
+  } else {
+    mainContent.forEach(el => el.removeAttribute('aria-hidden'));
+  }
+});
 
-  // close nav when clicking outside (mobile)
-  document.addEventListener('click', (e) => {
-    if (!nav.contains(e.target) && !mobileMenuBtn.contains(e.target) && nav.classList.contains('active')) {
+// ✅ Tutup menu saat salah satu link di klik
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', () => {
+    if (nav.classList.contains('active')) {
       nav.classList.remove('active');
       document.body.classList.remove('menu-open');
-      main.removeAttribute('aria-hidden');
+
+      // Kembalikan aksesibilitas elemen utama
+      document.querySelectorAll('[aria-hidden="true"]').forEach(el => el.removeAttribute('aria-hidden'));
     }
   });
-}
+});
+
+// ✅ Tutup menu saat klik di luar area navigasi
+document.addEventListener('click', (e) => {
+  if (
+    !nav.contains(e.target) &&
+    !mobileMenuBtn.contains(e.target) &&
+    nav.classList.contains('active')
+  ) {
+    nav.classList.remove('active');
+    document.body.classList.remove('menu-open');
+
+    // Kembalikan aksesibilitas elemen utama
+    document.querySelectorAll('[aria-hidden="true"]').forEach(el => el.removeAttribute('aria-hidden'));
+  }
+});
+
 
 /* ---------------------------
    SCROLL TOP BUTTON

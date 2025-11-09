@@ -761,6 +761,7 @@ section {
   
   /* ==== PROGRAM SECTION ==== */
 
+
 .programs-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -895,47 +896,16 @@ section {
 
 /* responsive */
 @media (max-width: 768px) {
-
-  /* === PROGRAM UNGGULAN: ubah ke horizontal scroll === */
-  .programs-grid {
-    display: flex;
-    overflow-x: auto;
-    gap: 20px;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 10px;
-  }
-
-  .program-card {
-    flex: 0 0 80%;
-    scroll-snap-align: start;
-  }
-
-  /* === BERITA: ubah ke horizontal scroll === */
   .news-slider {
-    display: flex;
-    overflow-x: auto;
-    gap: 20px;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 10px;
+    grid-template-columns: 1fr;
   }
-
   .news-card {
-    flex: 0 0 80%;
-    scroll-snap-align: start;
     border-radius: 12px;
-  }
-
-  /* sembunyikan scrollbar agar tampilan bersih */
-  .programs-grid::-webkit-scrollbar,
-  .news-slider::-webkit-scrollbar {
-    display: none;
   }
 }
 
-
-
+lakukan ini juga untuk testimonial
+berikut code sebelumnya
 .testimonials-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -1000,28 +970,6 @@ section {
 .testimonial-date {
     color: var(--text-light);
     font-size: 0.85rem;
-}
-
-/* ==== RESPONSIVE - TESTIMONIAL SLIDER ==== */
-@media (max-width: 768px) {
-  .testimonials-grid {
-    display: flex;
-    overflow-x: auto;
-    gap: 20px;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 10px;
-  }
-
-  .testimonial-card {
-    flex: 0 0 80%;
-    scroll-snap-align: start;
-  }
-
-  /* sembunyikan scrollbar agar tampil bersih */
-  .testimonials-grid::-webkit-scrollbar {
-    display: none;
-  }
 }
 
   .about-gallery {

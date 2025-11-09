@@ -45,24 +45,32 @@ const safeQueryAll = (sel, ctx = document) => Array.from((ctx || document).query
 let siteData = null;
 
 async function loadData() {
-  // Try to fetch package.json with CORS mode. If fails, fallback to embedded data.
+  // Try to fetch package.json when served over HTTP(S). If served via file:// or fetch fails,
+  // use the embedded fallback data. This avoids opaque CORS errors and works both locally and on hosting.
   try {
-    const res = await fetch('package.json', { mode: 'cors', cache: 'no-cache' });
-    if (!res.ok) throw new Error(`Fetch failed (${res.status})`);
+    // If page opened via file://, skip fetch (fetching local files via fetch often fails)
+    if (window.location.protocol === 'file:') {
+      throw new Error('Running from file:// - skipping package.json fetch');
+    }
+
+    // Normal HTTP(S) fetch - keep it simple (no explicit mode). If remote server blocks CORS,
+    // this will throw and fallback will be used.
+    const res = await fetch('package.json', { cache: 'no-cache' });
+
+    if (!res || !res.ok) throw new Error(`Fetch failed (${res && res.status})`);
+
     const json = await res.json();
-    // package.json may wrap content: { content: {...} }
     siteData = json.content ? json.content : json;
     console.info('Loaded data from package.json');
   } catch (err) {
-    console.warn('Could not load package.json via fetch — using fallback embedded data.', err);
-    // Use embedded fallback
+    console.warn('package.json fetch failed or skipped — using embedded fallback data.', err);
     siteData = window._DEFAULT_SITE_DATA;
   } finally {
-    // Ensure siteData exists (at least empty object) to avoid errors
-    siteData = siteData || {};
+    siteData = siteData || window._DEFAULT_SITE_DATA;
     initializePage();
   }
 }
+
 
 /* ---------------------------
    INITIALIZE PAGE (populate + inits)

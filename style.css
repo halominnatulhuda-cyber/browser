@@ -443,7 +443,7 @@ body {
   position: relative;
   background: linear-gradient(135deg, rgba(45,95,63,0.95) 0%, rgba(79,179,191,0.85) 100%);
   color: var(--text-white);
-  padding-top: 0;
+  padding-top: 60px;
   padding-bottom: 60px;
   margin-top: 0; /* tempel ke hero */
   z-index: 2; /* biar tetap di atas hero jika overlap */

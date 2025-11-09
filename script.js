@@ -111,21 +111,26 @@ function initializePage() {
 /* ---------------------------
    DROPDOWN BEHAVIOR (mobile + desktop)
 ----------------------------*/
+/* === DROPDOWN BEHAVIOR (Mobile + Desktop) === */
 function initDropdowns() {
   const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
 
-  dropdownToggles.forEach((toggle) => {
+  dropdownToggles.forEach(toggle => {
     toggle.addEventListener('click', (e) => {
       const menu = toggle.nextElementSibling;
 
-      // === MOBILE BEHAVIOR ===
+      // === MOBILE MODE ===
       if (window.innerWidth <= 1024) {
+        // Jika menu belum aktif → buka, tapi jangan tutup menu utama
         if (!menu.classList.contains('active')) {
-          // klik pertama → buka dropdown
           e.preventDefault();
+          // Tutup dropdown lain lebih dulu
+          document.querySelectorAll('.dropdown-menu.active').forEach(m => {
+            if (m !== menu) m.classList.remove('active');
+          });
           menu.classList.add('active');
         } else {
-          // klik kedua → jalankan navigasi link internal
+          // Kalau dropdown sudah terbuka → klik lagi = navigasi
           const target = toggle.getAttribute('href');
           if (target && target.startsWith('#')) {
             e.preventDefault();
@@ -133,43 +138,46 @@ function initDropdowns() {
             history.pushState({ section: target }, '', target);
             setActiveNav(target);
 
-            // tutup dropdown & menu
-            document
-              .querySelectorAll('.dropdown-menu.active')
-              .forEach((m) => m.classList.remove('active'));
-            document.body.classList.remove('menu-open');
+            // Tutup semua menu & kembalikan scroll
+            closeMobileMenu();
           }
         }
       }
     });
   });
 
-  // === Close dropdown if click outside ===
+  // === Klik area gelap (overlay) menutup menu mobile ===
   document.addEventListener('click', (e) => {
-    if (!e.target.closest('.nav-item')) {
-      document
-        .querySelectorAll('.dropdown-menu.active')
-        .forEach((menu) => menu.classList.remove('active'));
+    const nav = document.getElementById('mainNav');
+    const isInsideNav = e.target.closest('.nav');
+    const isMenuBtn = e.target.closest('#mobileMenuBtn');
+    if (!isInsideNav && !isMenuBtn && nav.classList.contains('active')) {
+      closeMobileMenu();
     }
   });
 
-  // === Handle internal links (both nav & dropdown) ===
-  document
-    .querySelectorAll('.nav-link[href^="#"], .dropdown-link[href^="#"]')
-    .forEach((link) => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const target = link.getAttribute('href');
-        showSection(target);
-        history.pushState({ section: target }, '', target);
-        setActiveNav(target);
+  // === Klik link internal langsung tutup menu ===
+  document.querySelectorAll('.nav-link[href^="#"], .dropdown-link[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = link.getAttribute('href');
+      showSection(target);
+      history.pushState({ section: target }, '', target);
+      setActiveNav(target);
 
-        // tutup menu dan hilangkan scroll lock
-        const nav = document.getElementById('mainNav');
-        nav?.classList.remove('active');
-        document.body.classList.remove('menu-open');
-      });
+      // Tutup semua dropdown & menu utama
+      closeMobileMenu();
     });
+  });
+}
+
+/* === Fungsi bantu sederhana === */
+function closeMobileMenu() {
+  document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
+  document.getElementById('mainNav')?.classList.remove('active');
+  document.body.classList.remove('menu-open');
+  const mobileBtn = document.getElementById('mobileMenuBtn');
+  if (mobileBtn) mobileBtn.classList.remove('active');
 }
 
 

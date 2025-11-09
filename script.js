@@ -101,23 +101,18 @@ function initializePage() {
   } catch (e) {
     console.warn('Some inits failed:', e);
   }
-
+}
 
 
   
   // Global inits
   initMobileMenu();
+  initDropdowns(); // ✅ tambahkan baris ini di sini, bukan bikin fungsi baru
   initScrollTop();
   initSmoothScroll();
   initHeader();
   initRouting(); // set up SPA routing (intercepts nav links)
-  // Set year if exists
-  const elYear = document.getElementById('currentYear');
-  if (elYear) elYear.textContent = new Date().getFullYear();
 
-  // Run page-specific initializers (fallback: keep previous behavior)
-  initCurrentPage();
-}
 /* === DROPDOWN BEHAVIOR === */
 function initDropdowns() {
   const dropdownToggles = document.querySelectorAll('.dropdown-toggle');

@@ -738,8 +738,12 @@ function initRegistrationForm() {
         form.reset();
     });
 }
+/* =========================================================
+   NAVIGATION SCRIPT – Yayasan Minnatul Huda (FINAL FIX)
+   ========================================================= */
+
 /* ---------------------------
-   DROPDOWN BEHAVIOR (mobile + desktop)
+   INIT DROPDOWNS (Desktop + Mobile)
 ----------------------------*/
 function initDropdowns() {
     const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
@@ -766,7 +770,7 @@ function initDropdowns() {
 }
 
 /* ---------------------------
-   MOBILE MENU TOGGLE & OVERLAY
+   INIT MOBILE MENU + OVERLAY
 ----------------------------*/
 function initMobileMenu() {
     const mobileBtn = document.getElementById('mobileMenuBtn');
@@ -783,18 +787,15 @@ function initMobileMenu() {
         document.body.appendChild(overlay);
     }
 
-    // === Tombol toggle menu ===
+    // === Toggle Menu Button ===
     mobileBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         const isActive = nav.classList.toggle('active');
         mobileBtn.classList.toggle('active', isActive);
-        body.classList.toggle('menu-open', isActive);
         overlay.classList.toggle('active', isActive);
+        body.classList.toggle('menu-open', isActive);
 
-        // Tutup semua dropdown saat menutup menu
-        if (!isActive) {
-            document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
-        }
+        if (!isActive) closeAllDropdowns();
     });
 
     // === Klik overlay menutup menu ===
@@ -811,7 +812,7 @@ function initMobileMenu() {
 }
 
 /* ---------------------------
-   CLOSE MOBILE MENU
+   CLOSE MOBILE MENU & DROPDOWNS
 ----------------------------*/
 function closeMobileMenu() {
     const nav = document.getElementById('mainNav');
@@ -823,37 +824,46 @@ function closeMobileMenu() {
     if (mobileBtn) mobileBtn.classList.remove('active');
     if (overlay) overlay.classList.remove('active');
     body.classList.remove('menu-open');
+    closeAllDropdowns();
+}
 
-    // Tutup semua dropdown aktif
+function closeAllDropdowns() {
     document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
 }
 
 /* ---------------------------
-   ROUTING / SPA NAVIGATION
+   ROUTING / NAVIGATION (SPA-Like)
 ----------------------------*/
 function initRouting() {
-    document.querySelectorAll('.nav-link, .dropdown-link').forEach(link => {
+    const links = document.querySelectorAll('.nav-link, .dropdown-link');
+
+    links.forEach(link => {
         link.addEventListener('click', (e) => {
             const href = link.getAttribute('href') || '';
+            const isHash = href.startsWith('#');
+            const isExternal = /^https?:\/\//i.test(href) || href.includes('.html');
 
-            // Abaikan external link
-            if (!href.startsWith('#')) return;
+            // Jika link eksternal (halaman lain), biarkan default behavior
+            if (isExternal && !isHash) {
+                closeMobileMenu();
+                return;
+            }
 
-            e.preventDefault();
+            // Jika hash link (SPA internal)
+            if (isHash) {
+                e.preventDefault();
 
-            // Routing internal
-            showSection(href);
-            history.pushState({
-                section: href
-            }, '', href);
-            setActiveNav(href);
+                showSection(href);
+                history.pushState({ section: href }, '', href);
+                setActiveNav(href);
 
-            // Tutup menu setelah navigasi (mobile only)
-            if (window.innerWidth <= 1024) closeMobileMenu();
+                // Tutup menu & dropdown di mobile
+                if (window.innerWidth <= 1024) closeMobileMenu();
+            }
         });
     });
 
-    // Back/forward navigation
+    // Back/forward browser
     window.addEventListener('popstate', (e) => {
         const state = e.state;
         const hash = location.hash || (state && state.section) || '#home';
@@ -866,16 +876,16 @@ function initRouting() {
     setTimeout(() => {
         showSection(initialHash);
         setActiveNav(initialHash);
-    }, 120);
+    }, 100);
 }
 
 /* ---------------------------
-   SECTION SHOWING
+   SECTION SHOW / HIDE
 ----------------------------*/
 function showSection(hashOrSelector) {
     let selector = hashOrSelector;
     if (!selector) selector = '#home';
-    if (!selector.startsWith('#') && typeof selector === 'string') selector = '#' + selector;
+    if (!selector.startsWith('#')) selector = '#' + selector;
 
     const sections = document.querySelectorAll('main section');
     sections.forEach(s => {
@@ -887,8 +897,8 @@ function showSection(hashOrSelector) {
     if (!target) {
         const home = document.querySelector('#home');
         if (home) {
-            home.classList.remove('section-hidden');
             home.classList.add('section-visible');
+            home.classList.remove('section-hidden');
         }
         return;
     }
@@ -905,22 +915,35 @@ function showSection(hashOrSelector) {
 }
 
 /* ---------------------------
-   ACTIVE NAV LINK HANDLER
+   ACTIVE NAV LINK SETTER
 ----------------------------*/
 function setActiveNav(hash) {
     const normalized = (hash || '').toString();
+
     document.querySelectorAll('.nav-link').forEach(a => {
         const href = a.getAttribute('href') || '';
         a.classList.toggle('active', href === normalized);
     });
 
-    // Tampilkan dropdown induk kalau link anak aktif
     document.querySelectorAll('.dropdown-menu').forEach(menu => {
-        const childActive = [...menu.querySelectorAll('.dropdown-link')].some(link => link.getAttribute('href') === normalized);
-        if (childActive) menu.classList.add('active');
+        const isActiveChild = [...menu.querySelectorAll('.dropdown-link')]
+            .some(link => link.getAttribute('href') === normalized);
+        if (isActiveChild) {
+            menu.parentElement.querySelector('.dropdown-toggle')?.classList.add('active');
+        } else {
+            menu.parentElement.querySelector('.dropdown-toggle')?.classList.remove('active');
+        }
     });
 }
 
+/* ---------------------------
+   INIT ALL
+----------------------------*/
+document.addEventListener('DOMContentLoaded', () => {
+    initDropdowns();
+    initMobileMenu();
+    initRouting();
+});
 
 /* ---------------------------
    IntersectionObserver: [data-animate] elements

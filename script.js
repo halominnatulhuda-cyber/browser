@@ -38,6 +38,207 @@ window._DEFAULT_SITE_DATA = {
 
 
 /* ---------------------------
+   Utility kecil
+----------------------------*/
+const safeQuery = (sel, ctx = document) => ctx.querySelector(sel);
+const safeQueryAll = (sel, ctx = document) =>
+  Array.from((ctx || document).querySelectorAll(sel || []));
+
+/* ---------------------------
+   DATA LOADING
+----------------------------*/
+let siteData = null;
+
+async function loadData() {
+  try {
+    if (window.location.protocol === 'file:') {
+      console.warn('Running locally — skip fetch and use fallback.');
+      siteData = window._DEFAULT_SITE_DATA; // fallback lokal
+    } else {
+      const res = await fetch('package.json', { cache: 'no-cache' });
+      if (!res.ok) throw new Error(`Fetch failed (${res.status})`);
+      const json = await res.json();
+      siteData = json.content ? json.content : json;
+      console.info('✅ Loaded data from package.json');
+    }
+  } catch (err) {
+    console.warn('⚠️ package.json fetch failed — using fallback.', err);
+    siteData = window._DEFAULT_SITE_DATA;
+  } finally {
+    siteData = siteData || window._DEFAULT_SITE_DATA;
+    initializePage();
+  }
+}
+
+console.log("✅ initializePage() started");
+
+
+
+
+
+
+
+
+/* ---------------------------
+   INITIALIZE PAGE (populate + inits)
+----------------------------*/
+function initializePage() {
+  if (!siteData) siteData = window._DEFAULT_SITE_DATA;
+
+  // === Populate dynamic content ===
+  try {
+    if (safeQuery('.hero-slider')) populateHero();
+    if (safeQuery('#aboutPara1')) populateAbout();
+    if (safeQuery('#aboutGallery')) populateAboutGallery(); // tambahan
+    if (safeQuery('#programsGrid')) populatePrograms();
+    if (safeQuery('#newsSlider')) populateNews();
+    if (safeQuery('#testimonialsGrid')) populateTestimonials();
+    if (safeQuery('#faqList')) populateFAQ();
+    if (safeQuery('.about-detail')) populateAboutDetail();
+    populateFooter();
+  } catch (e) {
+    console.error('Error when populating content (non-fatal):', e);
+  }
+
+  // === Initialize UI components ===
+  try {
+    if (safeQuery('.hero-slider')) initSliders();
+    if (safeQuery('.stats')) initStats();
+    if (safeQuery('.faq-question')) initFAQ();
+    if (safeQuery('#programModal')) initModal();
+    if (safeQuery('#newsModal')) initNewsModal();
+  } catch (e) {
+    console.warn('Some inits failed:', e);
+  }
+
+  // === Global inits ===
+  initDropdowns();
+  initMobileMenu();
+  initScrollTop();
+  initSmoothScroll();
+  initHeader();
+  initRouting();
+}
+
+/* ---------------------------
+   DROPDOWN BEHAVIOR (mobile + desktop)
+----------------------------*/
+function initDropdowns() {
+  const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+
+  dropdownToggles.forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+      const menu = toggle.nextElementSibling;
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile) {
+        e.preventDefault();
+
+        // Tutup dropdown lain agar hanya satu terbuka
+        document.querySelectorAll('.dropdown-menu.active').forEach(m => {
+          if (m !== menu) m.classList.remove('active');
+        });
+
+        // Toggle dropdown ini
+        menu.classList.toggle('active');
+      } else {
+        // Untuk desktop, biarkan CSS hover yang mengatur
+        menu.classList.remove('active');
+      }
+    });
+  });
+
+  // === Klik link dalam dropdown ===
+  document.querySelectorAll('.dropdown-link[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = link.getAttribute('href');
+      if (target) {
+        showSection(target);
+        history.pushState({ section: target }, '', target);
+        setActiveNav(target);
+        closeMobileMenu();
+      }
+    });
+  });
+}
+
+/* ---------------------------
+   MOBILE MENU TOGGLE & OVERLAY
+----------------------------*/
+function initMobileMenu() {
+  const mobileBtn = document.getElementById('mobileMenuBtn');
+  const nav = document.getElementById('mainNav');
+  const body = document.body;
+
+  if (!mobileBtn || !nav) return;
+
+  // === Buat overlay (jika belum ada) ===
+  let overlay = document.querySelector('.nav-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.className = 'nav-overlay';
+    document.body.appendChild(overlay);
+  }
+
+  // === Tombol toggle menu ===
+  mobileBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isActive = nav.classList.toggle('active');
+    mobileBtn.classList.toggle('active', isActive);
+    body.classList.toggle('menu-open', isActive);
+    overlay.classList.toggle('active', isActive);
+
+    // Tutup semua dropdown saat menutup menu
+    if (!isActive) {
+      document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
+    }
+  });
+
+  // === Klik overlay menutup menu ===
+  overlay.addEventListener('click', closeMobileMenu);
+
+  // === Klik link di menu menutup menu (mobile only) ===
+  document.querySelectorAll('.nav-link, .dropdown-link').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 1024) closeMobileMenu();
+    });
+  });
+
+  // === Klik di luar nav menutup menu (untuk keamanan tambahan) ===
+  document.addEventListener('click', (e) => {
+    const insideNav = e.target.closest('#mainNav');
+    const insideBtn = e.target.closest('#mobileMenuBtn');
+    if (!insideNav && !insideBtn && nav.classList.contains('active')) {
+      closeMobileMenu();
+    }
+  });
+}
+
+/* ---------------------------
+   CLOSE MOBILE MENU (universal)
+----------------------------*/
+function closeMobileMenu() {
+  const nav = document.getElementById('mainNav');
+  const mobileBtn = document.getElementById('mobileMenuBtn');
+  const overlay = document.querySelector('.nav-overlay');
+  const body = document.body;
+
+  if (nav) nav.classList.remove('active');
+  if (mobileBtn) mobileBtn.classList.remove('active');
+  if (overlay) overlay.classList.remove('active');
+  body.classList.remove('menu-open');
+
+  // Tutup semua dropdown aktif
+  document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
+}
+
+
+
+
+
+
+/* ---------------------------
    POPULATE FUNCTIONS (keep original logic — slightly guarded)
    (Jika Anda punya implementasi asli, ini akan dipakai; saya hanya pastikan tidak crash)
 ----------------------------*/
@@ -618,170 +819,29 @@ function initRegistrationForm() {
     form.reset();
   });
 }
-/* =========================================================
-   === [LATEST SCRIPT VERSION - DO NOT MODIFY ABOVE THIS] ===
-   ========================================================= */
 
-/* --------------------------- INITIALIZE PAGE (populate + inits) ----------------------------*/
-function initializePage() {
-  if (!siteData) siteData = window._DEFAULT_SITE_DATA;
-
-  // === Populate dynamic content ===
-  try {
-    if (safeQuery('.hero-slider')) populateHero();
-    if (safeQuery('#aboutPara1')) populateAbout();
-    if (safeQuery('#aboutGallery')) populateAboutGallery();
-    // tambahan
-    if (safeQuery('#programsGrid')) populatePrograms();
-    if (safeQuery('#newsSlider')) populateNews();
-    if (safeQuery('#testimonialsGrid')) populateTestimonials();
-    if (safeQuery('#faqList')) populateFAQ();
-    if (safeQuery('.about-detail')) populateAboutDetail();
-    populateFooter();
-  } catch (e) {
-    console.error('Error when populating content (non-fatal):', e);
-  }
-
-  // === Initialize UI components ===
-  try {
-    if (safeQuery('.hero-slider')) initSliders();
-    if (safeQuery('.stats')) initStats();
-    if (safeQuery('.faq-question')) initFAQ();
-    if (safeQuery('#programModal')) initModal();
-    if (safeQuery('#newsModal')) initNewsModal();
-  } catch (e) {
-    console.warn('Some inits failed:', e);
-  }
-
-  // === Global inits ===
-  initDropdowns();
-  initMobileMenu();
-  initScrollTop();
-  initSmoothScroll();
-  initHeader();
-  initRouting();
-}
-
-/* --------------------------- DROPDOWN BEHAVIOR (mobile + desktop) ----------------------------*/
-function initDropdowns() {
-  const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-
-  dropdownToggles.forEach(toggle => {
-    toggle.addEventListener('click', (e) => {
-      const menu = toggle.nextElementSibling;
-      const isMobile = window.innerWidth <= 1024;
-
-      if (isMobile) {
-        e.preventDefault();
-        // Tutup dropdown lain agar hanya satu terbuka
-        document.querySelectorAll('.dropdown-menu.active').forEach(m => {
-          if (m !== menu) m.classList.remove('active');
-        });
-        // Toggle dropdown ini
-        menu.classList.toggle('active');
-      } else {
-        // Untuk desktop, biarkan CSS hover yang mengatur
-        menu.classList.remove('active');
-      }
-    });
-  });
-
-  // === Klik link dalam dropdown ===
-  document.querySelectorAll('.dropdown-link[href^="#"]').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const target = link.getAttribute('href');
-      if (target) {
-        showSection(target);
-        history.pushState({ section: target }, '', target);
-        setActiveNav(target);
-        closeMobileMenu();
-      }
-    });
-  });
-}
-
-/* --------------------------- MOBILE MENU TOGGLE & OVERLAY ----------------------------*/
-function initMobileMenu() {
-  const mobileBtn = document.getElementById('mobileMenuBtn');
-  const nav = document.getElementById('mainNav');
-  const body = document.body;
-  if (!mobileBtn || !nav) return;
-
-  // === Buat overlay (jika belum ada) ===
-  let overlay = document.querySelector('.nav-overlay');
-  if (!overlay) {
-    overlay = document.createElement('div');
-    overlay.className = 'nav-overlay';
-    document.body.appendChild(overlay);
-  }
-
-  // === Tombol toggle menu ===
-  mobileBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const isActive = nav.classList.toggle('active');
-    mobileBtn.classList.toggle('active', isActive);
-    body.classList.toggle('menu-open', isActive);
-    overlay.classList.toggle('active', isActive);
-
-    // Tutup semua dropdown saat menutup menu
-    if (!isActive) {
-      document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
-    }
-  });
-
-  // === Klik overlay menutup menu ===
-  overlay.addEventListener('click', closeMobileMenu);
-
-  // === Klik link di menu menutup menu (mobile only) ===
-  document.querySelectorAll('.nav-link, .dropdown-link').forEach(link => {
-    link.addEventListener('click', () => {
-      if (window.innerWidth <= 1024) closeMobileMenu();
-    });
-  });
-
-  // === Klik di luar nav menutup menu ===
-  document.addEventListener('click', (e) => {
-    const insideNav = e.target.closest('#mainNav');
-    const insideBtn = e.target.closest('#mobileMenuBtn');
-    if (!insideNav && !insideBtn && nav.classList.contains('active')) {
-      closeMobileMenu();
-    }
-  });
-}
-
-/* --------------------------- CLOSE MOBILE MENU (universal) ----------------------------*/
-function closeMobileMenu() {
-  const nav = document.getElementById('mainNav');
-  const mobileBtn = document.getElementById('mobileMenuBtn');
-  const overlay = document.querySelector('.nav-overlay');
-  const body = document.body;
-
-  if (nav) nav.classList.remove('active');
-  if (mobileBtn) mobileBtn.classList.remove('active');
-  if (overlay) overlay.classList.remove('active');
-  body.classList.remove('menu-open');
-
-  // Tutup semua dropdown aktif
-  document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
-}
-
-/* --------------------------- ROUTING / SPA: show only selected section ----------------------------*/
+/* ---------------------------
+   ROUTING / SPA: show only selected section
+----------------------------*/
 function initRouting() {
+  // intercept nav links
   document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', (e) => {
       const href = link.getAttribute('href') || '';
+      // only process internal hash or same-page links
       if (href.startsWith('#')) {
         e.preventDefault();
         const id = href;
         showSection(id);
         history.pushState({ section: id }, '', id);
         setActiveNav(id);
+      } else {
+        // allow external or file links to behave normally
       }
     });
   });
 
-  // Handle back/forward
+  // handle back/forward
   window.addEventListener('popstate', (e) => {
     const state = e.state;
     const hash = location.hash || (state && state.section) || '#home';
@@ -789,7 +849,7 @@ function initRouting() {
     setActiveNav(hash);
   });
 
-  // Initial show
+  // initial show
   const initialHash = location.hash || '#home';
   setTimeout(() => {
     showSection(initialHash);
@@ -798,18 +858,21 @@ function initRouting() {
 }
 
 function showSection(hashOrSelector) {
+  // Accept either '#id' or 'id' or element
   let selector = hashOrSelector;
   if (!selector) selector = '#home';
   if (!selector.startsWith('#') && typeof selector === 'string') selector = '#' + selector;
 
   const sections = document.querySelectorAll('main section');
   sections.forEach(s => {
+    // hide all
     s.classList.remove('section-visible');
     s.classList.add('section-hidden');
   });
 
   const target = document.querySelector(selector);
   if (!target) {
+    // fallback: show home
     const home = document.querySelector('#home');
     if (home) {
       home.classList.remove('section-hidden');
@@ -818,9 +881,11 @@ function showSection(hashOrSelector) {
     return;
   }
 
+  // show target
   target.classList.remove('section-hidden');
   target.classList.add('section-visible');
 
+  // scroll to top of page (header sticky accounted)
   const header = document.querySelector('.header');
   const offset = header ? header.offsetHeight : 0;
   window.scrollTo({ top: Math.max(target.offsetTop - offset - 8, 0), behavior: 'smooth' });
@@ -835,7 +900,9 @@ function setActiveNav(hash) {
   });
 }
 
-/* --------------------------- IntersectionObserver: [data-animate] elements ----------------------------*/
+/* ---------------------------
+   IntersectionObserver: [data-animate] elements
+----------------------------*/
 function init_scroll_animations() {
   const els = document.querySelectorAll('[data-animate]');
   if (!els || !els.length) return;
@@ -847,8 +914,12 @@ function init_scroll_animations() {
   els.forEach(e => io.observe(e));
 }
 
-/* --------------------------- Preserve old page-specific functions ----------------------------*/
+/* ---------------------------
+   Detect and expose original page-specific functions if present
+   (If your older script defined full implementations earlier, preserve them)
+----------------------------*/
 (function preserveOriginals() {
+  // If there were full implementations defined earlier in the environment
   if (typeof initAboutPage === 'function') window.initAboutPageOriginal = initAboutPage;
   if (typeof initAchievementsPage === 'function') window.initAchievementsPageOriginal = initAchievementsPage;
   if (typeof initUnitsPage === 'function') window.initUnitsPageOriginal = initUnitsPage;
@@ -856,12 +927,13 @@ function init_scroll_animations() {
   if (typeof initRegistrationForm === 'function') window.initRegistrationFormOriginal = initRegistrationForm;
 })();
 
-/* --------------------------- Start ----------------------------*/
+/* ---------------------------
+   Start
+----------------------------*/
 document.addEventListener('DOMContentLoaded', () => {
   loadData();
   init_scroll_animations();
 });
-
 // === GALERI CLICK HANDLING ===
 document.querySelectorAll('.gallery-item img').forEach((img) => {
   img.addEventListener('click', (e) => {
@@ -869,6 +941,7 @@ document.querySelectorAll('.gallery-item img').forEach((img) => {
     if (altText === "Galeri 1") {
       window.open("https://www.youtube.com/watch?v=YOUR_VIDEO_ID", "_blank");
     } else {
+      // buka gambar penuh (fungsi modal default)
       openImageFullscreen(img.src, altText);
     }
   });

@@ -120,118 +120,6 @@ function initializePage() {
   initRouting();
 }
 
-/* ---------------------------
-   DROPDOWN BEHAVIOR (mobile + desktop)
-----------------------------*/
-function initDropdowns() {
-  const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-
-  dropdownToggles.forEach(toggle => {
-    toggle.addEventListener('click', (e) => {
-      const menu = toggle.nextElementSibling;
-      const isMobile = window.innerWidth <= 1024;
-
-      if (isMobile) {
-        e.preventDefault();
-
-        // Tutup dropdown lain agar hanya satu terbuka
-        document.querySelectorAll('.dropdown-menu.active').forEach(m => {
-          if (m !== menu) m.classList.remove('active');
-        });
-
-        // Toggle dropdown ini
-        menu.classList.toggle('active');
-      } else {
-        // Untuk desktop, biarkan CSS hover yang mengatur
-        menu.classList.remove('active');
-      }
-    });
-  });
-
-  // === Klik link dalam dropdown ===
-  document.querySelectorAll('.dropdown-link[href^="#"]').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const target = link.getAttribute('href');
-      if (target) {
-        showSection(target);
-        history.pushState({ section: target }, '', target);
-        setActiveNav(target);
-        closeMobileMenu();
-      }
-    });
-  });
-}
-
-/* ---------------------------
-   MOBILE MENU TOGGLE & OVERLAY
-----------------------------*/
-function initMobileMenu() {
-  const mobileBtn = document.getElementById('mobileMenuBtn');
-  const nav = document.getElementById('mainNav');
-  const body = document.body;
-
-  if (!mobileBtn || !nav) return;
-
-  // === Buat overlay (jika belum ada) ===
-  let overlay = document.querySelector('.nav-overlay');
-  if (!overlay) {
-    overlay = document.createElement('div');
-    overlay.className = 'nav-overlay';
-    document.body.appendChild(overlay);
-  }
-
-  // === Tombol toggle menu ===
-  mobileBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const isActive = nav.classList.toggle('active');
-    mobileBtn.classList.toggle('active', isActive);
-    body.classList.toggle('menu-open', isActive);
-    overlay.classList.toggle('active', isActive);
-
-    // Tutup semua dropdown saat menutup menu
-    if (!isActive) {
-      document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
-    }
-  });
-
-  // === Klik overlay menutup menu ===
-  overlay.addEventListener('click', closeMobileMenu);
-
-  // === Klik link di menu menutup menu (mobile only) ===
-  document.querySelectorAll('.nav-link, .dropdown-link').forEach(link => {
-    link.addEventListener('click', () => {
-      if (window.innerWidth <= 1024) closeMobileMenu();
-    });
-  });
-
-  // === Klik di luar nav menutup menu (untuk keamanan tambahan) ===
-  document.addEventListener('click', (e) => {
-    const insideNav = e.target.closest('#mainNav');
-    const insideBtn = e.target.closest('#mobileMenuBtn');
-    if (!insideNav && !insideBtn && nav.classList.contains('active')) {
-      closeMobileMenu();
-    }
-  });
-}
-
-/* ---------------------------
-   CLOSE MOBILE MENU (universal)
-----------------------------*/
-function closeMobileMenu() {
-  const nav = document.getElementById('mainNav');
-  const mobileBtn = document.getElementById('mobileMenuBtn');
-  const overlay = document.querySelector('.nav-overlay');
-  const body = document.body;
-
-  if (nav) nav.classList.remove('active');
-  if (mobileBtn) mobileBtn.classList.remove('active');
-  if (overlay) overlay.classList.remove('active');
-  body.classList.remove('menu-open');
-
-  // Tutup semua dropdown aktif
-  document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
-}
 
 
 
@@ -819,29 +707,120 @@ function initRegistrationForm() {
     form.reset();
   });
 }
-
 /* ---------------------------
-   ROUTING / SPA: show only selected section
+   DROPDOWN BEHAVIOR (mobile + desktop)
 ----------------------------*/
-function initRouting() {
-  // intercept nav links
-  document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', (e) => {
-      const href = link.getAttribute('href') || '';
-      // only process internal hash or same-page links
-      if (href.startsWith('#')) {
+function initDropdowns() {
+  const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+
+  dropdownToggles.forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+      const menu = toggle.nextElementSibling;
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile) {
         e.preventDefault();
-        const id = href;
-        showSection(id);
-        history.pushState({ section: id }, '', id);
-        setActiveNav(id);
-      } else {
-        // allow external or file links to behave normally
+        e.stopPropagation();
+
+        // Tutup dropdown lain agar hanya satu terbuka
+        document.querySelectorAll('.dropdown-menu.active').forEach(m => {
+          if (m !== menu) m.classList.remove('active');
+        });
+
+        // Toggle dropdown ini
+        menu.classList.toggle('active');
       }
     });
   });
+}
 
-  // handle back/forward
+/* ---------------------------
+   MOBILE MENU TOGGLE & OVERLAY
+----------------------------*/
+function initMobileMenu() {
+  const mobileBtn = document.getElementById('mobileMenuBtn');
+  const nav = document.getElementById('mainNav');
+  const body = document.body;
+
+  if (!mobileBtn || !nav) return;
+
+  // === Buat overlay jika belum ada ===
+  let overlay = document.querySelector('.nav-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.className = 'nav-overlay';
+    document.body.appendChild(overlay);
+  }
+
+  // === Tombol toggle menu ===
+  mobileBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isActive = nav.classList.toggle('active');
+    mobileBtn.classList.toggle('active', isActive);
+    body.classList.toggle('menu-open', isActive);
+    overlay.classList.toggle('active', isActive);
+
+    // Tutup semua dropdown saat menutup menu
+    if (!isActive) {
+      document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
+    }
+  });
+
+  // === Klik overlay menutup menu ===
+  overlay.addEventListener('click', closeMobileMenu);
+
+  // === Klik di luar nav menutup menu ===
+  document.addEventListener('click', (e) => {
+    const insideNav = e.target.closest('#mainNav');
+    const insideBtn = e.target.closest('#mobileMenuBtn');
+    if (!insideNav && !insideBtn && nav.classList.contains('active')) {
+      closeMobileMenu();
+    }
+  });
+}
+
+/* ---------------------------
+   CLOSE MOBILE MENU
+----------------------------*/
+function closeMobileMenu() {
+  const nav = document.getElementById('mainNav');
+  const mobileBtn = document.getElementById('mobileMenuBtn');
+  const overlay = document.querySelector('.nav-overlay');
+  const body = document.body;
+
+  if (nav) nav.classList.remove('active');
+  if (mobileBtn) mobileBtn.classList.remove('active');
+  if (overlay) overlay.classList.remove('active');
+  body.classList.remove('menu-open');
+
+  // Tutup semua dropdown aktif
+  document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
+}
+
+/* ---------------------------
+   ROUTING / SPA NAVIGATION
+----------------------------*/
+function initRouting() {
+  document.querySelectorAll('.nav-link, .dropdown-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href') || '';
+
+      // Abaikan external link
+      if (!href.startsWith('#')) return;
+
+      e.preventDefault();
+
+      // Routing internal
+      showSection(href);
+      history.pushState({ section: href }, '', href);
+      setActiveNav(href);
+
+      // Tutup menu setelah navigasi (mobile only)
+      if (window.innerWidth <= 1024) closeMobileMenu();
+    });
+  });
+
+  // Back/forward navigation
   window.addEventListener('popstate', (e) => {
     const state = e.state;
     const hash = location.hash || (state && state.section) || '#home';
@@ -849,7 +828,7 @@ function initRouting() {
     setActiveNav(hash);
   });
 
-  // initial show
+  // Initial
   const initialHash = location.hash || '#home';
   setTimeout(() => {
     showSection(initialHash);
@@ -857,22 +836,22 @@ function initRouting() {
   }, 120);
 }
 
+/* ---------------------------
+   SECTION SHOWING
+----------------------------*/
 function showSection(hashOrSelector) {
-  // Accept either '#id' or 'id' or element
   let selector = hashOrSelector;
   if (!selector) selector = '#home';
   if (!selector.startsWith('#') && typeof selector === 'string') selector = '#' + selector;
 
   const sections = document.querySelectorAll('main section');
   sections.forEach(s => {
-    // hide all
     s.classList.remove('section-visible');
     s.classList.add('section-hidden');
   });
 
   const target = document.querySelector(selector);
   if (!target) {
-    // fallback: show home
     const home = document.querySelector('#home');
     if (home) {
       home.classList.remove('section-hidden');
@@ -881,24 +860,31 @@ function showSection(hashOrSelector) {
     return;
   }
 
-  // show target
   target.classList.remove('section-hidden');
   target.classList.add('section-visible');
 
-  // scroll to top of page (header sticky accounted)
   const header = document.querySelector('.header');
   const offset = header ? header.offsetHeight : 0;
   window.scrollTo({ top: Math.max(target.offsetTop - offset - 8, 0), behavior: 'smooth' });
 }
 
-/* helper: update active class on nav */
+/* ---------------------------
+   ACTIVE NAV LINK HANDLER
+----------------------------*/
 function setActiveNav(hash) {
   const normalized = (hash || '').toString();
   document.querySelectorAll('.nav-link').forEach(a => {
     const href = a.getAttribute('href') || '';
     a.classList.toggle('active', href === normalized);
   });
+
+  // Tampilkan dropdown induk kalau link anak aktif
+  document.querySelectorAll('.dropdown-menu').forEach(menu => {
+    const childActive = [...menu.querySelectorAll('.dropdown-link')].some(link => link.getAttribute('href') === normalized);
+    if (childActive) menu.classList.add('active');
+  });
 }
+
 
 /* ---------------------------
    IntersectionObserver: [data-animate] elements

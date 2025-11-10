@@ -242,7 +242,9 @@ section {
   z-index: 999;
 }
 
-.nav-item:hover > .dropdown-menu {
+/* TAMPILKAN dropdown saat hover ATAU nav-link aktif */
+.nav-item:hover > .dropdown-menu,
+.nav-item > .nav-link.active + .dropdown-menu {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
@@ -361,7 +363,9 @@ section {
     transform: none;
   }
 
-  .dropdown-menu.active {
+  /* TAMPILKAN dropdown di mobile jika parent aktif */
+  .dropdown-menu.active,
+  .nav-item > .nav-link.active + .dropdown-menu {
     display: flex;
   }
 

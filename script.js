@@ -739,39 +739,45 @@ function initRegistrationForm() {
     });
 }
 /* =========================================================
-   NAVIGATION SCRIPT – Yayasan Minnatul Huda (FINAL FIX)
+   NAVIGATION SCRIPT – Yayasan Minnatul Huda (FAQ-style dropdown)
    ========================================================= */
 
-/* ---------------------------
-   INIT DROPDOWNS (Desktop + Mobile)
-----------------------------*/
 function initDropdowns() {
     const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
 
     dropdownToggles.forEach(toggle => {
-        toggle.addEventListener('click', (e) => {
-            const menu = toggle.nextElementSibling;
-            const isMobile = window.innerWidth <= 1024;
+        const menu = toggle.nextElementSibling;
 
-            if (isMobile) {
+        // Jika toggle adalah <a href="...">, cegah navigasi default karena dipakai sebagai FAQ-toggle
+        const onToggleClick = (e) => {
+            // selalu hentikan default agar parent link tidak navigasi
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Jika ada dropdown-menu lain aktif, tutup (accordion style)
+            document.querySelectorAll('.dropdown-menu.active').forEach(m => {
+                if (m !== menu) m.classList.remove('active');
+            });
+
+            // Toggle dropdown ini
+            menu.classList.toggle('active');
+        };
+
+        // Klik untuk toggle (desktop & mobile)
+        toggle.addEventListener('click', onToggleClick);
+
+        // Keyboard accessibility: Enter / Space toggles juga
+        toggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                e.stopPropagation();
-
-                // Tutup dropdown lain agar hanya satu terbuka
-                document.querySelectorAll('.dropdown-menu.active').forEach(m => {
-                    if (m !== menu) m.classList.remove('active');
-                });
-
-                // Toggle dropdown ini
-                menu.classList.toggle('active');
+                onToggleClick(e);
             }
         });
+
+        // Jika user klik di luar dropdown, dropdown akan tertutup melalui listener global (di initMobileMenu / document)
     });
 }
 
-/* ---------------------------
-   INIT MOBILE MENU + OVERLAY
-----------------------------*/
 function initMobileMenu() {
     const mobileBtn = document.getElementById('mobileMenuBtn');
     const nav = document.getElementById('mainNav');
@@ -779,7 +785,7 @@ function initMobileMenu() {
 
     if (!mobileBtn || !nav) return;
 
-    // === Buat overlay jika belum ada ===
+    // Buat overlay bila belum ada
     let overlay = document.querySelector('.nav-overlay');
     if (!overlay) {
         overlay = document.createElement('div');
@@ -787,7 +793,6 @@ function initMobileMenu() {
         document.body.appendChild(overlay);
     }
 
-    // === Toggle Menu Button ===
     mobileBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         const isActive = nav.classList.toggle('active');
@@ -798,22 +803,24 @@ function initMobileMenu() {
         if (!isActive) closeAllDropdowns();
     });
 
-    // === Klik overlay menutup menu ===
+    // Klik overlay menutup menu
     overlay.addEventListener('click', closeMobileMenu);
 
-    // === Klik di luar nav menutup menu ===
+    // Klik di luar nav menutup menu & dropdown
     document.addEventListener('click', (e) => {
         const insideNav = e.target.closest('#mainNav');
         const insideBtn = e.target.closest('#mobileMenuBtn');
-        if (!insideNav && !insideBtn && nav.classList.contains('active')) {
+        if (!insideNav && !insideBtn) {
             closeMobileMenu();
         }
     });
+
+    // Juga tangani ESC untuk menutup
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeMobileMenu();
+    });
 }
 
-/* ---------------------------
-   CLOSE MOBILE MENU & DROPDOWNS
-----------------------------*/
 function closeMobileMenu() {
     const nav = document.getElementById('mainNav');
     const mobileBtn = document.getElementById('mobileMenuBtn');
@@ -832,38 +839,42 @@ function closeAllDropdowns() {
 }
 
 /* ---------------------------
-   ROUTING / NAVIGATION (SPA-Like)
+   ROUTING: .nav-link & .dropdown-link
+   - Jika link hash (#...), lakukan SPA showSection
+   - Jika link ke .html / external -> biarkan default (full page), tapi tutup mobile menu
 ----------------------------*/
 function initRouting() {
+    // Semua link navigasi (nav-link = parent links juga, dropdown-link = child)
     const links = document.querySelectorAll('.nav-link, .dropdown-link');
 
     links.forEach(link => {
         link.addEventListener('click', (e) => {
             const href = link.getAttribute('href') || '';
             const isHash = href.startsWith('#');
-            const isExternal = /^https?:\/\//i.test(href) || href.includes('.html');
+            const isExternalFull = /^https?:\/\//i.test(href) || href.match(/\.html\b/i);
 
-            // Jika link eksternal (halaman lain), biarkan default behavior
-            if (isExternal && !isHash) {
-                closeMobileMenu();
-                return;
-            }
-
-            // Jika hash link (SPA internal)
+            // Jika link adalah dropdown-toggle (parent) kita sudah cegah default di initDropdowns.
+            // Untuk child dropdown-link: jika hash -> SPA; jika external/.html -> biarkan browser navigasi.
             if (isHash) {
                 e.preventDefault();
-
+                // SPA navigation
                 showSection(href);
                 history.pushState({ section: href }, '', href);
                 setActiveNav(href);
 
-                // Tutup menu & dropdown di mobile
+                // Jika sedang di mobile, tutup menu setelah navigasi
                 if (window.innerWidth <= 1024) closeMobileMenu();
+            } else if (isExternalFull) {
+                // Biarkan default behavior (pindah halaman). Namun kalau di mobile, tutup menu dulu agar UX rapi.
+                if (window.innerWidth <= 1024) closeMobileMenu();
+                // tidak mencegah default
+            } else {
+                // Fallback: treat as external if contains domain, otherwise allow default
             }
         });
     });
 
-    // Back/forward browser
+    // Back/forward
     window.addEventListener('popstate', (e) => {
         const state = e.state;
         const hash = location.hash || (state && state.section) || '#home';
@@ -871,7 +882,7 @@ function initRouting() {
         setActiveNav(hash);
     });
 
-    // Initial
+    // Initial show
     const initialHash = location.hash || '#home';
     setTimeout(() => {
         showSection(initialHash);
@@ -883,8 +894,7 @@ function initRouting() {
    SECTION SHOW / HIDE
 ----------------------------*/
 function showSection(hashOrSelector) {
-    let selector = hashOrSelector;
-    if (!selector) selector = '#home';
+    let selector = hashOrSelector || '#home';
     if (!selector.startsWith('#')) selector = '#' + selector;
 
     const sections = document.querySelectorAll('main section');
@@ -915,7 +925,7 @@ function showSection(hashOrSelector) {
 }
 
 /* ---------------------------
-   ACTIVE NAV LINK SETTER
+   setActiveNav: menandai link aktif dan buka parent dropdown bila perlu
 ----------------------------*/
 function setActiveNav(hash) {
     const normalized = (hash || '').toString();
@@ -925,19 +935,21 @@ function setActiveNav(hash) {
         a.classList.toggle('active', href === normalized);
     });
 
+    // Jika child aktif, buka dropdown induknya
     document.querySelectorAll('.dropdown-menu').forEach(menu => {
-        const isActiveChild = [...menu.querySelectorAll('.dropdown-link')]
-            .some(link => link.getAttribute('href') === normalized);
-        if (isActiveChild) {
+        const childActive = [...menu.querySelectorAll('.dropdown-link')].some(link => link.getAttribute('href') === normalized);
+        if (childActive) {
+            menu.classList.add('active');
             menu.parentElement.querySelector('.dropdown-toggle')?.classList.add('active');
         } else {
+            menu.classList.remove('active');
             menu.parentElement.querySelector('.dropdown-toggle')?.classList.remove('active');
         }
     });
 }
 
 /* ---------------------------
-   INIT ALL
+   Init everything on DOM ready
 ----------------------------*/
 document.addEventListener('DOMContentLoaded', () => {
     initDropdowns();

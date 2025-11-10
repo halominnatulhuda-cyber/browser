@@ -551,7 +551,7 @@ section {
 }
 
 .program-card {
-  background: var(--bg-white);
+  background: var(--bg-light);
   border-radius: var(--radius-lg);
   overflow: hidden;
   display: flex;
@@ -654,7 +654,7 @@ section {
 
 /* Card Base Styles */
 .news-card {
-  background: var(--bg-white);
+  background: var(--bg-light);
   border-radius: var(--radius-lg);
   overflow: hidden;
   display: flex;
@@ -781,7 +781,7 @@ section {
    Realistic Testimonial Card
    ============================ */
 .testimonial-card {
-  background: var(--bg-white, #fff);
+  background: var(--bg-light);
   border-radius: 1rem; /* Modern rounded corners */
   padding: 2rem;
   display: flex;

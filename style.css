@@ -164,6 +164,7 @@ section {
     white-space: nowrap;
 }
 
+/* --- Navigation base (keep your variables as-is) --- */
 .nav {
     display: flex;
     align-items: center;
@@ -186,6 +187,7 @@ section {
     position: relative;
 }
 
+/* link */
 .nav-link {
     text-decoration: none;
     color: var(--text-dark);
@@ -222,7 +224,7 @@ section {
 }
 
 /* ============================
-   Dropdown Menu (Desktop)
+   Dropdown Menu (controlled by JS)
    ============================ */
 .dropdown-menu {
     position: absolute;
@@ -237,17 +239,23 @@ section {
     padding: 10px 0;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(10px);
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    transform: translateY(10px) scaleY(.98);
+    transform-origin: top;
+    transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease;
     z-index: 999;
+    pointer-events: none;
 }
 
-.nav-item:hover>.dropdown-menu {
+/* Active/opened dropdown */
+.dropdown-menu.active,
+.nav-item.open > .dropdown-menu {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+    transform: translateY(0) scaleY(1);
+    pointer-events: auto;
 }
 
+/* Dropdown items */
 .dropdown-link {
     display: block;
     width: 100%;
@@ -256,13 +264,16 @@ section {
     color: var(--text-dark);
     text-decoration: none;
     border-radius: var(--radius);
-    transition: background 0.3s ease, color 0.3s ease;
+    transition: background 0.25s ease, color 0.25s ease;
 }
 
 .dropdown-link:hover {
     background: var(--accent-light);
     color: var(--primary-dark);
 }
+
+/* Remove hover-based opening (we rely on JS click toggle now) */
+/* previously .nav-item:hover > .dropdown-menu { ... } removed */
 
 /* ============================
    Mobile Menu
@@ -298,6 +309,7 @@ section {
     visibility: visible;
 }
 
+/* Responsive */
 @media (max-width: 1024px) {
     .mobile-menu-btn {
         display: block;
@@ -345,7 +357,7 @@ section {
         text-align: left;
     }
 
-    /* Dropdown di Mobile */
+    /* Dropdown di Mobile: static, collapsible */
     .dropdown-menu {
         position: static;
         background: rgba(0, 0, 0, 0.04);
@@ -378,6 +390,11 @@ section {
     .dropdown-toggle::after {
         content: none !important;
     }
+}
+
+/* Utility small: parent show indicator */
+.nav-item.open > .nav-link {
+    color: var(--primary-color);
 }
 
 /* ============================

@@ -296,8 +296,6 @@ function initNewsModal() {
   });
 }
 
-
-
 function populateTestimonials() {
   const testimonialsGrid = document.getElementById('testimonialsGrid');
   if (!testimonialsGrid) return;

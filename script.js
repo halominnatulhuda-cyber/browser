@@ -134,13 +134,17 @@ function initializePage() {
         console.warn('Some inits failed:', e);
     }
 
-    // === Global inits ===
-    initDropdowns();
-    initMobileMenu();
-    initScrollTop();
-    initSmoothScroll();
-    initHeader();
-    initRouting();
+  // === Global inits ===
+if (typeof initDropdowns === 'function') initDropdowns();
+if (typeof toggleMobileMenu === 'function') {
+    // mobile menu init handler: attach mobile button / overlay handlers if needed
+    // toggleMobileMenu(false) is called only when user toggles; the function exists globally
+}
+if (typeof initScrollTop === 'function') initScrollTop();
+if (typeof initSmoothScroll === 'function') initSmoothScroll();
+if (typeof initHeader === 'function') initHeader();
+if (typeof initRouting === 'function') initRouting();
+
 }
 /* ---------------------------
    POPULATE FUNCTIONS (keep original logic — slightly guarded)
@@ -738,30 +742,33 @@ function initRegistrationForm() {
         form.reset();
     });
 }
+
 /* =========================================================
-   NAVIGATION SCRIPT – Yayasan Minnatul Huda
-   (Responsive Dropdown + FAQ-style Behavior)
+   NAVIGATION MODULE (global)
+   - Single, non-duplicated implementation available globally
+   - Exposes: initDropdowns, initRouting, toggleMobileMenu, closeAllDropdowns,
+             showSection, setActiveNav
    ========================================================= */
 
-document.addEventListener('DOMContentLoaded', () => {
-    const nav = document.getElementById('mainNav');
-    const mobileBtn = document.getElementById('mobileMenuBtn');
-    const body = document.body;
+(function globalNavigationModule() {
+    // overlay element (created once)
+    let overlayEl = null;
 
-    /* ---------- CREATE OVERLAY ---------- */
-    let overlay = document.querySelector('.nav-overlay');
-    if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.className = 'nav-overlay';
-        document.body.appendChild(overlay);
+    function ensureOverlay() {
+        if (!overlayEl) {
+            overlayEl = document.querySelector('.nav-overlay');
+            if (!overlayEl) {
+                overlayEl = document.createElement('div');
+                overlayEl.className = 'nav-overlay';
+                document.body.appendChild(overlayEl);
+            }
+        }
+        return overlayEl;
     }
 
-    /* =========================================================
-       1. DROPDOWN (FAQ-STYLE)
-    ========================================================= */
+    // DROPDOWN (FAQ-style)
     function initDropdowns() {
         const toggles = document.querySelectorAll('.dropdown-toggle');
-
         toggles.forEach(toggle => {
             const menu = toggle.nextElementSibling;
             if (!menu) return;
@@ -769,13 +776,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const handleToggle = (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-
-                // Tutup semua dropdown lain (accordion style)
+                // close others (accordion)
                 document.querySelectorAll('.dropdown-menu.active').forEach(m => {
                     if (m !== menu) m.classList.remove('active');
                 });
-
-                // Toggle dropdown saat ini
                 menu.classList.toggle('active');
                 toggle.classList.toggle('active', menu.classList.contains('active'));
             };
@@ -788,16 +792,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
+
+        // close dropdowns when clicking outside nav (but don't close nav itself)
+        document.addEventListener('click', (e) => {
+            const insideNav = e.target.closest('#mainNav');
+            const insideBtn = e.target.closest('#mobileMenuBtn');
+            if (!insideNav && !insideBtn) {
+                document.querySelectorAll('.dropdown-menu.active').forEach(m => {
+                    m.classList.remove('active');
+                });
+                document.querySelectorAll('.dropdown-toggle.active').forEach(t => t.classList.remove('active'));
+            }
+        });
     }
 
-    /* =========================================================
-       2. MOBILE MENU
-    ========================================================= */
-    function toggleMobileMenu(forceState) {
-        const isActive = typeof forceState === 'boolean' ? forceState : !nav.classList.contains('active');
+    // Mobile menu toggle
+    function toggleMobileMenu(force) {
+        const nav = document.getElementById('mainNav');
+        const mobileBtn = document.getElementById('mobileMenuBtn');
+        const body = document.body;
+        if (!nav || !mobileBtn) return;
+
+        const isActive = (typeof force === 'boolean') ? force : !nav.classList.contains('active');
         nav.classList.toggle('active', isActive);
         mobileBtn.classList.toggle('active', isActive);
-        overlay.classList.toggle('active', isActive);
+        const ov = ensureOverlay();
+        ov.classList.toggle('active', isActive);
         body.classList.toggle('menu-open', isActive);
 
         if (!isActive) closeAllDropdowns();
@@ -808,79 +828,53 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.dropdown-toggle.active').forEach(t => t.classList.remove('active'));
     }
 
-    /* =========================================================
-       3. GLOBAL EVENTS (overlay, click outside, ESC)
-    ========================================================= */
-    overlay.addEventListener('click', () => toggleMobileMenu(false));
-
-    document.addEventListener('click', (e) => {
-        const insideNav = e.target.closest('#mainNav');
-        const insideBtn = e.target.closest('#mobileMenuBtn');
-        if (!insideNav && !insideBtn) toggleMobileMenu(false);
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') toggleMobileMenu(false);
-    });
-
-    if (mobileBtn) {
-        mobileBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleMobileMenu();
-        });
-    }
-
-    /* =========================================================
-       4. ROUTING: nav-link & dropdown-link
-    ========================================================= */
+    // Routing (nav-link & dropdown-link)
     function initRouting() {
         const links = document.querySelectorAll('.nav-link, .dropdown-link');
-
         links.forEach(link => {
             link.addEventListener('click', (e) => {
-                const href = link.getAttribute('href') || '';
+                const href = (link.getAttribute('href') || '').trim();
                 const isHash = href.startsWith('#');
                 const isExternal = /^https?:\/\//i.test(href) || href.match(/\.html\b/i);
 
-                // Hash-based (SPA)
                 if (isHash) {
                     e.preventDefault();
                     showSection(href);
                     history.pushState({ section: href }, '', href);
                     setActiveNav(href);
                     if (window.innerWidth <= 1024) toggleMobileMenu(false);
-                }
-                // External link
-                else if (isExternal) {
+                } else if (isExternal) {
+                    if (window.innerWidth <= 1024) toggleMobileMenu(false);
+                    // allow navigation
+                } else {
+                    // Non-hash non-.html fallback - allow default; optionally close nav on mobile
                     if (window.innerWidth <= 1024) toggleMobileMenu(false);
                 }
             });
         });
 
-        // Back/forward navigation
+        // popstate
         window.addEventListener('popstate', () => {
             const hash = location.hash || '#home';
             showSection(hash);
             setActiveNav(hash);
         });
-
-        // Initial load
-        const initialHash = location.hash || '#home';
-        showSection(initialHash);
-        setActiveNav(initialHash);
     }
 
-    /* =========================================================
-       5. SECTION SHOW / HIDE (SPA LOGIC)
-    ========================================================= */
+    // showSection / SPA-style
     function showSection(selector) {
-        const targetSelector = selector.startsWith('#') ? selector : `#${selector}`;
-        const sections = document.querySelectorAll('main section');
-        sections.forEach(s => s.classList.replace('section-visible', 'section-hidden'));
+        let sel = selector || '#home';
+        if (!sel.startsWith('#')) sel = `#${sel}`;
+        const secs = document.querySelectorAll('main section');
+        secs.forEach(s => {
+            s.classList.remove('section-visible');
+            s.classList.add('section-hidden');
+        });
 
-        const target = document.querySelector(targetSelector) || document.querySelector('#home');
+        const target = document.querySelector(sel) || document.querySelector('#home');
         if (target) {
-            target.classList.replace('section-hidden', 'section-visible');
+            target.classList.remove('section-hidden');
+            target.classList.add('section-visible');
             const header = document.querySelector('.header');
             const offset = header ? header.offsetHeight : 0;
             window.scrollTo({
@@ -890,32 +884,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /* =========================================================
-       6. SET ACTIVE NAV
-    ========================================================= */
+    // active nav
     function setActiveNav(hash) {
-        const normalized = hash || '';
-        document.querySelectorAll('.nav-link').forEach(link => {
-            const href = link.getAttribute('href') || '';
-            link.classList.toggle('active', href === normalized);
+        const normalized = (hash || '').toString();
+        document.querySelectorAll('.nav-link').forEach(a => {
+            const href = a.getAttribute('href') || '';
+            a.classList.toggle('active', href === normalized);
         });
 
         document.querySelectorAll('.dropdown-menu').forEach(menu => {
-            const childActive = [...menu.querySelectorAll('.dropdown-link')]
-                .some(link => link.getAttribute('href') === normalized);
-
+            const childActive = Array.from(menu.querySelectorAll('.dropdown-link'))
+                .some(link => (link.getAttribute('href') || '') === normalized);
             menu.classList.toggle('active', childActive);
-            menu.parentElement.querySelector('.dropdown-toggle')
-                ?.classList.toggle('active', childActive);
+            const parentToggle = menu.parentElement && menu.parentElement.querySelector('.dropdown-toggle');
+            if (parentToggle) parentToggle.classList.toggle('active', childActive);
         });
     }
 
-    /* =========================================================
-       INIT ALL
-    ========================================================= */
-    initDropdowns();
-    initRouting();
-});
+    // expose to global so other code can call these before DOMContentLoaded if needed
+    window.initDropdowns = initDropdowns;
+    window.initRouting = initRouting;
+    window.toggleMobileMenu = toggleMobileMenu;
+    window.closeAllDropdowns = closeAllDropdowns;
+    window.showSection = showSection;
+    window.setActiveNav = setActiveNav;
+})();
+
+
 
 
 /* ---------------------------
@@ -947,22 +942,20 @@ function init_scroll_animations() {
     if (typeof initRegistrationForm === 'function') window.initRegistrationFormOriginal = initRegistrationForm;
 })();
 
-/* ---------------------------
-   Start
-----------------------------*/
-document.addEventListener('DOMContentLoaded', () => {
-    loadData();
-    init_scroll_animations();
-});
-// === GALERI CLICK HANDLING ===
-document.querySelectorAll('.gallery-item img').forEach((img) => {
+// === GALERI CLICK HANDLING (guarded) ===
+safeQueryAll('.gallery-item img').forEach((img) => {
     img.addEventListener('click', (e) => {
-        const altText = img.alt?.trim() || "";
+        const altText = (img.alt || "").trim();
         if (altText === "Galeri 1") {
             window.open("https://www.youtube.com/watch?v=YOUR_VIDEO_ID", "_blank");
         } else {
             // buka gambar penuh (fungsi modal default)
-            openImageFullscreen(img.src, altText);
+            if (typeof openImageFullscreen === 'function') {
+                openImageFullscreen(img.src, altText);
+            } else {
+                // fallback: buka di tab baru
+                window.open(img.src, '_blank');
+            }
         }
     });
 });

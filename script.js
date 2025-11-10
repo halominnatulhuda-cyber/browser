@@ -738,46 +738,36 @@ function initRegistrationForm() {
         form.reset();
     });
 }
-/* =========================================================
-   NAVIGATION SCRIPT – Yayasan Minnatul Huda (FAQ-style dropdown)
-   ========================================================= */
-
+/* ---------------------------
+   DROPDOWN BEHAVIOR (mobile + desktop)
+----------------------------*/
 function initDropdowns() {
     const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
 
     dropdownToggles.forEach(toggle => {
-        const menu = toggle.nextElementSibling;
+        toggle.addEventListener('click', (e) => {
+            const menu = toggle.nextElementSibling;
+            const isMobile = window.innerWidth <= 1024;
 
-        // Jika toggle adalah <a href="...">, cegah navigasi default karena dipakai sebagai FAQ-toggle
-        const onToggleClick = (e) => {
-            // selalu hentikan default agar parent link tidak navigasi
-            e.preventDefault();
-            e.stopPropagation();
-
-            // Jika ada dropdown-menu lain aktif, tutup (accordion style)
-            document.querySelectorAll('.dropdown-menu.active').forEach(m => {
-                if (m !== menu) m.classList.remove('active');
-            });
-
-            // Toggle dropdown ini
-            menu.classList.toggle('active');
-        };
-
-        // Klik untuk toggle (desktop & mobile)
-        toggle.addEventListener('click', onToggleClick);
-
-        // Keyboard accessibility: Enter / Space toggles juga
-        toggle.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
+            if (isMobile) {
                 e.preventDefault();
-                onToggleClick(e);
+                e.stopPropagation();
+
+                // Tutup dropdown lain agar hanya satu terbuka
+                document.querySelectorAll('.dropdown-menu.active').forEach(m => {
+                    if (m !== menu) m.classList.remove('active');
+                });
+
+                // Toggle dropdown ini
+                menu.classList.toggle('active');
             }
         });
-
-        // Jika user klik di luar dropdown, dropdown akan tertutup melalui listener global (di initMobileMenu / document)
     });
 }
 
+/* ---------------------------
+   MOBILE MENU TOGGLE & OVERLAY
+----------------------------*/
 function initMobileMenu() {
     const mobileBtn = document.getElementById('mobileMenuBtn');
     const nav = document.getElementById('mainNav');
@@ -785,7 +775,7 @@ function initMobileMenu() {
 
     if (!mobileBtn || !nav) return;
 
-    // Buat overlay bila belum ada
+    // === Buat overlay jika belum ada ===
     let overlay = document.querySelector('.nav-overlay');
     if (!overlay) {
         overlay = document.createElement('div');
@@ -793,34 +783,36 @@ function initMobileMenu() {
         document.body.appendChild(overlay);
     }
 
+    // === Tombol toggle menu ===
     mobileBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         const isActive = nav.classList.toggle('active');
         mobileBtn.classList.toggle('active', isActive);
-        overlay.classList.toggle('active', isActive);
         body.classList.toggle('menu-open', isActive);
+        overlay.classList.toggle('active', isActive);
 
-        if (!isActive) closeAllDropdowns();
-    });
-
-    // Klik overlay menutup menu
-    overlay.addEventListener('click', closeMobileMenu);
-
-    // Klik di luar nav menutup menu & dropdown
-    document.addEventListener('click', (e) => {
-        const insideNav = e.target.closest('#mainNav');
-        const insideBtn = e.target.closest('#mobileMenuBtn');
-        if (!insideNav && !insideBtn) {
-            closeMobileMenu();
+        // Tutup semua dropdown saat menutup menu
+        if (!isActive) {
+            document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
         }
     });
 
-    // Juga tangani ESC untuk menutup
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeMobileMenu();
+    // === Klik overlay menutup menu ===
+    overlay.addEventListener('click', closeMobileMenu);
+
+    // === Klik di luar nav menutup menu ===
+    document.addEventListener('click', (e) => {
+        const insideNav = e.target.closest('#mainNav');
+        const insideBtn = e.target.closest('#mobileMenuBtn');
+        if (!insideNav && !insideBtn && nav.classList.contains('active')) {
+            closeMobileMenu();
+        }
     });
 }
 
+/* ---------------------------
+   CLOSE MOBILE MENU
+----------------------------*/
 function closeMobileMenu() {
     const nav = document.getElementById('mainNav');
     const mobileBtn = document.getElementById('mobileMenuBtn');
@@ -831,50 +823,37 @@ function closeMobileMenu() {
     if (mobileBtn) mobileBtn.classList.remove('active');
     if (overlay) overlay.classList.remove('active');
     body.classList.remove('menu-open');
-    closeAllDropdowns();
-}
 
-function closeAllDropdowns() {
+    // Tutup semua dropdown aktif
     document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
 }
 
 /* ---------------------------
-   ROUTING: .nav-link & .dropdown-link
-   - Jika link hash (#...), lakukan SPA showSection
-   - Jika link ke .html / external -> biarkan default (full page), tapi tutup mobile menu
+   ROUTING / SPA NAVIGATION
 ----------------------------*/
 function initRouting() {
-    // Semua link navigasi (nav-link = parent links juga, dropdown-link = child)
-    const links = document.querySelectorAll('.nav-link, .dropdown-link');
-
-    links.forEach(link => {
+    document.querySelectorAll('.nav-link, .dropdown-link').forEach(link => {
         link.addEventListener('click', (e) => {
             const href = link.getAttribute('href') || '';
-            const isHash = href.startsWith('#');
-            const isExternalFull = /^https?:\/\//i.test(href) || href.match(/\.html\b/i);
 
-            // Jika link adalah dropdown-toggle (parent) kita sudah cegah default di initDropdowns.
-            // Untuk child dropdown-link: jika hash -> SPA; jika external/.html -> biarkan browser navigasi.
-            if (isHash) {
-                e.preventDefault();
-                // SPA navigation
-                showSection(href);
-                history.pushState({ section: href }, '', href);
-                setActiveNav(href);
+            // Abaikan external link
+            if (!href.startsWith('#')) return;
 
-                // Jika sedang di mobile, tutup menu setelah navigasi
-                if (window.innerWidth <= 1024) closeMobileMenu();
-            } else if (isExternalFull) {
-                // Biarkan default behavior (pindah halaman). Namun kalau di mobile, tutup menu dulu agar UX rapi.
-                if (window.innerWidth <= 1024) closeMobileMenu();
-                // tidak mencegah default
-            } else {
-                // Fallback: treat as external if contains domain, otherwise allow default
-            }
+            e.preventDefault();
+
+            // Routing internal
+            showSection(href);
+            history.pushState({
+                section: href
+            }, '', href);
+            setActiveNav(href);
+
+            // Tutup menu setelah navigasi (mobile only)
+            if (window.innerWidth <= 1024) closeMobileMenu();
         });
     });
 
-    // Back/forward
+    // Back/forward navigation
     window.addEventListener('popstate', (e) => {
         const state = e.state;
         const hash = location.hash || (state && state.section) || '#home';
@@ -882,20 +861,21 @@ function initRouting() {
         setActiveNav(hash);
     });
 
-    // Initial show
+    // Initial
     const initialHash = location.hash || '#home';
     setTimeout(() => {
         showSection(initialHash);
         setActiveNav(initialHash);
-    }, 100);
+    }, 120);
 }
 
 /* ---------------------------
-   SECTION SHOW / HIDE
+   SECTION SHOWING
 ----------------------------*/
 function showSection(hashOrSelector) {
-    let selector = hashOrSelector || '#home';
-    if (!selector.startsWith('#')) selector = '#' + selector;
+    let selector = hashOrSelector;
+    if (!selector) selector = '#home';
+    if (!selector.startsWith('#') && typeof selector === 'string') selector = '#' + selector;
 
     const sections = document.querySelectorAll('main section');
     sections.forEach(s => {
@@ -907,8 +887,8 @@ function showSection(hashOrSelector) {
     if (!target) {
         const home = document.querySelector('#home');
         if (home) {
-            home.classList.add('section-visible');
             home.classList.remove('section-hidden');
+            home.classList.add('section-visible');
         }
         return;
     }
@@ -925,37 +905,22 @@ function showSection(hashOrSelector) {
 }
 
 /* ---------------------------
-   setActiveNav: menandai link aktif dan buka parent dropdown bila perlu
+   ACTIVE NAV LINK HANDLER
 ----------------------------*/
 function setActiveNav(hash) {
     const normalized = (hash || '').toString();
-
     document.querySelectorAll('.nav-link').forEach(a => {
         const href = a.getAttribute('href') || '';
         a.classList.toggle('active', href === normalized);
     });
 
-    // Jika child aktif, buka dropdown induknya
+    // Tampilkan dropdown induk kalau link anak aktif
     document.querySelectorAll('.dropdown-menu').forEach(menu => {
         const childActive = [...menu.querySelectorAll('.dropdown-link')].some(link => link.getAttribute('href') === normalized);
-        if (childActive) {
-            menu.classList.add('active');
-            menu.parentElement.querySelector('.dropdown-toggle')?.classList.add('active');
-        } else {
-            menu.classList.remove('active');
-            menu.parentElement.querySelector('.dropdown-toggle')?.classList.remove('active');
-        }
+        if (childActive) menu.classList.add('active');
     });
 }
 
-/* ---------------------------
-   Init everything on DOM ready
-----------------------------*/
-document.addEventListener('DOMContentLoaded', () => {
-    initDropdowns();
-    initMobileMenu();
-    initRouting();
-});
 
 /* ---------------------------
    IntersectionObserver: [data-animate] elements

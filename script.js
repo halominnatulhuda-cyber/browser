@@ -79,22 +79,24 @@ let siteData = null;
 async function loadData() {
     try {
         if (window.location.protocol === 'file:') {
-            console.warn('Running locally — skipping fetch and using fallback.');
-            siteData = window._DEFAULT_SITE_DATA; // Fallback for local runs
+            console.warn('Running locally — skip fetch and use fallback.');
+            siteData = window._DEFAULT_SITE_DATA; // fallback lokal
         } else {
-            const res = await fetch('package.json', { cache: 'no-cache' });
+            const res = await fetch('package.json', {
+                cache: 'no-cache'
+            });
             if (!res.ok) throw new Error(`Fetch failed (${res.status})`);
             const json = await res.json();
-            siteData = json.content || json;
+            siteData = json.content ? json.content : json;
             console.info('✅ Loaded data from package.json');
         }
     } catch (err) {
-        console.warn('⚠️ Failed to fetch package.json — using fallback.', err);
+        console.warn('⚠️ package.json fetch failed — using fallback.', err);
         siteData = window._DEFAULT_SITE_DATA;
     } finally {
         siteData = siteData || window._DEFAULT_SITE_DATA;
         initializePage();
-}
+    }
 }
 
 console.log("✅ initializePage() started");
@@ -110,14 +112,15 @@ function initializePage() {
     try {
         if (safeQuery('.hero-slider')) populateHero();
         if (safeQuery('#aboutPara1')) populateAbout();
-        if (safeQuery('#aboutGallery')) populateAboutGallery();
+        if (safeQuery('#aboutGallery')) populateAboutGallery(); // tambahan
         if (safeQuery('#programsGrid')) populatePrograms();
         if (safeQuery('#newsSlider')) populateNews();
         if (safeQuery('#testimonialsGrid')) populateTestimonials();
         if (safeQuery('#faqList')) populateFAQ();
+        if (safeQuery('.about-detail')) populateAboutDetail();
         populateFooter();
     } catch (e) {
-        console.error('Error when populating content:', e);
+        console.error('Error when populating content (non-fatal):', e);
     }
 
     // === Initialize UI components ===
@@ -125,21 +128,20 @@ function initializePage() {
         if (safeQuery('.hero-slider')) initSliders();
         if (safeQuery('.stats')) initStats();
         if (safeQuery('.faq-question')) initFAQ();
+        if (safeQuery('#programModal')) initModal();
         if (safeQuery('#newsModal')) initNewsModal();
-        if (safeQuery('#programModal')) initProgramModal();
     } catch (e) {
-        console.warn('Some initializations failed:', e);
+        console.warn('Some inits failed:', e);
     }
 
     // === Global inits ===
-    if (typeof initDropdowns === 'function') initDropdowns();
-    if (typeof toggleMobileMenu === 'function') initMobileMenu();
-    if (typeof initScrollTop === 'function') initScrollTop();
-    if (typeof initSmoothScroll === 'function') initSmoothScroll();
-    if (typeof initHeader === 'function') initHeader();
-    if (typeof initRouting === 'function') initRouting();
+    initDropdowns();
+    initMobileMenu();
+    initScrollTop();
+    initSmoothScroll();
+    initHeader();
+    initRouting();
 }
-
 /* ---------------------------
    POPULATE FUNCTIONS (keep original logic — slightly guarded)
    (Jika Anda punya implementasi asli, ini akan dipakai; saya hanya pastikan tidak crash)
@@ -147,67 +149,136 @@ function initializePage() {
 function populateHero() {
     const heroSlider = document.querySelector('.hero-slider');
     const indicators = document.querySelector('.slider-indicators');
-    const slides = siteData.hero || [];
-    heroSlider.innerHTML = slides.map((s, i) => `
-        <div class="hero-slide ${i === 0 ? 'active' : ''}">
-            <img src="${s.image || ''}" alt="${s.title || 'Hero Image'}" loading="lazy">
-            <div class="hero-overlay"></div>
-            <div class="hero-content">
-                <h1 class="hero-title">${s.title || ''}</h1>
-                <p class="hero-subtitle">${s.subtitle || ''}</p>
-            </div>
-        </div>
-    `).join('');
+    if (!heroSlider) return;
 
-    indicators.innerHTML = slides.map((_, i) => `
-        <button class="slider-indicator ${i === 0 ? 'active' : ''}" data-slide="${i}" aria-label="Go to slide ${i+1}"></button>
-    `).join('');
+    // If siteData.hero missing, use empty array
+    const slides = Array.isArray(siteData.hero) ? siteData.hero : [];
+    if (slides.length === 0) {
+        // fallback: make one slide from siteInfo or default
+        const fallbackImg = slides[0]?.image || (siteData.about?.galleries?.[0] || 'assets/hero1.jpg');
+        heroSlider.innerHTML = `
+      <div class="hero-slide active">
+        <img src="${fallbackImg}" alt="Hero" loading="lazy">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1 class="hero-title">${siteData.siteInfo?.tagline || 'Sekolah Modern'}</h1>
+          <p class="hero-subtitle">${siteData.siteInfo?.description || ''}</p>
+        </div>
+      </div>
+    `;
+        if (indicators) indicators.innerHTML = `<button class="slider-indicator active"></button>`;
+        return;
+    }
+
+    heroSlider.innerHTML = slides.map((s, i) => `
+    <div class="hero-slide ${i === 0 ? 'active' : ''}">
+      <img src="${s.image || ''}" alt="${s.title || 'Slide'}" loading="lazy">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1 class="hero-title">${s.title || ''}</h1>
+        <p class="hero-subtitle">${s.subtitle || ''}</p>
+      </div>
+    </div>
+  `).join('');
+
+    if (indicators) {
+        indicators.innerHTML = slides.map((_, i) => `<button class="slider-indicator ${i === 0 ? 'active' : ''}" data-slide="${i}" aria-label="Go to slide ${i+1}"></button>`).join('');
+    }
 }
 
 function populateAbout() {
     const para1 = document.getElementById('aboutPara1');
     const para2 = document.getElementById('aboutPara2');
-    if (para1) para1.textContent = siteData.about?.paragraphs[0] || 'Loading...';
-    if (para2) para2.textContent = siteData.about?.paragraphs[1] || 'Loading...';
+    if (!para1 && !para2) return;
+    const paragraphs = siteData.about?.paragraphs || [];
+    if (para1) para1.textContent = paragraphs[0] || '';
+    if (para2) para2.textContent = paragraphs[1] || '';
+    const gallerySlider = document.querySelector('.gallery-slider');
+    if (gallerySlider && Array.isArray(siteData.about?.galleries) && siteData.about.galleries.length) {
+        gallerySlider.innerHTML = `<img src="${siteData.about.galleries[0]}" alt="Galeri 1" loading="lazy">`;
+        // rotate images if more than 1
+        if (siteData.about.galleries.length > 1) {
+            let idx = 0;
+            setInterval(() => {
+                idx = (idx + 1) % siteData.about.galleries.length;
+                const img = gallerySlider.querySelector('img');
+                if (!img) return;
+                img.style.opacity = '0';
+                setTimeout(() => {
+                    img.src = siteData.about.galleries[idx];
+                    img.style.opacity = '1';
+                }, 300);
+            }, 5000);
+        }
+    }
 }
 
 function populateAboutGallery() {
-    const galleryContainer = document.getElementById('aboutGallery');
-    if (!galleryContainer || !siteData.about?.galleries) return;
-    galleryContainer.innerHTML = siteData.about.galleries.map((url, idx) => `
-        <img src="${url}" alt="Gallery ${idx+1}" loading="lazy" class="about-gallery-img" data-index="${idx}">
-    `).join('');
+    const galleryContainer = document.getElementById("aboutGallery");
+    if (!galleryContainer || !siteData.galleries) return;
+
+    galleryContainer.innerHTML = siteData.galleries
+        .map((url, index) => `
+      <img src="${url}" 
+           alt="Galeri ${index + 1}" 
+           loading="lazy"
+           class="about-gallery-img"
+           data-index="${index}">
+    `)
+        .join("");
+
+    // Event klik tiap gambar
+    galleryContainer.querySelectorAll(".about-gallery-img").forEach((img, idx) => {
+        img.addEventListener("click", () => {
+            if (idx === 0) {
+                // jika Galeri 1 → buka YouTube
+                window.open("https://www.youtube.com/watch?v=YOUR_VIDEO_ID", "_blank");
+            } else {
+                // selainnya → buka fullscreen seperti biasa
+                openImageFullscreen(siteData.galleries[idx], `Galeri ${idx + 1}`);
+            }
+        });
+    });
 }
+
 
 function populatePrograms() {
     const programsGrid = document.getElementById('programsGrid');
-    const programs = siteData.programs || [];
+    if (!programsGrid) return;
+    const programs = Array.isArray(siteData.programs) ? siteData.programs : [];
     programsGrid.innerHTML = programs.map(p => `
-        <div class="program-card" data-program-id="${p.id}">
-            <img src="${p.image || 'assets/program1.jpg'}" alt="${p.title || ''}" class="program-image" loading="lazy">
-            <div class="program-content">
-                <h3 class="program-title">${p.title || ''}</h3>
-                <p class="program-description">${p.short || ''}</p>
-            </div>
-        </div>
-    `).join('');
+    <div class="program-card" data-program-id="${p.id}">
+      <img src="${p.image || 'assets/program1.jpg'}" alt="${p.title || ''}" class="program-image" loading="lazy">
+      <div class="program-content">
+        <h3 class="program-title">${p.title || ''}</h3>
+        <p class="program-description">${p.short || ''}</p>
+      </div>
+    </div>
+  `).join('');
 }
 
 function populateNews() {
     const newsSlider = document.getElementById('newsSlider');
-    const news = siteData.news || [];
-    newsSlider.innerHTML = news.map(n => {
-        const date = new Date(n.date);
+    if (!newsSlider) return;
+    const news = Array.isArray(siteData.news) ? siteData.news : [];
+    const show = news.slice(0, 3);
+    newsSlider.innerHTML = show.map(n => {
+        const date = n.date ? new Date(n.date) : new Date();
+        const formatted = date.toLocaleDateString('id-ID', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
         return `
-            <div class="news-card">
-                <img src="${n.image || 'assets/news1.jpg'}" alt="${n.title || ''}" class="news-image" loading="lazy">
-                <div class="news-content">
-                    <div class="news-date">${date.toLocaleDateString()}</div>
-                    <h3 class="news-title">${n.title || ''}</h3>
-                    <p class="news-description">${n.short || ''}</p>
-                </div>
-            </div>
-        `;
+      <div class="news-card">
+        <img src="${n.image || 'assets/news1.jpg'}" alt="${n.title || ''}" class="news-image" loading="lazy">
+        <div class="news-content">
+          <div class="news-date">${formatted}</div>
+          <h3 class="news-title">${n.title || ''}</h3>
+          <p class="news-description">${n.short || ''}</p>
+        </div>
+      </div>
+    `;
     }).join('');
 }
 
@@ -244,41 +315,51 @@ function initNewsModal() {
 
 function populateTestimonials() {
     const testimonialsGrid = document.getElementById('testimonialsGrid');
-    const testimonials = siteData.testimonials || [];
-    testimonialsGrid.innerHTML = testimonials.map(t => {
-        const date = new Date(t.date);
+    if (!testimonialsGrid) return;
+    const arr = Array.isArray(siteData.testimonials) ? siteData.testimonials : [];
+    testimonialsGrid.innerHTML = arr.map(t => {
+        const date = t.date ? new Date(t.date) : new Date();
+        const formatted = date.toLocaleDateString('id-ID', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
         return `
-            <div class="testimonial-card">
-                <div class="testimonial-header">
-                    <img src="${t.photo || 'assets/avatar.png'}" alt="${t.name || ''}" class="testimonial-photo">
-                    <div class="testimonial-info">
-                        <h4>${t.name || ''}</h4>
-                        <p class="testimonial-role">${t.role || ''}</p>
-                    </div>
-                </div>
-                <div class="testimonial-rating">
-                    ${Array(t.rating || 0).fill('<span class="star">★</span>').join('')}
-                </div>
-                <p class="testimonial-comment">"${t.comment || ''}"</p>
-                <p class="testimonial-date">${date.toLocaleDateString()}</p>
-            </div>
-        `;
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <img src="${t.photo || 'assets/avatar.png'}" alt="${t.name || ''}" class="testimonial-photo">
+          <div class="testimonial-info">
+            <h4>${t.name || ''}</h4>
+            <p class="testimonial-role">${t.role || ''}</p>
+          </div>
+        </div>
+        <div class="testimonial-rating">
+          ${Array(Math.max(0, t.rating || 0)).fill('<span class="star">★</span>').join('')}
+        </div>
+        <p class="testimonial-comment">"${t.comment || ''}"</p>
+        <p class="testimonial-date">${formatted}</p>
+      </div>
+    `;
     }).join('');
 }
 
 function populateFAQ() {
     const faqList = document.getElementById('faqList');
-    const faqs = siteData.faqs || [];
-    faqList.innerHTML = faqs.map(faq => `
-        <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">
-                <span>${faq.q || ''}</span>
-            </button>
-            <div class="faq-answer">
-                <div class="faq-answer-content">${faq.a || ''}</div>
-            </div>
-        </div>
-    `).join('');
+    if (!faqList) return;
+    const faqs = Array.isArray(siteData.faqs) ? siteData.faqs : [];
+    faqList.innerHTML = faqs.map((faq, i) => `
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span>${faq.q || ''}</span>
+        <svg class="icon faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-content">${faq.a || ''}</div>
+      </div>
+    </div>
+  `).join('');
 }
 
 /* ---------------------------
@@ -344,17 +425,15 @@ function populateAboutDetail() {
 }
 
 
-
 function populateFooter() {
-    const footer = siteData.siteInfo || {};
     const footerTagline = document.getElementById('footerTagline');
     const footerPhone = document.getElementById('footerPhone');
     const footerEmail = document.getElementById('footerEmail');
     const footerAddress = document.getElementById('footerAddress');
-    if (footerTagline) footerTagline.textContent = footer.tagline || '';
-    if (footerPhone) footerPhone.textContent = footer.phone || '';
-    if (footerEmail) footerEmail.textContent = footer.email || '';
-    if (footerAddress) footerAddress.textContent = footer.address || '';
+    if (footerTagline) footerTagline.textContent = siteData.siteInfo?.tagline || '';
+    if (footerPhone) footerPhone.textContent = siteData.siteInfo?.phone || '';
+    if (footerEmail) footerEmail.textContent = siteData.siteInfo?.email || '';
+    if (footerAddress) footerAddress.textContent = siteData.siteInfo?.address || '';
 }
 
 /* ---------------------------
@@ -659,199 +738,224 @@ function initRegistrationForm() {
         form.reset();
     });
 }
-
 /* =========================================================
-   NAVIGATION MODULE (global)
-   - Single implementation available globally
-   - Exposes: initDropdowns, initMobileMenu, initRouting, toggleMobileMenu,
-             closeAllDropdowns, showSection, setActiveNav
+   NAVIGATION SCRIPT – Yayasan Minnatul Huda (FAQ-style dropdown)
    ========================================================= */
-(function globalNavigationModule() {
-    let overlayEl = null;
 
-    function ensureOverlay() {
-        if (!overlayEl) {
-            overlayEl = document.querySelector('.nav-overlay');
-            if (!overlayEl) {
-                overlayEl = document.createElement('div');
-                overlayEl.className = 'nav-overlay';
-                document.body.appendChild(overlayEl);
-            }
-        }
-        return overlayEl;
-    }
+function initDropdowns() {
+    const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
 
-    /* DROPDOWN (FAQ-style) */
-    function initDropdowns() {
-        const toggles = document.querySelectorAll('.dropdown-toggle');
-        toggles.forEach(toggle => {
-            const menu = toggle.nextElementSibling;
-            if (!menu) return;
+    dropdownToggles.forEach(toggle => {
+        const menu = toggle.nextElementSibling;
 
-            const handleToggle = (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                document.querySelectorAll('.dropdown-menu.active').forEach(m => {
-                    if (m !== menu) m.classList.remove('active');
-                });
-                menu.classList.toggle('active');
-                toggle.classList.toggle('active', menu.classList.contains('active'));
-            };
+        // Jika toggle adalah <a href="...">, cegah navigasi default karena dipakai sebagai FAQ-toggle
+        const onToggleClick = (e) => {
+            // selalu hentikan default agar parent link tidak navigasi
+            e.preventDefault();
+            e.stopPropagation();
 
-            toggle.addEventListener('click', handleToggle);
-            toggle.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleToggle(e);
-                }
+            // Jika ada dropdown-menu lain aktif, tutup (accordion style)
+            document.querySelectorAll('.dropdown-menu.active').forEach(m => {
+                if (m !== menu) m.classList.remove('active');
             });
-        });
 
-        // close dropdowns when clicking outside nav but keep nav open
-        document.addEventListener('click', (e) => {
-            const insideNav = e.target.closest('#mainNav');
-            const insideBtn = e.target.closest('#mobileMenuBtn');
-            if (!insideNav && !insideBtn) {
-                document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
-                document.querySelectorAll('.dropdown-toggle.active').forEach(t => t.classList.remove('active'));
+            // Toggle dropdown ini
+            menu.classList.toggle('active');
+        };
+
+        // Klik untuk toggle (desktop & mobile)
+        toggle.addEventListener('click', onToggleClick);
+
+        // Keyboard accessibility: Enter / Space toggles juga
+        toggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onToggleClick(e);
             }
         });
-    }
 
-    /* MOBILE MENU: expose both initMobileMenu (initializer) and toggleMobileMenu (action) */
-    function toggleMobileMenu(force) {
-        const nav = document.getElementById('mainNav');
-        const mobileBtn = document.getElementById('mobileMenuBtn');
-        const body = document.body;
-        if (!nav || !mobileBtn) return;
-        const isActive = (typeof force === 'boolean') ? force : !nav.classList.contains('active');
-        nav.classList.toggle('active', isActive);
-        mobileBtn.classList.toggle('active', isActive);
-        const ov = ensureOverlay();
-        ov.classList.toggle('active', isActive);
-        body.classList.toggle('menu-open', isActive);
-        if (!isActive) closeAllDropdowns();
-    }
+        // Jika user klik di luar dropdown, dropdown akan tertutup melalui listener global (di initMobileMenu / document)
+    });
+}
 
 function initMobileMenu() {
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const navOverlay = document.querySelector('.nav-overlay');
-    const nav = document.querySelector('.nav');
-    if (!mobileMenuBtn || !nav) return;
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const nav = document.getElementById('mainNav');
+    const body = document.body;
 
-    mobileMenuBtn.addEventListener('click', () => {
-        nav.classList.toggle('active');
-        navOverlay.classList.toggle('active');
+    if (!mobileBtn || !nav) return;
+
+    // Buat overlay bila belum ada
+    let overlay = document.querySelector('.nav-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'nav-overlay';
+        document.body.appendChild(overlay);
+    }
+
+    mobileBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isActive = nav.classList.toggle('active');
+        mobileBtn.classList.toggle('active', isActive);
+        overlay.classList.toggle('active', isActive);
+        body.classList.toggle('menu-open', isActive);
+
+        if (!isActive) closeAllDropdowns();
     });
 
-    document.addEventListener('DOMContentLoaded', loadData);
+    // Klik overlay menutup menu
+    overlay.addEventListener('click', closeMobileMenu);
 
-        overlay.addEventListener('click', () => toggleMobileMenu(false));
+    // Klik di luar nav menutup menu & dropdown
+    document.addEventListener('click', (e) => {
+        const insideNav = e.target.closest('#mainNav');
+        const insideBtn = e.target.closest('#mobileMenuBtn');
+        if (!insideNav && !insideBtn) {
+            closeMobileMenu();
+        }
+    });
 
-        document.addEventListener('click', (e) => {
-            const insideNav = e.target.closest('#mainNav');
-            const insideBtn = e.target.closest('#mobileMenuBtn');
-            if (!insideNav && !insideBtn && nav.classList.contains('active')) {
-                toggleMobileMenu(false);
+    // Juga tangani ESC untuk menutup
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeMobileMenu();
+    });
+}
+
+function closeMobileMenu() {
+    const nav = document.getElementById('mainNav');
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const overlay = document.querySelector('.nav-overlay');
+    const body = document.body;
+
+    if (nav) nav.classList.remove('active');
+    if (mobileBtn) mobileBtn.classList.remove('active');
+    if (overlay) overlay.classList.remove('active');
+    body.classList.remove('menu-open');
+    closeAllDropdowns();
+}
+
+function closeAllDropdowns() {
+    document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
+}
+
+/* ---------------------------
+   ROUTING: .nav-link & .dropdown-link
+   - Jika link hash (#...), lakukan SPA showSection
+   - Jika link ke .html / external -> biarkan default (full page), tapi tutup mobile menu
+----------------------------*/
+function initRouting() {
+    // Semua link navigasi (nav-link = parent links juga, dropdown-link = child)
+    const links = document.querySelectorAll('.nav-link, .dropdown-link');
+
+    links.forEach(link => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href') || '';
+            const isHash = href.startsWith('#');
+            const isExternalFull = /^https?:\/\//i.test(href) || href.match(/\.html\b/i);
+
+            // Jika link adalah dropdown-toggle (parent) kita sudah cegah default di initDropdowns.
+            // Untuk child dropdown-link: jika hash -> SPA; jika external/.html -> biarkan browser navigasi.
+            if (isHash) {
+                e.preventDefault();
+                // SPA navigation
+                showSection(href);
+                history.pushState({ section: href }, '', href);
+                setActiveNav(href);
+
+                // Jika sedang di mobile, tutup menu setelah navigasi
+                if (window.innerWidth <= 1024) closeMobileMenu();
+            } else if (isExternalFull) {
+                // Biarkan default behavior (pindah halaman). Namun kalau di mobile, tutup menu dulu agar UX rapi.
+                if (window.innerWidth <= 1024) closeMobileMenu();
+                // tidak mencegah default
+            } else {
+                // Fallback: treat as external if contains domain, otherwise allow default
             }
         });
+    });
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && nav.classList.contains('active')) toggleMobileMenu(false);
-        });
+    // Back/forward
+    window.addEventListener('popstate', (e) => {
+        const state = e.state;
+        const hash = location.hash || (state && state.section) || '#home';
+        showSection(hash);
+        setActiveNav(hash);
+    });
 
-        // on resize ensure mobile menu closed when switching to desktop
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > 1024 && nav.classList.contains('active')) toggleMobileMenu(false);
-        });
-    }
+    // Initial show
+    const initialHash = location.hash || '#home';
+    setTimeout(() => {
+        showSection(initialHash);
+        setActiveNav(initialHash);
+    }, 100);
+}
 
-    function closeAllDropdowns() {
-        document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
-        document.querySelectorAll('.dropdown-toggle.active').forEach(t => t.classList.remove('active'));
-    }
+/* ---------------------------
+   SECTION SHOW / HIDE
+----------------------------*/
+function showSection(hashOrSelector) {
+    let selector = hashOrSelector || '#home';
+    if (!selector.startsWith('#')) selector = '#' + selector;
 
-    /* ROUTING: nav-link & dropdown-link */
-    function initRouting() {
-        const links = document.querySelectorAll('.nav-link, .dropdown-link');
-        links.forEach(link => {
-            link.addEventListener('click', (e) => {
-                const href = (link.getAttribute('href') || '').trim();
-                const isHash = href.startsWith('#');
-                const isExternal = /^https?:\/\//i.test(href) || href.match(/\.html\b/i);
+    const sections = document.querySelectorAll('main section');
+    sections.forEach(s => {
+        s.classList.remove('section-visible');
+        s.classList.add('section-hidden');
+    });
 
-                if (isHash) {
-                    e.preventDefault();
-                    showSection(href);
-                    history.pushState({ section: href }, '', href);
-                    setActiveNav(href);
-                    if (window.innerWidth <= 1024) toggleMobileMenu(false);
-                } else if (isExternal) {
-                    if (window.innerWidth <= 1024) toggleMobileMenu(false);
-                    // allow default navigation
-                } else {
-                    if (window.innerWidth <= 1024) toggleMobileMenu(false);
-                }
-            });
-        });
-
-        window.addEventListener('popstate', () => {
-            const hash = location.hash || '#home';
-            showSection(hash);
-            setActiveNav(hash);
-        });
-    }
-
-    /* SPA show section */
-    function showSection(selector) {
-        let sel = selector || '#home';
-        if (!sel.startsWith('#')) sel = `#${sel}`;
-        const secs = document.querySelectorAll('main section');
-        secs.forEach(s => {
-            s.classList.remove('section-visible');
-            s.classList.add('section-hidden');
-        });
-
-        const target = document.querySelector(sel) || document.querySelector('#home');
-        if (target) {
-            target.classList.remove('section-hidden');
-            target.classList.add('section-visible');
-            const header = document.querySelector('.header');
-            const offset = header ? header.offsetHeight : 0;
-            window.scrollTo({
-                top: Math.max(target.offsetTop - offset - 8, 0),
-                behavior: 'smooth'
-            });
+    const target = document.querySelector(selector);
+    if (!target) {
+        const home = document.querySelector('#home');
+        if (home) {
+            home.classList.add('section-visible');
+            home.classList.remove('section-hidden');
         }
+        return;
     }
 
-    function setActiveNav(hash) {
-        const normalized = (hash || '').toString();
-        document.querySelectorAll('.nav-link').forEach(a => {
-            const href = a.getAttribute('href') || '';
-            a.classList.toggle('active', href === normalized);
-        });
+    target.classList.remove('section-hidden');
+    target.classList.add('section-visible');
 
-        document.querySelectorAll('.dropdown-menu').forEach(menu => {
-            const childActive = Array.from(menu.querySelectorAll('.dropdown-link'))
-                .some(link => (link.getAttribute('href') || '') === normalized);
-            menu.classList.toggle('active', childActive);
-            const parentToggle = menu.parentElement && menu.parentElement.querySelector('.dropdown-toggle');
-            if (parentToggle) parentToggle.classList.toggle('active', childActive);
-        });
-    }
+    const header = document.querySelector('.header');
+    const offset = header ? header.offsetHeight : 0;
+    window.scrollTo({
+        top: Math.max(target.offsetTop - offset - 8, 0),
+        behavior: 'smooth'
+    });
+}
 
-    // expose
-    window.initDropdowns = initDropdowns;
-    window.initMobileMenu = initMobileMenu;
-    window.initRouting = initRouting;
-    window.toggleMobileMenu = toggleMobileMenu;
-    window.closeAllDropdowns = closeAllDropdowns;
-    window.showSection = showSection;
-    window.setActiveNav = setActiveNav;
-})();
+/* ---------------------------
+   setActiveNav: menandai link aktif dan buka parent dropdown bila perlu
+----------------------------*/
+function setActiveNav(hash) {
+    const normalized = (hash || '').toString();
 
+    document.querySelectorAll('.nav-link').forEach(a => {
+        const href = a.getAttribute('href') || '';
+        a.classList.toggle('active', href === normalized);
+    });
 
+    // Jika child aktif, buka dropdown induknya
+    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+        const childActive = [...menu.querySelectorAll('.dropdown-link')].some(link => link.getAttribute('href') === normalized);
+        if (childActive) {
+            menu.classList.add('active');
+            menu.parentElement.querySelector('.dropdown-toggle')?.classList.add('active');
+        } else {
+            menu.classList.remove('active');
+            menu.parentElement.querySelector('.dropdown-toggle')?.classList.remove('active');
+        }
+    });
+}
+
+/* ---------------------------
+   Init everything on DOM ready
+----------------------------*/
+document.addEventListener('DOMContentLoaded', () => {
+    initDropdowns();
+    initMobileMenu();
+    initRouting();
+});
 
 /* ---------------------------
    IntersectionObserver: [data-animate] elements
@@ -882,20 +986,22 @@ function init_scroll_animations() {
     if (typeof initRegistrationForm === 'function') window.initRegistrationFormOriginal = initRegistrationForm;
 })();
 
-// === GALERI CLICK HANDLING (guarded) ===
-safeQueryAll('.gallery-item img').forEach((img) => {
+/* ---------------------------
+   Start
+----------------------------*/
+document.addEventListener('DOMContentLoaded', () => {
+    loadData();
+    init_scroll_animations();
+});
+// === GALERI CLICK HANDLING ===
+document.querySelectorAll('.gallery-item img').forEach((img) => {
     img.addEventListener('click', (e) => {
-        const altText = (img.alt || "").trim();
+        const altText = img.alt?.trim() || "";
         if (altText === "Galeri 1") {
             window.open("https://www.youtube.com/watch?v=YOUR_VIDEO_ID", "_blank");
         } else {
             // buka gambar penuh (fungsi modal default)
-            if (typeof openImageFullscreen === 'function') {
-                openImageFullscreen(img.src, altText);
-            } else {
-                // fallback: buka di tab baru
-                window.open(img.src, '_blank');
-            }
+            openImageFullscreen(img.src, altText);
         }
     });
 });

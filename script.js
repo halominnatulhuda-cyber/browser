@@ -134,16 +134,14 @@ function initializePage() {
         console.warn('Some inits failed:', e);
     }
 
-  // === Global inits ===
+// === Global inits ===
 if (typeof initDropdowns === 'function') initDropdowns();
-if (typeof toggleMobileMenu === 'function') {
-    // mobile menu init handler: attach mobile button / overlay handlers if needed
-    // toggleMobileMenu(false) is called only when user toggles; the function exists globally
-}
+if (typeof initMobileMenu === 'function') initMobileMenu();
 if (typeof initScrollTop === 'function') initScrollTop();
 if (typeof initSmoothScroll === 'function') initSmoothScroll();
 if (typeof initHeader === 'function') initHeader();
 if (typeof initRouting === 'function') initRouting();
+
 
 }
 /* ---------------------------
@@ -745,13 +743,11 @@ function initRegistrationForm() {
 
 /* =========================================================
    NAVIGATION MODULE (global)
-   - Single, non-duplicated implementation available globally
-   - Exposes: initDropdowns, initRouting, toggleMobileMenu, closeAllDropdowns,
-             showSection, setActiveNav
+   - Single implementation available globally
+   - Exposes: initDropdowns, initMobileMenu, initRouting, toggleMobileMenu,
+             closeAllDropdowns, showSection, setActiveNav
    ========================================================= */
-
 (function globalNavigationModule() {
-    // overlay element (created once)
     let overlayEl = null;
 
     function ensureOverlay() {
@@ -766,7 +762,7 @@ function initRegistrationForm() {
         return overlayEl;
     }
 
-    // DROPDOWN (FAQ-style)
+    /* DROPDOWN (FAQ-style) */
     function initDropdowns() {
         const toggles = document.querySelectorAll('.dropdown-toggle');
         toggles.forEach(toggle => {
@@ -776,7 +772,6 @@ function initRegistrationForm() {
             const handleToggle = (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                // close others (accordion)
                 document.querySelectorAll('.dropdown-menu.active').forEach(m => {
                     if (m !== menu) m.classList.remove('active');
                 });
@@ -793,34 +788,61 @@ function initRegistrationForm() {
             });
         });
 
-        // close dropdowns when clicking outside nav (but don't close nav itself)
+        // close dropdowns when clicking outside nav but keep nav open
         document.addEventListener('click', (e) => {
             const insideNav = e.target.closest('#mainNav');
             const insideBtn = e.target.closest('#mobileMenuBtn');
             if (!insideNav && !insideBtn) {
-                document.querySelectorAll('.dropdown-menu.active').forEach(m => {
-                    m.classList.remove('active');
-                });
+                document.querySelectorAll('.dropdown-menu.active').forEach(m => m.classList.remove('active'));
                 document.querySelectorAll('.dropdown-toggle.active').forEach(t => t.classList.remove('active'));
             }
         });
     }
 
-    // Mobile menu toggle
+    /* MOBILE MENU: expose both initMobileMenu (initializer) and toggleMobileMenu (action) */
     function toggleMobileMenu(force) {
         const nav = document.getElementById('mainNav');
         const mobileBtn = document.getElementById('mobileMenuBtn');
         const body = document.body;
         if (!nav || !mobileBtn) return;
-
         const isActive = (typeof force === 'boolean') ? force : !nav.classList.contains('active');
         nav.classList.toggle('active', isActive);
         mobileBtn.classList.toggle('active', isActive);
         const ov = ensureOverlay();
         ov.classList.toggle('active', isActive);
         body.classList.toggle('menu-open', isActive);
-
         if (!isActive) closeAllDropdowns();
+    }
+
+    function initMobileMenu() {
+        const mobileBtn = document.getElementById('mobileMenuBtn');
+        const nav = document.getElementById('mainNav');
+        if (!mobileBtn || !nav) return;
+        const overlay = ensureOverlay();
+
+        mobileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMobileMenu();
+        });
+
+        overlay.addEventListener('click', () => toggleMobileMenu(false));
+
+        document.addEventListener('click', (e) => {
+            const insideNav = e.target.closest('#mainNav');
+            const insideBtn = e.target.closest('#mobileMenuBtn');
+            if (!insideNav && !insideBtn && nav.classList.contains('active')) {
+                toggleMobileMenu(false);
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && nav.classList.contains('active')) toggleMobileMenu(false);
+        });
+
+        // on resize ensure mobile menu closed when switching to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1024 && nav.classList.contains('active')) toggleMobileMenu(false);
+        });
     }
 
     function closeAllDropdowns() {
@@ -828,7 +850,7 @@ function initRegistrationForm() {
         document.querySelectorAll('.dropdown-toggle.active').forEach(t => t.classList.remove('active'));
     }
 
-    // Routing (nav-link & dropdown-link)
+    /* ROUTING: nav-link & dropdown-link */
     function initRouting() {
         const links = document.querySelectorAll('.nav-link, .dropdown-link');
         links.forEach(link => {
@@ -845,15 +867,13 @@ function initRegistrationForm() {
                     if (window.innerWidth <= 1024) toggleMobileMenu(false);
                 } else if (isExternal) {
                     if (window.innerWidth <= 1024) toggleMobileMenu(false);
-                    // allow navigation
+                    // allow default navigation
                 } else {
-                    // Non-hash non-.html fallback - allow default; optionally close nav on mobile
                     if (window.innerWidth <= 1024) toggleMobileMenu(false);
                 }
             });
         });
 
-        // popstate
         window.addEventListener('popstate', () => {
             const hash = location.hash || '#home';
             showSection(hash);
@@ -861,7 +881,7 @@ function initRegistrationForm() {
         });
     }
 
-    // showSection / SPA-style
+    /* SPA show section */
     function showSection(selector) {
         let sel = selector || '#home';
         if (!sel.startsWith('#')) sel = `#${sel}`;
@@ -884,7 +904,6 @@ function initRegistrationForm() {
         }
     }
 
-    // active nav
     function setActiveNav(hash) {
         const normalized = (hash || '').toString();
         document.querySelectorAll('.nav-link').forEach(a => {
@@ -901,15 +920,15 @@ function initRegistrationForm() {
         });
     }
 
-    // expose to global so other code can call these before DOMContentLoaded if needed
+    // expose
     window.initDropdowns = initDropdowns;
+    window.initMobileMenu = initMobileMenu;
     window.initRouting = initRouting;
     window.toggleMobileMenu = toggleMobileMenu;
     window.closeAllDropdowns = closeAllDropdowns;
     window.showSection = showSection;
     window.setActiveNav = setActiveNav;
 })();
-
 
 
 

@@ -764,164 +764,235 @@ section {
   }
 }
 
+/* =========================================================
+   PREMIUM TESTIMONIALS SECTION – MINNATUL HUDA VERSION
+   Polished for professional, modern, and luxury feel
+   ========================================================= */
+
 .testimonials-section {
-  padding: 4rem 0;
+  padding: 5rem 0;
   position: relative;
-}
-
-/* Container Grid - Desktop Defaults */
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2rem;
-  padding: 1.5rem 0.5rem; /* Padding for shadow breathing room */
-}
-
-/* ============================
-   Realistic Testimonial Card
-   ============================ */
-.testimonial-card {
-  background: var(--bg-light);
-  border-radius: 1rem; /* Modern rounded corners */
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  
-  /* Realism: Subtle thin border + soft shadow base */
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
-              0 2px 4px -1px rgba(0, 0, 0, 0.03);
-              
-  /* 3D Smooth Transition */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
+  background: linear-gradient(180deg, #f9fafb 0%, #f1f5f9 100%);
   overflow: hidden;
 }
 
-/* 3D Hover Effect */
-.testimonial-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-              0 8px 10px -6px rgba(0, 0, 0, 0.05);
-  border-color: transparent; /* Optional: Let shadow define edges on hover */
+/* Decorative soft gradient shapes (optional background flair) */
+.testimonials-section::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  right: -180px;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle at center, rgba(14,165,233,0.15), transparent 70%);
+  filter: blur(60px);
+  z-index: 0;
+}
+.testimonials-section::after {
+  content: "";
+  position: absolute;
+  bottom: -160px;
+  left: -180px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle at center, rgba(34,197,94,0.12), transparent 70%);
+  filter: blur(80px);
+  z-index: 0;
 }
 
-/* --- Header: Image & Meta Info --- */
+/* ------------------------------
+   Responsive Grid Container
+------------------------------ */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 2.5rem;
+  padding: 1rem 1rem 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================================
+   CARD CORE STYLES
+   ========================================================= */
+.testimonial-card {
+  background: var(--bg-light, #fff);
+  border-radius: 1.25rem;
+  padding: 2.2rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+
+  /* Subtle borders + layered shadows */
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow:
+    0 1px 2px rgba(0,0,0,0.04),
+    0 4px 12px rgba(0,0,0,0.06);
+
+  /* Smooth transform on hover */
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(2px);
+}
+
+/* Elegant lighting hover effect */
+.testimonial-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.15));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-8px);
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.08),
+    0 4px 15px rgba(0,0,0,0.04);
+}
+.testimonial-card:hover::before {
+  opacity: 1;
+}
+
+/* ------------------------------
+   Header (Avatar + Info)
+------------------------------ */
 .testimonial-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: 1.25rem;
+  margin-bottom: 1.75rem;
 }
 
-/* Circle Profile Image */
 .testimonial-avatar {
-  width: 64px;
-  height: 64px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--bg-white, #fff);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Slight lift for avatar */
-  flex-shrink: 0;
+  border: 3px solid #fff;
+  box-shadow:
+    0 4px 8px rgba(0,0,0,0.1),
+    0 0 0 4px rgba(14,165,233,0.08);
+  transition: transform 0.4s ease;
 }
 
-/* Meta Container (Right of Image) */
+.testimonial-card:hover .testimonial-avatar {
+  transform: scale(1.03) rotate(2deg);
+}
+
 .testimonial-meta {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-/* Nama (Bold) */
 .testimonial-name {
-  font-size: 1.125rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  color: var(--primary-color-t);
-  line-height: 1.2;
-  margin-bottom: 0.25rem;
-}
-
-/* Sub Nama (Role) - Bold but lower opacity (grayish) */
-.testimonial-role {
-  font-size: 0.95rem;
-  font-weight: 600; /* Bold-ish */
-  color: var(--text-light-t); /* Agak samar/hitam tidak pekat */
-  opacity: 0.9;
+  color: var(--primary-color-t, #0f172a);
   line-height: 1.3;
 }
 
-/* Tanggal - Even more subtle, placed under role */
-.testimonial-date {
-  font-size: 0.8rem;
-  color: #9ca3af; /* gray-400 for very subtle date */
-  margin-top: 0.25rem;
+.testimonial-role {
+  font-size: 0.96rem;
   font-weight: 500;
+  color: var(--text-light-t, #4b5563);
+  margin-top: 0.15rem;
 }
 
-/* --- Body: Ulasan --- */
+.testimonial-date {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-top: 0.3rem;
+}
+
+/* ------------------------------
+   Body (Comment)
+------------------------------ */
 .testimonial-body {
-  flex-grow: 1; /* Pushes rating to bottom if heights vary */
-  margin-bottom: 1.5rem;
+  flex-grow: 1;
+  margin-bottom: 1.6rem;
+  position: relative;
 }
 
 .testimonial-text {
   font-size: 1rem;
-  line-height: 1.65;
-  color: #374151; /* gray-700 for good readability */
-  font-style: normal; /* Or italic if preferred */
+  line-height: 1.7;
+  color: #374151;
   position: relative;
+  font-style: normal;
 }
 
-/* Optional: Add a subtle quote icon for extra realism */
 .testimonial-text::before {
   content: "“";
-  font-size: 4rem;
-  position: absolute;
-  top: -2rem;
-  left: -1rem;
-  opacity: 0.05;
+  font-size: 5rem;
   font-family: serif;
-  color: var(--primary-color-t);
+  color: var(--primary-color-t, #0ea5a4);
+  opacity: 0.05;
+  position: absolute;
+  top: -2.6rem;
+  left: -0.8rem;
   pointer-events: none;
 }
 
-/* --- Footer: Rating --- */
+/* ------------------------------
+   Footer (Rating)
+------------------------------ */
 .testimonial-footer {
-  padding-top: 1rem;
-  border-top: 1px solid rgba(0,0,0,0.05); /* Very subtle separator */
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(0,0,0,0.05);
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .testimonial-rating {
   display: flex;
-  gap: 0.25rem;
-  color: var(--star-color);
-  font-size: 1.1rem;
+  align-items: center;
+  gap: 0.3rem;
+  color: #facc15;
+  font-size: 1.2rem;
 }
 
-/* ============================
-   Mobile Responsive (Perfect Horizontal Scroll)
-   ============================ */
+.testimonial-score {
+  background: #f9fafb;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.6rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* ------------------------------
+   Micro Animations
+------------------------------ */
+.testimonial-card:hover .testimonial-name {
+  color: var(--primary-color-t, #0ea5a4);
+  transition: color 0.3s ease;
+}
+
+.testimonial-card:hover .testimonial-text {
+  color: #1e293b;
+}
+
+/* ------------------------------
+   Mobile Scroll Optimization
+------------------------------ */
 @media (max-width: 768px) {
   .testimonials-grid {
     display: flex;
-    /* Enable smooth horizontal scrolling */
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch; /* Momentum scroll on iOS */
-    
-    gap: 1.5rem;
-    padding: 2rem 1.5rem 3rem; /* Generous padding for shadows to not clip */
-    
-    /* Full-bleed effect */
+    gap: 1.75rem;
+    padding: 2.5rem 1.5rem;
     margin: 0 -1.5rem;
     scroll-padding-left: 1.5rem;
   }
-
-  /* Hide scrollbars for clean look */
   .testimonials-grid::-webkit-scrollbar {
     display: none;
   }
@@ -929,18 +1000,15 @@ section {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-
   .testimonial-card {
-    min-width: 85vw; /* Show 85% of card to encourage scrolling */
-    max-width: 380px; /* Prevent getting too huge on larger phones */
+    min-width: 85vw;
     flex-shrink: 0;
-    scroll-snap-align: center; /* Center the active card */
-    
-    /* Ensure 3D effect works on mobile too if desired, 
-       or simplify shadows for performance if needed. 
-       Keeping realistic shadows here. */
+    scroll-snap-align: center;
   }
 }
+
+
+
 /* ============================
    FAQ Section
    ============================ */

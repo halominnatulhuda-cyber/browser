@@ -57,12 +57,12 @@ body.menu-open {
 }
 
 section {
-  padding: 80px 0;
+  padding: 30px 0;
 }
 
 @media (max-width: 768px) {
   section {
-    padding: 60px 0;
+    padding: 30px 0;
   }
 }
 

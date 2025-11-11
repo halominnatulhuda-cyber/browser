@@ -970,19 +970,3 @@ document.querySelectorAll('.gallery-item img').forEach((img) => {
         }
     });
 });
-
-const menuBtn = document.querySelector('.mobile-menu-btn');
-const nav = document.querySelector('.nav');
-const overlay = document.querySelector('.nav-overlay');
-
-menuBtn.addEventListener('click', () => {
-  nav.classList.toggle('active');
-  overlay.classList.toggle('active');
-  document.body.classList.toggle('nav-open'); // kunci scroll
-});
-
-overlay.addEventListener('click', () => {
-  nav.classList.remove('active');
-  overlay.classList.remove('active');
-  document.body.classList.remove('nav-open');
-});

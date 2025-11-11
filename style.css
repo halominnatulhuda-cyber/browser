@@ -277,7 +277,7 @@ section {
 }
 
 /* =========================================================
-   🧭 NAVIGATION (Refined)
+   🧭 NAVIGATION (Refined & Scroll-Locked Mobile Behavior)
    ========================================================= */
 .nav {
   display: flex;
@@ -360,7 +360,7 @@ section {
 }
 
 /* =========================================================
-   📱 MOBILE NAVIGATION (Optimized)
+   📱 MOBILE NAVIGATION (Optimized & Scroll Enabled)
    ========================================================= */
 .mobile-menu-btn {
   display: none;
@@ -394,7 +394,7 @@ section {
 }
 
 /* =========================================================
-   📱 RESPONSIVE BEHAVIOR (Two-column layout fix)
+   📱 RESPONSIVE BEHAVIOR (Scroll-Locked)
    ========================================================= */
 @media (max-width: 1024px) {
   .header-content {
@@ -414,15 +414,16 @@ section {
     background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-    overflow-y: auto;
     max-height: 0;
     padding: 0;
+    overflow: hidden;
     transition: max-height 0.4s ease, padding 0.3s ease;
   }
 
   .nav.active {
     max-height: calc(100vh - 70px);
     padding: 20px 0;
+    overflow-y: auto; /* nav bisa di-scroll */
   }
 
   .nav-list {
@@ -439,22 +440,33 @@ section {
     font-size: 1.05rem;
   }
 
-  .dropdown-menu {
+  /* Semua dropdown tampil saat nav aktif */
+  .nav.active .dropdown-menu {
+    display: flex !important;
     position: static;
     background: rgba(0, 0, 0, 0.04);
     box-shadow: none;
     border-radius: 8px;
     margin-top: 6px;
     padding: 8px 0 8px 15px;
-    display: none;
     flex-direction: column;
     gap: 6px;
     opacity: 1;
     visibility: visible;
   }
 
-  .dropdown-menu.active {
-    display: flex;
+  /* Hilangkan efek hover di mobile */
+  .nav-item:hover > .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  /* Saat nav aktif, body tidak bisa di-scroll */
+  body.nav-open {
+    overflow: hidden;
+    height: 100vh;
+    touch-action: none;
   }
 }
 
@@ -472,12 +484,6 @@ section {
     animation-duration: 0s !important;
   }
 }
-
-
-
-
-
-
 
 
 /* =========================================================

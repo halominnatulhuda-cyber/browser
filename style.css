@@ -2364,22 +2364,18 @@ header {
 
 
 /* =========================================================
-   🌿 ABOUT PAGE — VISI, MISI, NILAI INTI, KURIKULUM, TIM
+   🌿 ABOUT PAGE — VISI, MISI, NILAI INTI, TIM
    ========================================================= */
 
-/* ---------- Global Layout ---------- */
 .about-section {
   margin-bottom: 80px;
   padding: 0 20px;
-  width: 100%;
-  box-sizing: border-box;
 }
 
 .section-title {
   text-align: center;
-  font-size: 1.9rem;
+  font-size: 1.8rem;
   font-weight: 700;
-  color: var(--text-dark, #1c1c1c);
   margin-bottom: 10px;
 }
 
@@ -2388,95 +2384,39 @@ header {
   height: 4px;
   background: var(--primary-color, #007bff);
   border-radius: 4px;
-  margin: 0 auto 35px;
+  margin: 0 auto 30px;
 }
 
 /* =========================================================
-   🏞️ HERO SLIDER SECTION (AUTO 5s)
-   ========================================================= */
-.page-hero {
-  position: relative;
-  width: 100%;
-  height: 420px;
-  overflow: hidden;
-}
-
-.hero-slider {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.hero-slider img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 420px;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 1.2s ease;
-}
-
-.hero-slider img.active {
-  opacity: 1;
-}
-
-.hero-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #fff;
-  text-align: center;
-  background: rgba(0, 0, 0, 0.4);
-  padding: 25px 35px;
-  border-radius: 16px;
-}
-
-.page-title {
-  font-size: 2.2rem;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.page-subtitle {
-  font-size: 1.1rem;
-  font-weight: 400;
-  color: #f5f5f5;
-}
-
-/* =========================================================
-   🌱 VISI & MISI SECTION
+   VISI & MISI SECTION
    ========================================================= */
 .vision-mission {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 30px;
-  margin-top: 40px;
 }
 
 .vision-box,
 .mission-box {
   background: var(--bg-white, #fff);
-  padding: 32px;
+  padding: 30px;
   border-radius: var(--radius-lg, 12px);
-  box-shadow: var(--shadow-sm, 0 2px 6px rgba(0, 0, 0, 0.08));
+  box-shadow: var(--shadow-sm, 0 2px 6px rgba(0,0,0,0.08));
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .vision-box:hover,
 .mission-box:hover {
   transform: translateY(-5px);
-  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.12));
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0,0,0,0.12));
 }
 
 .vision-box h3,
 .mission-box h3 {
   font-size: 1.3rem;
   font-weight: 600;
-  color: var(--text-dark, #222);
   margin-bottom: 15px;
+  color: var(--text-dark, #222);
 }
 
 .vision-box p,
@@ -2484,15 +2424,13 @@ header {
   color: var(--text-muted, #555);
   line-height: 1.7;
   margin: 0;
-  text-align: left;
 }
 
-/* Daftar misi bergaya seperti paragraf visi */
+/* Untuk daftar misi bergaya sama seperti teks visi */
 #missionTextContainer p {
   margin-bottom: 12px;
   padding-left: 20px;
   position: relative;
-  text-align: left;
 }
 
 #missionTextContainer p::before {
@@ -2504,7 +2442,7 @@ header {
 }
 
 /* =========================================================
-   💎 NILAI INTI (CORE VALUES)
+   NILAI INTI (CORE VALUES)
    ========================================================= */
 .core-values-grid {
   display: grid;
@@ -2515,9 +2453,9 @@ header {
 
 .core-value-card {
   background: var(--bg-white, #fff);
-  padding: 28px;
+  padding: 25px;
   border-radius: var(--radius-lg, 12px);
-  box-shadow: var(--shadow-sm, 0 2px 6px rgba(0, 0, 0, 0.08));
+  box-shadow: var(--shadow-sm, 0 2px 6px rgba(0,0,0,0.08));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2527,24 +2465,24 @@ header {
 
 .core-value-card:hover {
   transform: translateY(-5px);
-  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.12));
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0,0,0,0.12));
 }
 
 .core-value-icon {
   width: 64px;
   height: 64px;
   object-fit: contain;
-  margin-bottom: 18px;
+  margin-bottom: 15px;
 }
 
-.core-value-card-content h4 {
-  font-size: 1.1rem;
+.core-value-title {
   font-weight: 600;
-  color: var(--text-dark, #222);
+  font-size: 1.1rem;
   margin-bottom: 8px;
+  color: var(--text-dark, #222);
 }
 
-.core-value-card-content p {
+.core-value-desc {
   font-size: 0.95rem;
   color: var(--text-muted, #555);
   line-height: 1.6;
@@ -2556,43 +2494,31 @@ header {
     flex-direction: row;
     align-items: flex-start;
     text-align: left;
-    padding: 22px;
+    padding: 20px;
   }
 
   .core-value-icon {
-    margin: 0 16px 0 0;
-    width: 52px;
-    height: 52px;
+    margin: 0 15px 0 0;
+    width: 50px;
+    height: 50px;
+  }
+
+  .core-value-title {
+    margin-bottom: 6px;
+  }
+
+  .core-value-desc {
+    margin-bottom: 0;
   }
 
   .core-value-card-content {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-  }
-
-  .core-value-card-content h4 {
-    margin-bottom: 6px;
   }
 }
 
 /* =========================================================
-   📘 KURIKULUM SECTION
-   ========================================================= */
-.curriculum-text {
-  color: var(--text-muted, #555);
-  line-height: 1.8;
-  font-size: 1rem;
-  text-align: justify;
-  margin-top: 20px;
-  background: var(--bg-white, #fff);
-  padding: 25px 30px;
-  border-radius: var(--radius-lg, 12px);
-  box-shadow: var(--shadow-sm, 0 2px 6px rgba(0, 0, 0, 0.08));
-}
-
-/* =========================================================
-   👥 TIM KAMI (TEAM)
+   TIM KAMI (TEAM)
    ========================================================= */
 .team-grid {
   display: grid;
@@ -2604,15 +2530,15 @@ header {
 .team-card {
   background: var(--bg-white, #fff);
   border-radius: var(--radius-lg, 12px);
-  padding: 28px;
+  padding: 25px;
   text-align: center;
-  box-shadow: var(--shadow-sm, 0 2px 6px rgba(0, 0, 0, 0.08));
+  box-shadow: var(--shadow-sm, 0 2px 6px rgba(0,0,0,0.08));
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .team-card:hover {
   transform: translateY(-5px);
-  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.12));
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0,0,0,0.12));
 }
 
 .team-photo {
@@ -2626,9 +2552,7 @@ header {
 
 .team-name {
   font-weight: 600;
-  font-size: 1.05rem;
   margin-bottom: 5px;
-  color: var(--text-dark, #222);
 }
 
 .team-role {

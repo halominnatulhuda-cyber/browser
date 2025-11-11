@@ -277,7 +277,7 @@ section {
 }
 
 /* =========================================================
-   🧭 NAVIGATION (Refined & Scroll-Locked Mobile Behavior)
+   🧭 NAVIGATION — ELEGANT & RESPONSIVE
    ========================================================= */
 .nav {
   display: flex;
@@ -285,12 +285,16 @@ section {
   justify-content: flex-end;
   position: relative;
   z-index: 1000;
+  font-family: var(--font-base, 'Inter', sans-serif);
 }
 
+/* ---------------------------------------------------------
+   NAV LIST (Desktop)
+   --------------------------------------------------------- */
 .nav-list {
   display: flex;
   list-style: none;
-  gap: 30px;
+  gap: 2rem;
   align-items: center;
   margin: 0;
   padding: 0;
@@ -301,11 +305,15 @@ section {
   position: relative;
 }
 
+/* ---------------------------------------------------------
+   NAV LINK (Elegant underline hover)
+   --------------------------------------------------------- */
 .nav-link {
   display: inline-block;
   position: relative;
   padding: 8px 4px;
   font-weight: 600;
+  font-size: 0.95rem;
   color: var(--text-dark, #222);
   text-decoration: none;
   transition: color 0.3s ease, transform 0.3s ease;
@@ -314,7 +322,7 @@ section {
 .nav-link::after {
   content: "";
   position: absolute;
-  bottom: -5px;
+  bottom: -4px;
   left: 0;
   width: 0;
   height: 2px;
@@ -334,23 +342,45 @@ section {
 }
 
 /* =========================================================
-   DROPDOWN MENU (Desktop)
+   💎 DROPDOWN MENU (Desktop Stylish)
    ========================================================= */
 .dropdown-menu {
   position: absolute;
-  top: 100%;
+  top: 120%;
   left: 0;
   min-width: 200px;
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, 0.97);
   backdrop-filter: blur(12px);
-  border-radius: var(--radius-lg, 10px);
-  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.1));
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   list-style: none;
-  padding: 10px 0;
+  padding: 12px 0;
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px);
   transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+}
+
+.dropdown-menu li {
+  width: 100%;
+}
+
+.dropdown-menu a {
+  display: block;
+  width: 100%;
+  padding: 10px 18px;
+  color: var(--text-dark, #333);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: background 0.2s ease, color 0.2s ease;
+  border-radius: 6px;
+}
+
+.dropdown-menu a:hover {
+  background: rgba(14, 165, 164, 0.08);
+  color: var(--primary-color, #0ea5a4);
 }
 
 .nav-item:hover > .dropdown-menu {
@@ -360,7 +390,7 @@ section {
 }
 
 /* =========================================================
-   📱 MOBILE NAVIGATION (Optimized & Scroll Enabled)
+   📱 MOBILE MENU BUTTON
    ========================================================= */
 .mobile-menu-btn {
   display: none;
@@ -370,13 +400,16 @@ section {
   font-size: 28px;
   cursor: pointer;
   transition: transform 0.3s ease;
+  z-index: 1100;
 }
 
 .mobile-menu-btn:hover {
   transform: scale(1.1);
 }
 
-/* Overlay */
+/* =========================================================
+   OVERLAY (for mobile menu)
+   ========================================================= */
 .nav-overlay {
   position: fixed;
   inset: 0;
@@ -394,7 +427,7 @@ section {
 }
 
 /* =========================================================
-   📱 RESPONSIVE BEHAVIOR (Scroll-Locked)
+   📱 RESPONSIVE — SCROLLABLE NAV + LOCK BODY
    ========================================================= */
 @media (max-width: 1024px) {
   .header-content {
@@ -411,19 +444,21 @@ section {
     left: 0;
     right: 0;
     flex-direction: column;
+    align-items: flex-start;
     background: rgba(255, 255, 255, 0.96);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
     max-height: 0;
-    padding: 0;
     overflow: hidden;
-    transition: max-height 0.4s ease, padding 0.3s ease;
+    padding: 0;
+    transition: max-height 0.45s ease, padding 0.3s ease;
   }
 
   .nav.active {
     max-height: calc(100vh - 70px);
     padding: 20px 0;
-    overflow-y: auto; /* nav bisa di-scroll */
+    overflow-y: auto; /* scrollable */
   }
 
   .nav-list {
@@ -440,29 +475,35 @@ section {
     font-size: 1.05rem;
   }
 
-  /* Semua dropdown tampil saat nav aktif */
+  /* =====================================================
+     Mobile Dropdowns — always visible & styled
+     ===================================================== */
   .nav.active .dropdown-menu {
     display: flex !important;
     position: static;
     background: rgba(0, 0, 0, 0.04);
     box-shadow: none;
-    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
     margin-top: 6px;
     padding: 8px 0 8px 15px;
     flex-direction: column;
-    gap: 6px;
-    opacity: 1;
-    visibility: visible;
-  }
-
-  /* Hilangkan efek hover di mobile */
-  .nav-item:hover > .dropdown-menu {
+    gap: 4px;
     opacity: 1;
     visibility: visible;
     transform: none;
   }
 
-  /* Saat nav aktif, body tidak bisa di-scroll */
+  .dropdown-menu a {
+    font-size: 0.95rem;
+    padding: 8px 12px;
+  }
+
+  .nav-item:hover > .dropdown-menu {
+    transform: none;
+  }
+
+  /* Lock body scroll when nav is open */
   body.nav-open {
     overflow: hidden;
     height: 100vh;
@@ -471,7 +512,7 @@ section {
 }
 
 /* =========================================================
-   ⚡ ACCESSIBILITY + PERFORMANCE ENHANCEMENTS
+   ⚡ ACCESSIBILITY & SMOOTHNESS
    ========================================================= */
 :focus-visible {
   outline: 2px solid var(--primary-color, #0ea5a4);

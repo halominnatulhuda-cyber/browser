@@ -4667,17 +4667,19 @@ header {
 
 
 /* =========================================================
-   PAGE-SPECIFIC: UNITS SECTION
+   📘 UNITS SECTION — REFINED RESPONSIVE GRID (UPDATED)
    ========================================================= */
 .unit-section {
   background: var(--bg-light);
-  padding: clamp(30px, 6vw, 60px);
+  padding: clamp(30px, 5vw, 70px);
   border-radius: var(--radius-xl);
-  margin-bottom: clamp(30px, 6vw, 40px);
+  margin-bottom: clamp(30px, 5vw, 50px);
   box-shadow: var(--shadow-sm);
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  overflow: hidden;
+  transition: var(--transition);
 }
 
 .unit-section:last-child {
@@ -4685,50 +4687,52 @@ header {
 }
 
 /* =========================================================
-   UNIT HEADER
+   HEADER
    ========================================================= */
 .unit-header {
   text-align: center;
-  margin-bottom: clamp(25px, 6vw, 40px);
-  padding-inline: clamp(1rem, 4vw, 2rem);
-  box-sizing: border-box;
+  margin-bottom: clamp(25px, 6vw, 45px);
+  padding-inline: clamp(0.5rem, 5vw, 2rem);
 }
 
 .unit-header h2 {
   color: var(--primary-color);
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  margin-bottom: 15px;
-  line-height: 1.2;
+  font-size: clamp(1.4rem, 4.2vw, 2.2rem);
+  margin-bottom: 12px;
+  line-height: 1.25;
+  word-break: break-word;
+  font-weight: 700;
 }
 
 .unit-header p {
   color: var(--text-light);
   font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-  line-height: 1.6;
+  line-height: 1.7;
   margin: 0 auto;
-  max-width: 700px;
+  max-width: 720px;
 }
 
 /* =========================================================
-   UNIT STATS (ANGKA UTAMA)
+   STATS BAR (ANGKA-ANGKA UTAMA)
    ========================================================= */
 .unit-stats {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: clamp(20px, 6vw, 60px);
-  margin: clamp(20px, 6vw, 40px) 0;
-  box-sizing: border-box;
+  align-items: center;
+  gap: clamp(20px, 5vw, 60px);
+  margin: clamp(20px, 5vw, 50px) 0;
 }
 
 .unit-stat {
   text-align: center;
-  flex: 1 1 120px;
-  min-width: 120px;
+  flex: 1 1 100px;
+  min-width: 100px;
+  max-width: 200px;
 }
 
 .unit-stat-value {
-  font-size: clamp(1.6rem, 6vw, 2.5rem);
+  font-size: clamp(1.6rem, 6vw, 2.6rem);
   font-weight: 700;
   color: var(--accent-color);
   display: block;
@@ -4737,12 +4741,12 @@ header {
 
 .unit-stat-label {
   color: var(--text-light);
-  font-size: clamp(0.8rem, 2.3vw, 0.95rem);
-  margin-top: 5px;
+  font-size: clamp(0.8rem, 2.5vw, 1rem);
+  margin-top: 6px;
 }
 
 /* =========================================================
-   UNIT CONTENT (GRID)
+   MAIN CONTENT (GRID)
    ========================================================= */
 .unit-content {
   display: grid;
@@ -4750,21 +4754,33 @@ header {
   gap: clamp(20px, 4vw, 40px);
   align-items: start;
   width: 100%;
+  margin-top: clamp(25px, 5vw, 50px);
   box-sizing: border-box;
-  margin-top: clamp(20px, 5vw, 40px);
 }
 
+/* =========================================================
+   UNIT LIST (CARD STYLE)
+   ========================================================= */
 .unit-list {
   background: var(--bg-white);
-  padding: clamp(20px, 5vw, 30px);
+  padding: clamp(18px, 4vw, 32px);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-xs);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.unit-list:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
 }
 
 .unit-list h4 {
   color: var(--primary-color);
-  margin-bottom: clamp(15px, 4vw, 20px);
-  font-size: clamp(1.1rem, 3vw, 1.25rem);
+  margin-bottom: clamp(12px, 3vw, 22px);
+  font-size: clamp(1rem, 3.2vw, 1.3rem);
+  font-weight: 600;
 }
 
 .unit-list ul {
@@ -4774,34 +4790,34 @@ header {
 }
 
 .unit-list li {
-  padding: 8px 0 8px 25px;
   position: relative;
   color: var(--text-light);
   font-size: clamp(0.85rem, 2.5vw, 1rem);
-  line-height: 1.6;
-  word-wrap: break-word;
+  line-height: 1.7;
+  padding: 6px 0 6px 22px;
 }
 
 .unit-list li::before {
   content: '→';
   position: absolute;
   left: 0;
+  top: 3px;
   color: var(--accent-color);
   font-weight: bold;
 }
 
 /* =========================================================
-   RESPONSIVE ADJUSTMENTS
+   RESPONSIVE BREAKPOINTS
    ========================================================= */
 
 /* Tablet (≤992px) */
 @media (max-width: 992px) {
   .unit-section {
-    padding: clamp(25px, 6vw, 40px);
+    padding: clamp(25px, 6vw, 45px);
   }
 
   .unit-header h2 {
-    font-size: clamp(1.4rem, 4.5vw, 1.8rem);
+    font-size: clamp(1.2rem, 4vw, 1.9rem);
   }
 
   .unit-content {
@@ -4809,225 +4825,15 @@ header {
   }
 }
 
-/* Mobile (≤480px) */
-@media (max-width: 480px) {
+/* Mobile (≤600px) */
+@media (max-width: 600px) {
   .unit-section {
-    padding: clamp(20px, 6vw, 30px);
-    border-radius: var(--radius-lg);
-  }
-
-  .unit-stats {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .unit-stat-value {
-    font-size: clamp(1.4rem, 7vw, 2rem);
-  }
-
-  .unit-stat-label {
-    font-size: clamp(0.75rem, 3vw, 0.9rem);
-  }
-
-  .unit-content {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .unit-list {
-    padding: clamp(15px, 5vw, 20px);
-  }
-
-  .unit-list li {
-    padding-left: 20px;
-  }
-}
-
-/* Extra Small (≤340px) */
-@media (max-width: 340px) {
-  .unit-section {
-    padding: 20px 15px;
-  }
-
-  .unit-header h2 {
-    font-size: 1.3rem;
-  }
-
-  .unit-header p {
-    font-size: 0.85rem;
-  }
-
-  .unit-stat-value {
-    font-size: 1.6rem;
-  }
-
-  .unit-list li {
-    font-size: 0.8rem;
-  }
-}
-
-/* =========================================================
-   PAGE-SPECIFIC: UNITS SECTION (OPTIMIZED & RESPONSIVE)
-   ========================================================= */
-.unit-section {
-  background: var(--bg-light);
-  padding: clamp(20px, 5vw, 60px);
-  border-radius: var(--radius-xl);
-  margin-bottom: clamp(25px, 5vw, 40px);
-  box-shadow: var(--shadow-sm);
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-.unit-section:last-child {
-  margin-bottom: 0;
-}
-
-/* =========================================================
-   UNIT HEADER
-   ========================================================= */
-.unit-header {
-  text-align: center;
-  margin-bottom: clamp(20px, 6vw, 40px);
-  padding-inline: clamp(0.5rem, 4vw, 2rem);
-  box-sizing: border-box;
-}
-
-.unit-header h2 {
-  color: var(--primary-color);
-  font-size: clamp(1.3rem, 4vw, 2rem);
-  margin-bottom: 12px;
-  line-height: 1.25;
-  word-break: break-word;
-}
-
-.unit-header p {
-  color: var(--text-light);
-  font-size: clamp(0.85rem, 2.5vw, 1.1rem);
-  line-height: 1.6;
-  margin: 0 auto;
-  max-width: 680px;
-  word-wrap: break-word;
-}
-
-/* =========================================================
-   UNIT STATS (ANGKA UTAMA)
-   ========================================================= */
-.unit-stats {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: clamp(15px, 5vw, 50px);
-  margin: clamp(15px, 5vw, 40px) 0;
-  box-sizing: border-box;
-}
-
-.unit-stat {
-  text-align: center;
-  flex: 1 1 100px;
-  min-width: 100px;
-  max-width: 180px;
-}
-
-.unit-stat-value {
-  font-size: clamp(1.4rem, 6vw, 2.4rem);
-  font-weight: 700;
-  color: var(--accent-color);
-  display: block;
-  line-height: 1.2;
-  word-break: break-word;
-}
-
-.unit-stat-label {
-  color: var(--text-light);
-  font-size: clamp(0.75rem, 2.3vw, 0.95rem);
-  margin-top: 5px;
-}
-
-/* =========================================================
-   UNIT CONTENT (GRID)
-   ========================================================= */
-.unit-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: clamp(15px, 4vw, 35px);
-  align-items: start;
-  width: 100%;
-  box-sizing: border-box;
-  margin-top: clamp(20px, 5vw, 40px);
-}
-
-.unit-list {
-  background: var(--bg-white);
-  padding: clamp(15px, 5vw, 30px);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xs);
-  overflow: hidden;
-}
-
-.unit-list h4 {
-  color: var(--primary-color);
-  margin-bottom: clamp(10px, 4vw, 20px);
-  font-size: clamp(1rem, 3vw, 1.25rem);
-  word-break: break-word;
-}
-
-.unit-list ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.unit-list li {
-  padding: 6px 0 6px 22px;
-  position: relative;
-  color: var(--text-light);
-  font-size: clamp(0.8rem, 2.5vw, 1rem);
-  line-height: 1.6;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-
-.unit-list li::before {
-  content: '→';
-  position: absolute;
-  left: 0;
-  top: 2px;
-  color: var(--accent-color);
-  font-weight: bold;
-}
-
-/* =========================================================
-   RESPONSIVE ADJUSTMENTS
-   ========================================================= */
-
-/* Tablet (≤992px) */
-@media (max-width: 992px) {
-  .unit-section {
-    padding: clamp(20px, 6vw, 40px);
-  }
-
-  .unit-header h2 {
-    font-size: clamp(1.2rem, 4vw, 1.8rem);
-  }
-
-  .unit-content {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
-}
-
-/* Mobile (≤480px) */
-@media (max-width: 480px) {
-  .unit-section {
-    padding: clamp(15px, 5vw, 25px);
+    padding: clamp(18px, 5vw, 30px);
     border-radius: var(--radius-lg);
   }
 
   .unit-header h2 {
-    font-size: clamp(1.1rem, 5vw, 1.4rem);
+    font-size: clamp(1.15rem, 5vw, 1.5rem);
   }
 
   .unit-header p {
@@ -5036,38 +4842,29 @@ header {
 
   .unit-stats {
     flex-direction: column;
-    align-items: center;
-    gap: 15px;
-  }
-
-  .unit-stat-value {
-    font-size: clamp(1.2rem, 7vw, 1.8rem);
-  }
-
-  .unit-stat-label {
-    font-size: clamp(0.7rem, 3vw, 0.85rem);
+    gap: 16px;
   }
 
   .unit-content {
     grid-template-columns: 1fr;
-    gap: 15px;
+    gap: 18px;
   }
 
   .unit-list {
-    padding: clamp(12px, 4vw, 18px);
+    padding: clamp(14px, 4vw, 22px);
   }
 
   .unit-list h4 {
-    font-size: clamp(0.95rem, 4vw, 1.1rem);
+    font-size: clamp(0.95rem, 4vw, 1.15rem);
   }
 
   .unit-list li {
-    font-size: clamp(0.75rem, 3vw, 0.9rem);
+    font-size: clamp(0.8rem, 3vw, 0.9rem);
     padding-left: 18px;
   }
 }
 
-/* Extra Small (≤340px / minimum 300px safe zone) */
+/* Extra Small (≤340px) */
 @media (max-width: 340px) {
   html, body {
     font-size: 90%;
@@ -5078,7 +4875,7 @@ header {
   }
 
   .unit-header h2 {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
 
   .unit-header p {
@@ -5087,10 +4884,6 @@ header {
 
   .unit-stat-value {
     font-size: 1.3rem;
-  }
-
-  .unit-stat-label {
-    font-size: 0.7rem;
   }
 
   .unit-list {
@@ -5105,7 +4898,4 @@ header {
     font-size: 0.75rem;
   }
 }
-
-
-
 

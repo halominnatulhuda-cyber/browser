@@ -365,70 +365,63 @@ function populateFAQ() {
 /* ---------------------------
    POPULATE ABOUT DETAIL PAGE
 ----------------------------*/
+// =========================================================
+// POPULASI OTOMATIS KE HALAMAN
+// =========================================================
 function populateAboutDetail() {
-    if (!siteData || !siteData.aboutPage) {
-        console.warn("⚠️ aboutPage data not found in package.json");
-        return;
-    }
+  // Visi
+  document.getElementById("visionText").textContent = aboutData.vision;
 
-    const about = siteData.aboutPage;
+  // Misi
+  const missionContainer = document.getElementById("missionTextContainer");
+  missionContainer.innerHTML = aboutData.mission
+    .map((item) => `<p>${item}</p>`)
+    .join("");
 
-    // === Visi ===
-    const visionTextEl = safeQuery("#visionText");
-    if (visionTextEl) {
-        visionTextEl.textContent = about.vision || "Visi belum tersedia.";
-    }
+  // Nilai Inti
+  const valuesGrid = document.getElementById("coreValuesGrid");
+  valuesGrid.innerHTML = aboutData.coreValues
+    .map(
+      (val) => `
+      <div class="core-value-card">
+        <img class="core-value-icon" src="${val.icon}" alt="${val.title}">
+        <div class="core-value-card-content">
+          <h4>${val.title}</h4>
+          <p>${val.desc}</p>
+        </div>
+      </div>
+    `
+    )
+    .join("");
 
-    // === Misi (seperti teks visi, bukan list) ===
-    const missionContainer = safeQuery("#missionTextContainer");
-    if (missionContainer && Array.isArray(about.mission)) {
-        missionContainer.innerHTML = about.mission
-            .map(m => `<p>${m}</p>`)
-            .join("");
-    }
-
-    // === Nilai Inti (dengan ikon) ===
-    const coreValuesGrid = safeQuery("#coreValuesGrid");
-    if (coreValuesGrid && Array.isArray(about.coreValues)) {
-        coreValuesGrid.innerHTML = about.coreValues
-            .map(v => `
-                <div class="core-value-card">
-                    <img src="${v.icon || ''}" alt="${v.title}" class="core-value-icon">
-                    <div class="core-value-card-content">
-                        <h4 class="core-value-title">${v.title}</h4>
-                        <p class="core-value-desc">${v.desc}</p>
-                    </div>
-                </div>
-            `)
-            .join("");
-    }
-
-    // === Kurikulum ===
-    const curriculumTextEl = safeQuery("#curriculumText");
-    if (curriculumTextEl) {
-        curriculumTextEl.textContent = about.curriculum || "Kurikulum belum tersedia.";
-    }
-
-    // === Tim Kami ===
-    const teamGrid = safeQuery("#teamGrid");
-    if (teamGrid && Array.isArray(about.team)) {
-        teamGrid.innerHTML = about.team
-            .map(t => `
-                <div class="team-card">
-                    <img src="${t.photo}" alt="${t.name}" class="team-photo">
-                    <h4 class="team-name">${t.name}</h4>
-                    <p class="team-role">${t.role}</p>
-                </div>
-            `)
-            .join("");
-    }
-
-    // === Profil (opsional) ===
-    const aboutProfile = safeQuery("#aboutProfile");
-    if (aboutProfile && about.profile) {
-        aboutProfile.innerHTML = `<p>${about.profile}</p>`;
-    }
+  // Kurikulum
+  document.getElementById("curriculumText").textContent = aboutData.curriculum;
 }
+
+// =========================================================
+// HERO SLIDER — AUTO SLIDE 5 DETIK
+// =========================================================
+function initHeroSlider() {
+  const slides = document.querySelectorAll("#heroSlider img");
+  if (!slides.length) return;
+  let current = 0;
+  slides[current].classList.add("active");
+
+  setInterval(() => {
+    slides[current].classList.remove("active");
+    current = (current + 1) % slides.length;
+    slides[current].classList.add("active");
+  }, 5000);
+}
+
+// =========================================================
+// INISIALISASI SAAT DOM SIAP
+// =========================================================
+document.addEventListener("DOMContentLoaded", () => {
+  initHeroSlider();
+  populateAboutDetail();
+});
+
 
 function populateFooter() {
     const footerTagline = document.getElementById('footerTagline');

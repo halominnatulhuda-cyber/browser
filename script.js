@@ -365,116 +365,64 @@ function populateFAQ() {
 /* ---------------------------
    POPULATE ABOUT DETAIL PAGE
 ----------------------------*/
-
-
-
-
-
-
-
-
-
-
-
-
-// ======= Safe mapper + fixes untuk aboutPage JSON (tidak mengubah JSON) =======
-(function () {
-  // Cari object JSON yang Anda miliki — beberapa project menamai objek global berbeda.
-  // Kita coba beberapa kemungkinan: aboutPage, siteData.aboutPage, data.aboutPage, aboutData.
-  const sourceCandidates = [
-    window.aboutPage,
-    (window.siteData && window.siteData.aboutPage) ? window.siteData.aboutPage : undefined,
-    (window.data && window.data.aboutPage) ? window.data.aboutPage : undefined,
-    window.aboutData // in case it's already named correctly
-  ];
-
-  // ambil yang terdefinisi
-  let aboutData = sourceCandidates.find((x) => typeof x !== "undefined" && x !== null);
-
-  // kalau masih tidak ada, jangan lempar error — keluarkan warning dan hentikan fungsi populate.
-  if (!aboutData) {
-    console.warn("populateAboutDetail: aboutPage JSON tidak ditemukan. Pastikan JSON dimuat sebagai `aboutPage` atau siteData.aboutPage` sebelum script ini.");
-    return;
-  }
-
-  // Sanitasi URL icon (tidak mengubah JSON asli, hanya string yang akan dipakai).
-  function sanitizeIconUrl(url) {
-    if (!url) return "";
-    // hapus duplikat protokol seperti "https://https://..."
-    return url.replace(/^https?:\/\/+/, "https://");
-  }
-
-  // Fungsi populate yang aman (cek ada element sebelum assign)
-  function populateAboutDetailSafe() {
-    // Visi
-    const vEl = document.getElementById("visionText");
-    if (vEl && aboutData.vision) vEl.textContent = aboutData.vision;
-
-    // Misi (array -> paragraph list)
-    const missionContainer = document.getElementById("missionTextContainer");
-    if (missionContainer && Array.isArray(aboutData.mission)) {
-      missionContainer.innerHTML = aboutData.mission
-        .map((item) => `<p>${item}</p>`)
-        .join("");
+function populateAboutDetail() {
+    if (!siteData || !siteData.aboutPage) {
+        console.warn("⚠️ aboutPage data not found in package.json");
+        return;
     }
 
-    // Nilai Inti
-    const valuesGrid = document.getElementById("coreValuesGrid");
-    if (valuesGrid && Array.isArray(aboutData.coreValues)) {
-      valuesGrid.innerHTML = aboutData.coreValues
-        .map((val) => {
-          const icon = sanitizeIconUrl(val.icon);
-          // gunakan kelas yang sesuai dengan CSS Anda
-          return `
-            <div class="core-value-card">
-              ${icon ? `<img class="core-value-icon" src="${icon}" alt="${val.title}">` : ""}
-              <div class="core-value-card-content">
-                <h4 class="core-value-title">${val.title}</h4>
-                <p class="core-value-desc">${val.desc}</p>
-              </div>
-            </div>
-          `;
-        })
-        .join("");
+    const about = siteData.aboutPage;
+
+    // === Visi & Misi ===
+    if (safeQuery("#visionText")) {
+        safeQuery("#visionText").textContent = about.vision || "Visi belum tersedia.";
     }
 
-    // Kurikulum
-    const curEl = document.getElementById("curriculumText");
-    if (curEl && aboutData.curriculum) curEl.textContent = aboutData.curriculum;
-
-    // TIM (rendering tambahan—sebelumnya belum ada di fungsi Anda)
-    const teamGrid = document.getElementById("teamGrid");
-    if (teamGrid && Array.isArray(aboutData.team)) {
-      teamGrid.innerHTML = aboutData.team
-        .map((member) => {
-          const photo = member.photo ? member.photo : "";
-          return `
-            <div class="team-card">
-              ${photo ? `<img class="team-photo" src="${photo}" alt="${member.name}">` : ""}
-              <div class="team-name">${member.name}</div>
-              <div class="team-role">${member.role || ""}</div>
-            </div>
-          `;
-        })
-        .join("");
+    if (safeQuery("#missionList") && Array.isArray(about.mission)) {
+        safeQuery("#missionList").innerHTML = about.mission
+            .map(m => `<li>${m}</li>`)
+            .join("");
     }
-  }
 
-  // Jika DOM sudah siap, jalankan langsung; kalau belum, pasang listener.
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", populateAboutDetailSafe);
-  } else {
-    populateAboutDetailSafe();
-  }
-})();
+    // === Nilai Inti ===
+    if (safeQuery("#coreValuesGrid") && Array.isArray(about.coreValues)) {
+        safeQuery("#coreValuesGrid").innerHTML = about.coreValues
+            .map(
+                v => `
+        <div class="core-value-card">
+          <h4>${v.title}</h4>
+          <p>${v.desc}</p>
+        </div>
+      `
+            )
+            .join("");
+    }
 
+    // === Kurikulum ===
+    if (safeQuery("#curriculumText")) {
+        safeQuery("#curriculumText").textContent = about.curriculum || "Kurikulum belum tersedia.";
+    }
 
+    // === Tim Kami ===
+    if (safeQuery("#teamGrid") && Array.isArray(about.team)) {
+        safeQuery("#teamGrid").innerHTML = about.team
+            .map(
+                t => `
+        <div class="team-card">
+          <img src="${t.photo}" alt="${t.name}" class="team-photo">
+          <h4 class="team-name">${t.name}</h4>
+          <p class="team-role">${t.role}</p>
+        </div>
+      `
+            )
+            .join("");
+    }
 
-
-
-
-
-
+    // === Profil (opsional jika kamu mau tampilkan di sini juga) ===
+    if (safeQuery("#aboutProfile") && about.profile) {
+        safeQuery("#aboutProfile").innerHTML = `<p>${about.profile}</p>`;
+    }
+}
 
 
 function populateFooter() {

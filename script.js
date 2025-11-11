@@ -365,62 +365,116 @@ function populateFAQ() {
 /* ---------------------------
    POPULATE ABOUT DETAIL PAGE
 ----------------------------*/
-// =========================================================
-// POPULASI OTOMATIS KE HALAMAN
-// =========================================================
-function populateAboutDetail() {
-  // Visi
-  document.getElementById("visionText").textContent = aboutData.vision;
 
-  // Misi
-  const missionContainer = document.getElementById("missionTextContainer");
-  missionContainer.innerHTML = aboutData.mission
-    .map((item) => `<p>${item}</p>`)
-    .join("");
 
-  // Nilai Inti
-  const valuesGrid = document.getElementById("coreValuesGrid");
-  valuesGrid.innerHTML = aboutData.coreValues
-    .map(
-      (val) => `
-      <div class="core-value-card">
-        <img class="core-value-icon" src="${val.icon}" alt="${val.title}">
-        <div class="core-value-card-content">
-          <h4>${val.title}</h4>
-          <p>${val.desc}</p>
-        </div>
-      </div>
-    `
-    )
-    .join("");
 
-  // Kurikulum
-  document.getElementById("curriculumText").textContent = aboutData.curriculum;
-}
 
-// =========================================================
-// HERO SLIDER — AUTO SLIDE 5 DETIK
-// =========================================================
-function initHeroSlider() {
-  const slides = document.querySelectorAll("#heroSlider img");
-  if (!slides.length) return;
-  let current = 0;
-  slides[current].classList.add("active");
 
-  setInterval(() => {
-    slides[current].classList.remove("active");
-    current = (current + 1) % slides.length;
-    slides[current].classList.add("active");
-  }, 5000);
-}
 
-// =========================================================
-// INISIALISASI SAAT DOM SIAP
-// =========================================================
-document.addEventListener("DOMContentLoaded", () => {
-  initHeroSlider();
-  populateAboutDetail();
-});
+
+
+
+
+
+
+// ======= Safe mapper + fixes untuk aboutPage JSON (tidak mengubah JSON) =======
+(function () {
+  // Cari object JSON yang Anda miliki — beberapa project menamai objek global berbeda.
+  // Kita coba beberapa kemungkinan: aboutPage, siteData.aboutPage, data.aboutPage, aboutData.
+  const sourceCandidates = [
+    window.aboutPage,
+    (window.siteData && window.siteData.aboutPage) ? window.siteData.aboutPage : undefined,
+    (window.data && window.data.aboutPage) ? window.data.aboutPage : undefined,
+    window.aboutData // in case it's already named correctly
+  ];
+
+  // ambil yang terdefinisi
+  let aboutData = sourceCandidates.find((x) => typeof x !== "undefined" && x !== null);
+
+  // kalau masih tidak ada, jangan lempar error — keluarkan warning dan hentikan fungsi populate.
+  if (!aboutData) {
+    console.warn("populateAboutDetail: aboutPage JSON tidak ditemukan. Pastikan JSON dimuat sebagai `aboutPage` atau siteData.aboutPage` sebelum script ini.");
+    return;
+  }
+
+  // Sanitasi URL icon (tidak mengubah JSON asli, hanya string yang akan dipakai).
+  function sanitizeIconUrl(url) {
+    if (!url) return "";
+    // hapus duplikat protokol seperti "https://https://..."
+    return url.replace(/^https?:\/\/+/, "https://");
+  }
+
+  // Fungsi populate yang aman (cek ada element sebelum assign)
+  function populateAboutDetailSafe() {
+    // Visi
+    const vEl = document.getElementById("visionText");
+    if (vEl && aboutData.vision) vEl.textContent = aboutData.vision;
+
+    // Misi (array -> paragraph list)
+    const missionContainer = document.getElementById("missionTextContainer");
+    if (missionContainer && Array.isArray(aboutData.mission)) {
+      missionContainer.innerHTML = aboutData.mission
+        .map((item) => `<p>${item}</p>`)
+        .join("");
+    }
+
+    // Nilai Inti
+    const valuesGrid = document.getElementById("coreValuesGrid");
+    if (valuesGrid && Array.isArray(aboutData.coreValues)) {
+      valuesGrid.innerHTML = aboutData.coreValues
+        .map((val) => {
+          const icon = sanitizeIconUrl(val.icon);
+          // gunakan kelas yang sesuai dengan CSS Anda
+          return `
+            <div class="core-value-card">
+              ${icon ? `<img class="core-value-icon" src="${icon}" alt="${val.title}">` : ""}
+              <div class="core-value-card-content">
+                <h4 class="core-value-title">${val.title}</h4>
+                <p class="core-value-desc">${val.desc}</p>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    // Kurikulum
+    const curEl = document.getElementById("curriculumText");
+    if (curEl && aboutData.curriculum) curEl.textContent = aboutData.curriculum;
+
+    // TIM (rendering tambahan—sebelumnya belum ada di fungsi Anda)
+    const teamGrid = document.getElementById("teamGrid");
+    if (teamGrid && Array.isArray(aboutData.team)) {
+      teamGrid.innerHTML = aboutData.team
+        .map((member) => {
+          const photo = member.photo ? member.photo : "";
+          return `
+            <div class="team-card">
+              ${photo ? `<img class="team-photo" src="${photo}" alt="${member.name}">` : ""}
+              <div class="team-name">${member.name}</div>
+              <div class="team-role">${member.role || ""}</div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+  }
+
+  // Jika DOM sudah siap, jalankan langsung; kalau belum, pasang listener.
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", populateAboutDetailSafe);
+  } else {
+    populateAboutDetailSafe();
+  }
+})();
+
+
+
+
+
+
+
+
 
 
 function populateFooter() {

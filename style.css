@@ -163,233 +163,216 @@ section {
     letter-spacing: 0.5px;
     white-space: nowrap;
 }
-
-/* --- Navigation base (keep your variables as-is) --- */
 .nav {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    position: relative;
-    z-index: 1000;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	position: relative;
+	z-index: 1000;
 }
 
 .nav-list {
-    display: flex;
-    list-style: none;
-    gap: 30px;
-    align-items: center;
-    transition: var(--transition);
-    margin: 0;
-    padding: 0;
+	display: flex;
+	list-style: none;
+	gap: 30px;
+	align-items: center;
+	transition: var(--transition);
+	margin: 0;
+	padding: 0;
 }
 
 .nav-item {
-    position: relative;
+	position: relative;
 }
 
-/* link */
 .nav-link {
-    text-decoration: none;
-    color: var(--text-dark);
-    font-weight: 600;
-    position: relative;
-    padding: 8px 4px;
-    transition: color 0.3s ease, transform 0.3s ease;
+	text-decoration: none;
+	color: var(--text-dark);
+	font-weight: 600;
+	position: relative;
+	padding: 8px 4px;
+	transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--accent-color);
-    border-radius: 2px;
-    transition: width 0.3s ease;
+	content: '';
+	position: absolute;
+	bottom: -5px;
+	left: 0;
+	width: 0;
+	height: 2px;
+	background: var(--accent-color);
+	border-radius: 2px;
+	transition: width 0.3s ease;
 }
 
 .nav-link:hover {
-    color: var(--primary-color);
-    transform: translateY(-2px);
+	color: var(--primary-color);
+	transform: translateY(-2px);
 }
 
 .nav-link:hover::after,
 .nav-link.active::after {
-    width: 100%;
+	width: 100%;
 }
 
 .nav-link.active {
-    color: var(--primary-color);
+	color: var(--primary-color);
 }
 
-/* ============================
-   Dropdown Menu (controlled by JS)
-   ============================ */
+/* ============================ Dropdown Menu (Desktop) ============================ */
 .dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    min-width: 200px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    list-style: none;
-    padding: 10px 0;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(10px) scaleY(.98);
-    transform-origin: top;
-    transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease;
-    z-index: 999;
-    pointer-events: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	min-width: 200px;
+	background: rgba(255, 255, 255, 0.95);
+	backdrop-filter: blur(10px);
+	border-radius: var(--radius-lg);
+	box-shadow: var(--shadow-md);
+	list-style: none;
+	padding: 10px 0;
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(10px);
+	transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+	z-index: 999;
 }
 
-/* Active/opened dropdown */
-.dropdown-menu.active,
-.nav-item.open > .dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0) scaleY(1);
-    pointer-events: auto;
+.nav-item:hover>.dropdown-menu {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
 }
 
-/* Dropdown items */
 .dropdown-link {
-    display: block;
-    width: 100%;
-    padding: 10px 18px;
-    font-weight: 500;
-    color: var(--text-dark);
-    text-decoration: none;
-    border-radius: var(--radius);
-    transition: background 0.25s ease, color 0.25s ease;
+	display: block;
+	width: 100%;
+	padding: 10px 18px;
+	font-weight: 500;
+	color: var(--text-dark);
+	text-decoration: none;
+	border-radius: var(--radius);
+	transition: background 0.3s ease, color 0.3s ease;
 }
 
 .dropdown-link:hover {
-    background: var(--accent-light);
-    color: var(--primary-dark);
+	background: var(--accent-light);
+	color: var(--primary-dark);
 }
 
-/* Remove hover-based opening (we rely on JS click toggle now) */
-/* previously .nav-item:hover > .dropdown-menu { ... } removed */
-
-/* ============================
-   Mobile Menu
-   ============================ */
+/* ============================ Mobile Menu ============================ */
 .mobile-menu-btn {
-    display: none;
-    background: none;
-    border: none;
-    color: var(--text-dark);
-    font-size: 28px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    z-index: 1100;
+	display: none;
+	background: none;
+	border: none;
+	color: var(--text-dark);
+	font-size: 28px;
+	cursor: pointer;
+	transition: transform 0.3s ease;
+	z-index: 1100;
 }
 
 .mobile-menu-btn:hover {
-    transform: scale(1.1);
+	transform: scale(1.1);
 }
 
 .nav-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(2px);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    z-index: 900;
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.4);
+	backdrop-filter: blur(2px);
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s ease, visibility 0.3s ease;
+	z-index: 900;
 }
 
 .nav-overlay.active {
-    opacity: 1;
-    visibility: visible;
+	opacity: 1;
+	visibility: visible;
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
-    .mobile-menu-btn {
-        display: block;
-    }
+	.mobile-menu-btn {
+		display: block;
+	}
 
-    .nav {
-        position: fixed;
-        top: 70px;
-        left: 0;
-        right: 0;
-        flex-direction: column;
-        justify-content: flex-start;
-        background: rgba(255, 255, 255, 0.96);
-        backdrop-filter: blur(10px);
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-        overflow-y: auto;
-        max-height: 0;
-        padding: 0;
-        transition: max-height 0.4s ease-in-out, padding 0.3s ease;
-        z-index: 1000;
-    }
+	.nav {
+		position: fixed;
+		top: 70px;
+		left: 0;
+		right: 0;
+		flex-direction: column;
+		justify-content: flex-start;
+		background: rgba(255, 255, 255, 0.96);
+		backdrop-filter: blur(10px);
+		box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+		overflow-y: auto;
+		max-height: 0;
+		padding: 0;
+		transition: max-height 0.4s ease-in-out, padding 0.3s ease;
+		z-index: 1000;
+	}
 
-    .nav.active {
-        max-height: calc(100vh - 70px);
-        padding: 20px 0;
-    }
+	.nav.active {
+		max-height: calc(100vh - 70px);
+		padding: 20px 0;
+	}
 
-    .nav-list {
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-        gap: 12px;
-        padding: 0 20px;
-    }
+	.nav-list {
+		flex-direction: column;
+		align-items: flex-start;
+		width: 100%;
+		gap: 12px;
+		padding: 0 20px;
+	}
 
-    .nav-item {
-        width: 100%;
-    }
+	.nav-item {
+		width: 100%;
+	}
 
-    .nav-link {
-        width: 100%;
-        padding: 12px 8px;
-        font-size: 1.1rem;
-        font-weight: 600;
-        text-align: left;
-    }
+	.nav-link {
+		width: 100%;
+		padding: 12px 8px;
+		font-size: 1.1rem;
+		font-weight: 600;
+		text-align: left;
+	}
 
-    /* Dropdown di Mobile: static, collapsible */
-    .dropdown-menu {
-        position: static;
-        background: rgba(0, 0, 0, 0.04);
-        box-shadow: none;
-        border-radius: 8px;
-        margin-top: 6px;
-        padding: 8px 0 8px 15px;
-        display: none;
-        flex-direction: column;
-        gap: 6px;
-        opacity: 1;
-        visibility: visible;
-        transform: none;
-    }
+	/* Dropdown di Mobile */
+	.dropdown-menu {
+		position: static;
+		background: rgba(0, 0, 0, 0.04);
+		box-shadow: none;
+		border-radius: 8px;
+		margin-top: 6px;
+		padding: 8px 0 8px 15px;
+		display: none;
+		flex-direction: column;
+		gap: 6px;
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+	}
 
-    .dropdown-menu.active {
-        display: flex;
-    }
+	.dropdown-menu.active {
+		display: flex;
+	}
 
-    .dropdown-link {
-        padding: 8px 15px;
-        font-size: 1rem;
-        color: var(--text-dark);
-    }
+	.dropdown-link {
+		padding: 8px 15px;
+		font-size: 1rem;
+		color: var(--text-dark);
+	}
 
-    .dropdown-link:hover {
-        color: var(--primary-color);
-    }
+	.dropdown-link:hover {
+		color: var(--primary-color);
+	}
 
-    .dropdown-toggle::after {
-        content: none !important;
-    }
+	.dropdown-toggle::after {
+		content: none !important;
+	}
 }
 
 /* Utility small: parent show indicator */

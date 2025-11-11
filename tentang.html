@@ -78,11 +78,17 @@
         </header>
 
     <!-- =========================================================
-     🌿 TENTANG KAMI PAGE
+     🌿 TENTANG KAMI PAGE — AUTO DATA JSON (VISI, MISI, NILAI INTI, DST)
      ========================================================= -->
 
 <section class="page-hero">
-  <div class="container">
+  <div class="hero-slider" id="heroSlider">
+    <img src="https://images.unsplash.com/photo-1508780709619-79562169bc64" alt="Pesantren 1">
+    <img src="https://images.unsplash.com/photo-1581092334404-9a45ba27f1c1" alt="Pesantren 2">
+    <img src="https://images.unsplash.com/photo-1607522370275-f14206abe5d3" alt="Pesantren 3">
+  </div>
+
+  <div class="container hero-overlay">
     <h1 class="page-title">Tentang Kami</h1>
     <p class="page-subtitle">Mengenal lebih dekat Pondok Pesantren Minnatul Huda</p>
   </div>
@@ -101,35 +107,24 @@
       <div class="vision-mission">
         <div class="vision-box">
           <h3>Visi</h3>
-          <p id="visionText">Menjadi pusat pendidikan Islam terdepan yang mengintegrasikan ilmu agama dan sains untuk kemaslahatan umat.</p>
+          <p id="visionText"></p>
         </div>
 
         <div class="mission-box">
           <h3>Misi</h3>
-          <div id="missionTextContainer">
-            <!-- JS akan mengisi daftar misi sebagai paragraf -->
-          </div>
+          <div id="missionTextContainer"></div>
         </div>
       </div>
     </div>
 
     <!-- =========================================================
-         NILAI INTI SECTION
+         NILAI INTI SECTION — AMBIL DARI JSON
          ========================================================= -->
     <div class="about-section">
       <h2 class="section-title">Nilai Inti</h2>
       <div class="section-divider"></div>
 
-      <div class="core-values-grid" id="coreValuesGrid">
-        <!-- Contoh static fallback (akan diganti JS) -->
-        <div class="core-value-card">
-          <img src="https://via.placeholder.com/64" alt="Religius" class="core-value-icon">
-          <div class="core-value-card-content">
-            <h4 class="core-value-title">Religius</h4>
-            <p class="core-value-desc">Menjadikan nilai-nilai Islam sebagai landasan dalam setiap aktivitas.</p>
-          </div>
-        </div>
-      </div>
+      <div class="core-values-grid" id="coreValuesGrid"></div>
     </div>
 
     <!-- =========================================================
@@ -138,9 +133,7 @@
     <div class="about-section">
       <h2 class="section-title">Kurikulum</h2>
       <div class="section-divider"></div>
-      <p class="curriculum-text" id="curriculumText">
-        Kurikulum kami mengintegrasikan Kurikulum Nasional (Kemendikbud) dengan Kurikulum Pesantren Modern...
-      </p>
+      <p class="curriculum-text" id="curriculumText"></p>
     </div>
 
     <!-- =========================================================
@@ -149,15 +142,7 @@
     <div class="about-section">
       <h2 class="section-title">Tim Kami</h2>
       <div class="section-divider"></div>
-
-      <div class="team-grid" id="teamGrid">
-        <!-- Contoh static fallback (akan diganti JS) -->
-        <div class="team-card">
-          <img src="https://i.pravatar.cc/150?img=11" alt="KH. Abdul Rahman" class="team-photo">
-          <h4 class="team-name">KH. Abdul Rahman, M.Pd.I</h4>
-          <p class="team-role">Pengasuh Pesantren</p>
-        </div>
-      </div>
+      <div class="team-grid" id="teamGrid"></div>
     </div>
 
   </div>

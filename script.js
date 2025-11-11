@@ -362,70 +362,103 @@ function populateFAQ() {
   `).join('');
 }
 
-function populateAboutDetail() {
-    if (!siteData || !siteData.aboutPage) {
-        console.warn("⚠️ aboutPage data not found in package.json");
-        return;
+// =========================================================
+// 🔹 FUNGSI UTAMA: MUAT DATA DARI package.json
+// =========================================================
+async function loadAboutData() {
+  try {
+    const response = await fetch("./package.json");
+    const data = await response.json();
+
+    if (!data.aboutPage) {
+      console.warn("⚠️ aboutPage data not found in package.json");
+      return;
     }
 
-    const about = siteData.aboutPage;
-
-    // === Visi ===
-    const visionTextEl = safeQuery("#visionText");
-    if (visionTextEl) {
-        visionTextEl.textContent = about.vision || "Visi belum tersedia.";
-    }
-
-    // === Misi (seperti teks visi, bukan list) ===
-    const missionContainer = safeQuery("#missionTextContainer");
-    if (missionContainer && Array.isArray(about.mission)) {
-        missionContainer.innerHTML = about.mission
-            .map(m => `<p>${m}</p>`)
-            .join("");
-    }
-
-    // === Nilai Inti (dengan ikon) ===
-    const coreValuesGrid = safeQuery("#coreValuesGrid");
-    if (coreValuesGrid && Array.isArray(about.coreValues)) {
-        coreValuesGrid.innerHTML = about.coreValues
-            .map(v => `
-                <div class="core-value-card">
-                    <img src="${v.icon || ''}" alt="${v.title}" class="core-value-icon">
-                    <div class="core-value-card-content">
-                        <h4 class="core-value-title">${v.title}</h4>
-                        <p class="core-value-desc">${v.desc}</p>
-                    </div>
-                </div>
-            `)
-            .join("");
-    }
-
-    // === Kurikulum ===
-    const curriculumTextEl = safeQuery("#curriculumText");
-    if (curriculumTextEl) {
-        curriculumTextEl.textContent = about.curriculum || "Kurikulum belum tersedia.";
-    }
-
-    // === Tim Kami ===
-    const teamGrid = safeQuery("#teamGrid");
-    if (teamGrid && Array.isArray(about.team)) {
-        teamGrid.innerHTML = about.team
-            .map(t => `
-                <div class="team-card">
-                    <img src="${t.photo}" alt="${t.name}" class="team-photo">
-                    <h4 class="team-name">${t.name}</h4>
-                    <p class="team-role">${t.role}</p>
-                </div>
-            `)
-            .join("");
-    }
-
-    // === Profil (opsional) ===
-    const aboutProfile = safeQuery("#aboutProfile");
-    if (aboutProfile && about.profile) {
-        aboutProfile.innerHTML = `<p>${about.profile}</p>`;
-    }
+    populateAboutDetail(data.aboutPage);
+  } catch (err) {
+    console.error("❌ Gagal memuat package.json:", err);
+  }
 }
+
+// =========================================================
+// 🔹 POPULASI DATA KE HALAMAN
+// =========================================================
+function populateAboutDetail(about) {
+  // === VISI ===
+  const visionEl = document.getElementById("visionText");
+  if (visionEl) visionEl.textContent = about.vision || "Visi belum tersedia.";
+
+  // === MISI ===
+  const missionEl = document.getElementById("missionTextContainer");
+  if (missionEl && Array.isArray(about.mission)) {
+    missionEl.innerHTML = about.mission.map(m => `<p>${m}</p>`).join("");
+  }
+
+  // === NILAI INTI (DARI JSON + ICON) ===
+  const coreGrid = document.getElementById("coreValuesGrid");
+  if (coreGrid && Array.isArray(about.coreValues)) {
+    coreGrid.innerHTML = about.coreValues
+      .map(
+        v => `
+        <div class="core-value-card">
+          <img class="core-value-icon" src="${v.icon}" alt="${v.title}">
+          <div class="core-value-card-content">
+            <h4>${v.title}</h4>
+            <p>${v.desc}</p>
+          </div>
+        </div>
+      `
+      )
+      .join("");
+  }
+
+  // === KURIKULUM ===
+  const curriculumEl = document.getElementById("curriculumText");
+  if (curriculumEl)
+    curriculumEl.textContent = about.curriculum || "Kurikulum belum tersedia.";
+
+  // === TIM KAMI ===
+  const teamEl = document.getElementById("teamGrid");
+  if (teamEl && Array.isArray(about.team)) {
+    teamEl.innerHTML = about.team
+      .map(
+        t => `
+        <div class="team-card">
+          <img src="${t.photo}" alt="${t.name}" class="team-photo">
+          <h4 class="team-name">${t.name}</h4>
+          <p class="team-role">${t.role}</p>
+        </div>
+      `
+      )
+      .join("");
+  }
+}
+
+// =========================================================
+// 🔹 HERO SLIDER — AUTO SLIDE 5 DETIK
+// =========================================================
+function initHeroSlider() {
+  const slides = document.querySelectorAll("#heroSlider img");
+  if (!slides.length) return;
+
+  let current = 0;
+  slides[current].classList.add("active");
+
+  setInterval(() => {
+    slides[current].classList.remove("active");
+    current = (current + 1) % slides.length;
+    slides[current].classList.add("active");
+  }, 5000);
+}
+
+// =========================================================
+// 🔹 INISIALISASI
+// =========================================================
+document.addEventListener("DOMContentLoaded", () => {
+  initHeroSlider();
+  loadAboutData();
+});
 
 
 function populateFooter() {

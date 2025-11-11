@@ -1,68 +1,137 @@
+/* =========================================================
+   ROOT VARIABLES
+   ========================================================= */
 :root {
-  /* Warna Utama */
+  /* ----- Warna Utama ----- */
   --primary-color: #2d5f3f;
   --primary-dark: #1f4029;
 
-  /* Warna Aksen */
+  /* ----- Warna Aksen ----- */
   --accent-color: #4fb3bf;
   --accent-light: #7ecfd8;
 
-  /* Teks */
+  /* ----- Warna Teks ----- */
   --text-dark: #1a1a1a;
   --text-light: #666;
   --text-white: #fff;
   --text-muted: #6b7280;
 
-  /* Background */
+  /* ----- Warna Latar (Background) ----- */
   --bg-light: #f8f9fa;
   --bg-white: #ffffff;
   --bg: #f8fafc;
 
-  /* Border & Shadow */
+  /* ----- Border & Shadow ----- */
   --border-color: #e0e0e0;
-  --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-  --shadow-lg: 0 10px 25px rgba(0,0,0,0.15);
-  --shadow-xl: 0 18px 36px rgba(0,0,0,0.1);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 18px 36px rgba(0, 0, 0, 0.1);
 
-  /* Animasi & Radius */
-  --transition: all 0.3s ease, transform 0.3s cubic-bezier(.2,.9,.3,1);
+  /* ----- Animasi & Radius ----- */
+  --transition: all 0.3s ease, transform 0.3s cubic-bezier(.2, .9, .3, 1);
   --radius: 8px;
   --radius-lg: 12px;
   --radius-xl: 20px;
 }
 
-/* ============================
-   Global & Base Styles
-   ============================ */
+/* =========================================================
+   GLOBAL RESET & NORMALIZATION
+   ========================================================= */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* Hilangkan scroll horizontal yang tidak diinginkan */
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Smooth scroll untuk navigasi anchor */
 html {
   scroll-behavior: smooth;
 }
 
+/* =========================================================
+   BASE BODY & TYPOGRAPHY
+   ========================================================= */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   color: var(--text-dark);
-  background: var(--bg-white);
+  background-color: var(--bg-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Saat menu mobile terbuka, nonaktifkan scroll */
 body.menu-open {
   overflow: hidden;
 }
 
+/* =========================================================
+   GLOBAL LAYOUT ELEMENTS
+   ========================================================= */
 section {
   padding: 30px 0;
+  width: 100%;
+  overflow-x: hidden; /* cegah section melebar keluar viewport */
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   TEXT UTILITY
+   ========================================================= */
+.text-center {
+  text-align: center;
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-white {
+  color: var(--text-white);
+}
+
+/* =========================================================
+   RESPONSIVE BASE ADJUSTMENTS
+   ========================================================= */
+@media (max-width: 1024px) {
+  section {
+    padding: 50px 0;
+  }
 }
 
 @media (max-width: 768px) {
   section {
+    padding: 40px 0;
+  }
+
+  .container {
+    padding-inline: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  section {
     padding: 30px 0;
+  }
+
+  .container {
+    padding-inline: 0.75rem;
   }
 }
 
@@ -379,37 +448,34 @@ section {
 .nav-item.open > .nav-link {
     color: var(--primary-color);
 }
-
-/* ============================
-   Hero Section
-   ============================ */
+/* =========================================================
+   HERO SECTION (Refined & Responsive)
+   ========================================================= */
 .hero {
   position: relative;
+  width: 100%;
+  max-width: 100%;
   height: 450px;
-  overflow: hidden;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
   margin: 0;
   padding: 0;
-}
-
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(45,95,63,0.7) 0%, rgba(79,179,191,0.4) 100%);
-  mix-blend-mode: multiply;
+  overflow: hidden; /* penting agar gambar & animasi tak melebar keluar */
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  box-sizing: border-box;
 }
 
 .hero-slider {
-  height: 100%;
   position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
 
 .hero-slide {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 1s ease-in-out, transform 1.2s ease-in-out;
   transform: scale(1.02);
+  transition: opacity 1s ease-in-out, transform 1.2s ease-in-out;
   will-change: opacity, transform;
 }
 
@@ -423,8 +489,9 @@ section {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(0.9);
+  max-width: 100%;
   transform: scale(1.05);
+  filter: brightness(0.9);
   transition: transform 4s ease-out;
 }
 
@@ -432,17 +499,28 @@ section {
   transform: scale(1);
 }
 
+/* Overlay gradient */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(45,95,63,0.7) 0%, rgba(79,179,191,0.4) 100%);
+  mix-blend-mode: multiply;
+  z-index: 1;
+}
+
+/* Content */
 .hero-content {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  text-align: center;
-  color: var(--text-white);
   width: 90%;
   max-width: 800px;
+  text-align: center;
+  color: var(--text-white);
   z-index: 3;
   animation: fadeInHero 1s ease both;
+  box-sizing: border-box;
 }
 
 .hero-title {
@@ -462,6 +540,7 @@ section {
   animation: fadeInUp 1s ease 0.3s both;
 }
 
+/* Navigation buttons */
 .slider-btn {
   position: absolute;
   top: 50%;
@@ -475,6 +554,7 @@ section {
   z-index: 10;
   border-radius: 50%;
   backdrop-filter: blur(6px);
+  box-sizing: border-box;
 }
 
 .slider-btn:hover {
@@ -482,9 +562,10 @@ section {
   transform: translateY(-50%) scale(1.1);
 }
 
-.slider-prev { left: 20px; }
-.slider-next { right: 20px; }
+.slider-prev { left: 16px; }
+.slider-next { right: 16px; }
 
+/* Indicators */
 .slider-indicators {
   position: absolute;
   bottom: 30px;
@@ -515,6 +596,7 @@ section {
   border-radius: 6px;
 }
 
+/* Animations */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
@@ -525,44 +607,58 @@ section {
   to { opacity: 1; transform: translate(-50%, -50%); }
 }
 
+/* ===== Responsive (Hero) ===== */
+@media (max-width: 1024px) {
+  .hero { height: 420px; }
+  .hero-title { font-size: 2.4rem; }
+}
+
 @media (max-width: 768px) {
   .hero {
-    height: 400px;
+    height: 380px;
   }
   .hero-title {
-    font-size: 2.2rem;
+    font-size: 2rem;
   }
   .hero-subtitle {
     font-size: 1.1rem;
   }
+  .slider-prev { left: 10px; }
+  .slider-next { right: 10px; }
   .slider-indicators {
     bottom: 20px;
   }
 }
 
-/* ============================
-   Stats Section
-   ============================ */
+/* =========================================================
+   STATS SECTION (Refined & Mobile-Safe)
+   ========================================================= */
 .stats {
   background: var(--primary-color);
   color: var(--text-white);
-  padding: 40px 0;
-  overflow: hidden;
+  padding: 50px 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .stats-grid {
   display: flex;
   justify-content: center;
   align-items: stretch;
+  flex-wrap: wrap; /* ubah nowrap → wrap agar aman di mobile */
   gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 0 20px;
-  flex-wrap: nowrap;
+  box-sizing: border-box;
 }
 
 .stat-card {
-  flex: 1;
+  flex: 1 1 220px; /* fleksibel */
   max-width: 250px;
-  min-width: 0;
   background: rgba(255, 255, 255, 0.15);
   border-radius: 16px;
   text-align: center;
@@ -570,6 +666,8 @@ section {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(6px);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .stat-card:hover {
@@ -598,6 +696,7 @@ section {
   opacity: 0.9;
 }
 
+/* ===== Responsive (Stats) ===== */
 @media (max-width: 900px) {
   .stats-grid {
     gap: 14px;
@@ -615,16 +714,16 @@ section {
 
 @media (max-width: 600px) {
   .stats {
-    padding: 30px 0;
+    padding: 40px 0;
   }
   .stats-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    flex-wrap: wrap;
+    grid-template-columns: repeat(2, 1fr);
     gap: 15px;
+    padding: 0 16px;
   }
   .stat-card {
-    padding: 14px 6px;
+    padding: 14px 8px;
     border-radius: 12px;
   }
   .stat-number {
@@ -693,19 +792,17 @@ section {
 /* ============================
    Programs Section
    ============================ */
-/* ============================
-   Programs Section (Enhanced)
-   ============================ */
-/* ============================
-   Programs Section (Full Image)
-   ============================ */
+/* =========================================================
+   PROGRAMS GRID – RESPONSIVE & MOBILE SLIDER OPTIMIZED
+   ========================================================= */
 
-/* Grid desktop, slider mobile */
+/* Base Grid Layout (Desktop & Tablet) */
 .programs-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
   padding: 1rem 0.5rem;
+  box-sizing: border-box; /* penting agar padding tidak menambah lebar */
 }
 
 /* Base Card */
@@ -723,7 +820,6 @@ section {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Hover Lift */
 .program-card:hover {
   transform: translateY(-6px);
   box-shadow:
@@ -731,7 +827,7 @@ section {
     0 8px 10px -6px rgba(0, 0, 0, 0.05);
 }
 
-/* Full Image Top — no margin, no border */
+/* Image Top */
 .program-image {
   width: 100%;
   height: 240px;
@@ -739,7 +835,7 @@ section {
   display: block;
 }
 
-/* Content Wrapper */
+/* Content */
 .program-content {
   padding: 2rem;
   display: flex;
@@ -766,7 +862,6 @@ section {
   margin: 0 0 1rem 0;
   transition: color 0.3s ease;
 }
-
 .program-card:hover .program-title {
   color: var(--accent-color, #0ea5a4);
 }
@@ -780,13 +875,12 @@ section {
   margin-bottom: 1.25rem;
 }
 
-/* Footer link */
+/* Footer Link */
 .program-footer {
   margin-top: auto;
   display: flex;
   align-items: center;
 }
-
 .program-link {
   display: inline-flex;
   align-items: center;
@@ -796,36 +890,37 @@ section {
   font-size: 0.95rem;
   transition: color 0.3s ease;
 }
-
 .program-link:hover {
   color: var(--primary-color, #0f172a);
 }
-
 .program-link svg {
   margin-left: 0.4rem;
   width: 1.1rem;
   height: 1.1rem;
   transition: transform 0.3s ease;
 }
-
 .program-link:hover svg {
   transform: translateX(4px);
 }
 
-/* ============================
-   Mobile: Slider Layout
-   ============================ */
+/* =========================================================
+   MOBILE MODE (≤768px): SLIDER LAYOUT
+   ========================================================= */
 @media (max-width: 768px) {
   .programs-grid {
     display: flex;
     overflow-x: auto;
+    overflow-y: hidden;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
-    gap: 1.5rem;
-    margin: 0 -1.5rem;
-    padding: 1rem 1.5rem 2.5rem;
+    gap: 1.25rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 1rem;
+    padding-bottom: 2.5rem;
     scroll-padding-left: 1.5rem;
     -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
   }
 
   /* Hide scrollbar */
@@ -837,11 +932,13 @@ section {
     scrollbar-width: none;
   }
 
+  /* Card adjustments */
   .program-card {
     min-width: 85vw;
-    max-width: 400px;
+    max-width: 420px;
     flex-shrink: 0;
     scroll-snap-align: start;
+    box-sizing: border-box;
   }
 
   .program-image {
@@ -852,38 +949,39 @@ section {
     padding: 1.5rem;
   }
 }
-
 /* ============================
    News Section (Improved)
    ============================ */
 
-/* Container: Grid on desktop, Slider on mobile */
+/* 1️⃣ Root Container — Grid (Desktop), Flex Slider (Mobile)
+   -------------------------------------------------------- */
 .news-slider {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
   padding: 1rem 0.5rem; /* Slight vertical padding to prevent shadow clipping */
+  box-sizing: border-box;
 }
 
-/* Card Base Styles */
+/* 2️⃣ News Card — Base Layout & Aesthetics
+   --------------------------------------- */
 .news-card {
   background: var(--bg-light);
   border-radius: var(--radius-lg);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  /* Modern, subtle 3D shadow */
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 
+  height: 100%; /* Match row height consistency */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
               0 2px 4px -1px rgba(0, 0, 0, 0.03);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  height: 100%; /* Ensures cards in same row match height */
 }
 
-/* Hover Effects */
+/* 3️⃣ Hover Effects — Lift & Highlight
+   ----------------------------------- */
 .news-card:hover {
   transform: translateY(-6px);
-  /* Elevated shadow on hover */
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
               0 8px 10px -6px rgba(0, 0, 0, 0.05);
 }
 
@@ -892,23 +990,27 @@ section {
   transition: color 0.2s ease;
 }
 
-/* Image Styling */
+/* 4️⃣ Image Styling
+   ----------------- */
 .news-image {
   width: 100%;
-  height: 240px; /* Fixed height for consistency across cards */
+  height: 240px; /* Fixed height for uniform look */
   object-fit: cover;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-/* Content Container */
+/* 5️⃣ Content Layout
+   ------------------ */
 .news-content {
-  padding: 2rem; /* Generous spacing for an elegant look */
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  box-sizing: border-box;
 }
 
-/* Typography Hierarchy */
+/* 6️⃣ Typography Hierarchy
+   ------------------------- */
 .news-date {
   font-size: 0.875rem;
   font-weight: 600;
@@ -931,10 +1033,12 @@ section {
   line-height: 1.6;
   color: var(--text-light);
   margin: 0;
-  flex-grow: 1; /* Pushes any potential footer down */
+  flex-grow: 1;
 }
 
-/* Mobile Responsive Slider (<= 768px) */
+/* ============================
+   📱 Mobile Responsive Slider (≤768px)
+   ============================ */
 @media (max-width: 768px) {
   .news-slider {
     display: flex;
@@ -942,16 +1046,20 @@ section {
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     gap: 1.5rem;
-    
-    /* Full-bleed slider setup with peeking cards */
-    margin: 0 -1.5rem;
-    padding: 1rem 1.5rem 2.5rem; /* Extra bottom padding for scroll shadows */
+
+    /* ✅ FIX: Remove negative margin to prevent right-side overflow */
+    /* margin: 0 -1.5rem;  ← (removed) */
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 1rem;
+    padding-bottom: 2.5rem;
+
     scroll-padding-left: 1.5rem;
-    
     -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
   }
 
-  /* Hide Scrollbars */
+  /* Hide Scrollbars (Mobile aesthetic) */
   .news-slider::-webkit-scrollbar {
     display: none;
   }
@@ -960,231 +1068,217 @@ section {
     scrollbar-width: none;
   }
 
+  /* Card sizing within horizontal scroll */
   .news-card {
-    min-width: 85vw; /* Show 85% of card to encourage scrolling */
+    min-width: 85vw; /* Show part of next card for "peek" effect */
     max-width: 400px;
     flex-shrink: 0;
     scroll-snap-align: start;
   }
 
-  /* Adjust content spacing slightly for smaller screens if needed */
+  /* Adjust spacing for smaller devices */
   .news-content {
     padding: 1.5rem;
   }
-  
+
   .news-image {
     height: 200px;
   }
 }
 
 /* =========================================================
-   PREMIUM TESTIMONIALS SECTION – MINNATUL HUDA
-   Polished, modern & elegant look with circle avatar
+   TESTIMONIALS SECTION – MINNATUL HUDA (SYNCHRONIZED STYLE)
+   Grid on desktop | Full-width slider on mobile
    ========================================================= */
 
+/* SECTION WRAPPER */
 .testimonials {
-  padding: 5rem 0;
   position: relative;
+  padding: 5rem 0;
   background: linear-gradient(180deg, #f9fafb 0%, #f1f5f9 100%);
-  overflow: hidden;
+  overflow-x: clip;
+  overflow-y: visible;
 }
 
-/* Decorative soft gradient shapes */
-.testimonials::before {
-  content: "";
-  position: absolute;
-  top: -120px;
-  right: -180px;
-  width: 380px;
-  height: 380px;
-  background: radial-gradient(circle at center, rgba(14,165,233,0.15), transparent 70%);
-  filter: blur(60px);
-  z-index: 0;
-}
+/* Decorative orbs */
+.testimonials::before,
 .testimonials::after {
   content: "";
   position: absolute;
-  bottom: -160px;
-  left: -180px;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle at center, rgba(34,197,94,0.12), transparent 70%);
-  filter: blur(80px);
+  border-radius: 50%;
+  filter: blur(60px);
   z-index: 0;
+  pointer-events: none;
 }
-
-/* ------------------------------
-   Grid Container
------------------------------- */
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-  gap: 2.5rem;
-  padding: 1rem 1rem 0;
-  position: relative;
-  z-index: 1;
+.testimonials::before {
+  top: -120px;
+  right: -160px;
+  width: 340px;
+  height: 340px;
+  background: radial-gradient(circle at center, rgba(14,165,233,0.15), transparent 70%);
+}
+.testimonials::after {
+  bottom: -160px;
+  left: -160px;
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle at center, rgba(34,197,94,0.12), transparent 70%);
 }
 
 /* =========================================================
-   CARD STYLING
+   DESKTOP GRID (Default)
+   ========================================================= */
+.testimonials-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  padding: 1rem 0.5rem;
+  box-sizing: border-box;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   CARD BASE
    ========================================================= */
 .testimonial-card {
   background: var(--bg-light, #fff);
-  border-radius: 1.25rem;
-  padding: 2.2rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   height: 100%;
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-  border: 1px solid rgba(0,0,0,0.05);
   box-shadow:
-    0 1px 2px rgba(0,0,0,0.04),
-    0 4px 12px rgba(0,0,0,0.06);
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(2px);
-}
-
-.testimonial-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.15));
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  z-index: -1;
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  box-sizing: border-box;
 }
 
 .testimonial-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-6px);
   box-shadow:
-    0 10px 25px rgba(0,0,0,0.08),
-    0 4px 15px rgba(0,0,0,0.04);
-}
-.testimonial-card:hover::before {
-  opacity: 1;
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 8px 10px -6px rgba(0, 0, 0, 0.05);
 }
 
-/* ------------------------------
-   Header (Avatar + Info)
------------------------------- */
+/* =========================================================
+   CONTENT STRUCTURE
+   ========================================================= */
 .testimonial-header {
   display: flex;
   align-items: center;
   gap: 1.25rem;
-  margin-bottom: 1.75rem;
+  padding: 2rem 2rem 1rem;
+  justify-content: flex-start;
 }
 
 .testimonial-photo {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;                /* ✅ bulat sempurna */
-  object-fit: cover;                 /* biar tidak gepeng */
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
   border: 3px solid #fff;
   box-shadow:
-    0 4px 8px rgba(0,0,0,0.1),
-    0 0 0 4px rgba(14,165,233,0.08);
-  transition: transform 0.4s ease;
-}
-
-.testimonial-card:hover .testimonial-photo {
-  transform: scale(1.05) rotate(2deg);
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    0 0 0 4px rgba(14, 165, 233, 0.08);
 }
 
 .testimonial-info {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 0.5rem; /* Adjusted spacing between name and role */
 }
 
 .testimonial-info h4 {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  color: var(--primary-color-t, #0f172a);
+  color: var(--primary-color, #0f172a);
   line-height: 1.3;
   margin: 0;
 }
 
 .testimonial-role {
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 500;
-  color: var(--text-light-t, #4b5563);
-  margin-top: 0.15rem;
+  color: var(--text-light, #4b5563);
+  margin: 0;
 }
 
-/* ------------------------------
-   Date
------------------------------- */
-.testimonial-date {
-  font-size: 0.85rem;
-  color: #9ca3af;
-  margin-top: 0.35rem;
-  text-align: right;
-}
-
-/* ------------------------------
-   Comment Text
------------------------------- */
 .testimonial-comment {
   font-size: 1rem;
   line-height: 1.7;
   color: #374151;
-  font-style: normal;
+  padding: 1.5rem 2rem;
+  flex-grow: 1;
   position: relative;
-  margin-top: 0.75rem;
-  margin-bottom: 1.5rem;
+  text-align: center; /* Ensures comment text is centered */
 }
 
 .testimonial-comment::before {
   content: "“";
   font-size: 4rem;
   font-family: serif;
-  color: var(--primary-color-t, #0ea5a4);
+  color: var(--primary-color, #0ea5a4);
   opacity: 0.08;
   position: absolute;
-  top: -1.6rem;
-  left: -0.6rem;
+  top: -1.2rem;
+  left: 1rem;
   pointer-events: none;
 }
 
-/* ------------------------------
-   Rating
------------------------------- */
+/* Rating and Date Layout */
+.testimonial-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2rem 1.5rem;
+  align-items: center;
+}
+
 .testimonial-rating {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.3rem;
   color: #facc15;
-  font-size: 1.25rem;
-  margin-top: auto;
+  font-size: 1.5rem; /* Larger rating */
+  justify-content: flex-start;
 }
 
-/* ------------------------------
-   Hover & Animation
------------------------------- */
+.testimonial-date {
+  font-size: 0.95rem;
+  color: #6b7280;
+  text-align: right; /* Align date to the right */
+}
+
 .testimonial-card:hover h4 {
-  color: var(--primary-color-t, #0ea5a4);
-  transition: color 0.3s ease;
-}
-.testimonial-card:hover .testimonial-comment {
-  color: #1e293b;
+  color: var(--accent-color, #0ea5a4);
 }
 
-/* ------------------------------
-   Mobile Scroll Mode
------------------------------- */
+/* =========================================================
+   MOBILE SLIDER (≤768px)
+   ========================================================= */
 @media (max-width: 768px) {
   .testimonials-grid {
     display: flex;
     overflow-x: auto;
+    overflow-y: hidden;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
-    gap: 1.75rem;
-    padding: 2.5rem 1.5rem;
-    margin: 0 -1.5rem;
+    gap: 1.25rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 1rem;
+    padding-bottom: 2.5rem;
     scroll-padding-left: 1.5rem;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
   }
+
   .testimonials-grid::-webkit-scrollbar {
     display: none;
   }
@@ -1192,10 +1286,47 @@ section {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
   .testimonial-card {
     min-width: 85vw;
+    max-width: 420px;
     flex-shrink: 0;
-    scroll-snap-align: center;
+    scroll-snap-align: start;
+    box-sizing: border-box;
+  }
+
+  .testimonial-header {
+    padding: 1.5rem 1.5rem 1rem;
+  }
+
+  .testimonial-comment {
+    padding: 0 1.5rem 1.5rem;
+  }
+
+  .testimonial-rating {
+    padding: 0 1.5rem 1.5rem;
+  }
+}
+
+/* =========================================================
+   SMALL DEVICES (≤480px)
+   ========================================================= */
+@media (max-width: 480px) {
+  .testimonial-photo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .testimonial-info h4 {
+    font-size: 1rem;
+  }
+
+  .testimonial-comment {
+    font-size: 0.95rem;
+  }
+
+  .testimonial-card {
+    min-width: 90vw;
   }
 }
 
@@ -1399,42 +1530,57 @@ section {
   border-top: 1px solid rgba(255,255,255,0.1);
   opacity: 0.8;
 }
-
 /* =========================================================
-   PREMIUM MODAL – MINNATUL HUDA VERSION
-   Smooth, centered, and scrollable popup without overflow issues
+   PREMIUM MODAL – MINNATUL HUDA VERSION (Optimized & Mobile-Safe)
+   ---------------------------------------------------------
+   Struktur:
+   1. Base Container
+   2. Overlay
+   3. Content Wrapper
+   4. Close Button
+   5. Image & Body
+   6. Fullscreen Mode
+   7. Responsive Adjustments
    ========================================================= */
 
+/* ------------------------------
+   1. Base Modal Container
+------------------------------ */
 .modal {
   position: fixed;
   inset: 0;
   z-index: 2000;
   display: none;
-  align-items: flex-start;            /* agar tidak nempel header */
+  align-items: flex-start;            /* tidak menempel header */
   justify-content: center;
   padding-top: 80px;                 /* jarak aman dari header */
-  overflow-y: auto;                  /* agar bisa di-scroll */
+  overflow-y: auto;
+  overflow-x: hidden;                /* hindari scroll horizontal */
   -webkit-overflow-scrolling: touch; /* smooth scroll di mobile */
+  box-sizing: border-box;
 }
 
 .modal.active {
   display: flex;
 }
 
+/* Hilangkan scrollbar (Chrome, Firefox, Safari) */
 .modal::-webkit-scrollbar {
-  width: 0;                          /* sembunyikan scrollbar */
+  width: 0;
   height: 0;
 }
 .modal {
-  scrollbar-width: none;             /* sembunyikan scrollbar (Firefox) */
+  scrollbar-width: none;
 }
 
-/* Overlay gelap transparan */
+/* ------------------------------
+   2. Overlay Gelap Transparan
+------------------------------ */
 .modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(3px);
   z-index: 2000;
   animation: fadeInOverlay 0.4s ease forwards;
 }
@@ -1444,15 +1590,19 @@ section {
   to { opacity: 1; }
 }
 
-/* Konten utama popup */
+/* ------------------------------
+   3. Konten Utama Popup
+------------------------------ */
 .modal-content {
   position: relative;
   background: var(--bg-white, #fff);
-  max-width: 700px;
   width: 90%;
-  margin-bottom: 80px;               /* beri ruang bawah agar tak terpotong */
+  max-width: 700px;
+  max-width: calc(100% - 2rem);      /* jaga aman dari tepi viewport */
+  margin-bottom: 80px;               /* ruang bawah agar tidak terpotong */
   border-radius: 1.25rem;
   overflow: hidden;
+  box-sizing: border-box;
   box-shadow:
     0 10px 25px rgba(0,0,0,0.15),
     0 0 0 1px rgba(0,0,0,0.05);
@@ -1471,23 +1621,26 @@ section {
   }
 }
 
-/* Tombol close */
+/* ------------------------------
+   4. Tombol Close
+------------------------------ */
 .modal-close {
   position: absolute;
   top: 14px;
   right: 14px;
-  background: rgba(0, 0, 0, 0.55);
-  border: none;
-  color: #fff;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  cursor: pointer;
+  border: none;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
   transition: all 0.3s ease;
   z-index: 3;
+  touch-action: manipulation;
 }
 
 .modal-close:hover {
@@ -1495,7 +1648,9 @@ section {
   transform: rotate(90deg);
 }
 
-/* Gambar utama */
+/* ------------------------------
+   5. Isi Modal: Gambar & Body
+------------------------------ */
 .modal-image {
   width: 100%;
   height: 320px;
@@ -1505,10 +1660,10 @@ section {
   border-top-right-radius: inherit;
 }
 
-/* Isi modal */
 .modal-body {
   padding: 2rem;
   color: var(--text-dark, #1e293b);
+  box-sizing: border-box;
 }
 
 .modal-title {
@@ -1516,24 +1671,31 @@ section {
   color: var(--primary-color, #0ea5a4);
   margin-bottom: 1rem;
   font-weight: 700;
+  line-height: 1.2;
 }
 
 .modal-text {
   color: var(--text-light, #4b5563);
   line-height: 1.75;
   font-size: 1rem;
+  text-align: justify;
 }
 
-/* Fullscreen Mode (jika digunakan) */
+/* ------------------------------
+   6. Fullscreen Mode
+------------------------------ */
 .fullscreen-modal .modal-content {
   max-width: 90vw;
   max-height: 90vh;
+  width: auto;
+  height: auto;
   background: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   box-shadow: none;
+  box-sizing: border-box;
 }
 
 .fullscreen-modal img {
@@ -1546,22 +1708,41 @@ section {
   color: #fff;
   margin-top: 20px;
   font-size: 1.1rem;
+  text-align: center;
 }
 
-/* Responsif untuk layar kecil */
+/* ------------------------------
+   7. Responsif untuk layar kecil
+------------------------------ */
 @media (max-width: 768px) {
   .modal {
     padding-top: 60px;
   }
+
   .modal-content {
     width: 92%;
+    max-width: calc(100% - 1.5rem);
     margin-bottom: 60px;
+    border-radius: 1rem;
   }
+
   .modal-body {
     padding: 1.5rem;
   }
+
   .modal-title {
     font-size: 1.5rem;
+  }
+
+  .modal-close {
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .modal-image {
+    height: 240px;
   }
 }
 
@@ -1595,15 +1776,18 @@ section {
   background: var(--primary-color);
   transform: translateY(-5px);
 }
-
-/* ============================
-   Page-Specific: General
-   ============================ */
+/* =========================================================
+   PAGE-SPECIFIC: GENERAL SECTION (PAGE HERO)
+   ========================================================= */
 .page-hero {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
   background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
   color: var(--text-white);
   padding: 100px 0 60px;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .page-title {
@@ -1616,6 +1800,7 @@ section {
   opacity: 0.95;
 }
 
+/* ===== Responsive (Hero) ===== */
 @media (max-width: 768px) {
   .page-hero {
     padding: 80px 0 50px;
@@ -1624,44 +1809,66 @@ section {
     font-size: 2rem;
   }
   .page-subtitle {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
 }
-/* ============================
-   Page-Specific: About (REFINED FOR YOU)
-   ============================ */
+
+/* =========================================================
+   PAGE-SPECIFIC: ABOUT SECTION
+   ========================================================= */
 .about {
-  /* Keeping background subtle if needed, or remove if default white is preferred */
-  /* background: var(--bg-light); */ 
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  position: relative;
+  background-color: var(--bg-white);
+  box-sizing: border-box;
 }
 
 .about-content {
   display: grid;
-  /* Default Desktop: Side-by-side (Text Left, Image Right via explicit ordering below) */
   grid-template-columns: 1fr 1fr;
   gap: 60px;
   align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+  box-sizing: border-box;
 }
 
-/* DESKTOP ORDERING (Standard) */
 .about-text {
-  order: 1; /* Text on the Left */
-}
-.about-gallery {
-  order: 2; /* Image on the Right */
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Simple 2-column grid for images */
-  gap: 15px;
+  order: 1;
 }
 
+/* ============================
+   Responsive Gallery Layout
+   ============================ */
+.about-gallery {
+  order: 2;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  align-items: stretch;
+}
+
+/* ✅ Perfectly responsive images */
 .about-gallery-img {
   width: 100%;
-  height: 240px;
+  height: auto;
+  aspect-ratio: 4 / 3; /* menjaga proporsi tetap */
   object-fit: cover;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
+  background-color: #f8fafc; /* fallback agar tidak kosong saat loading */
+  display: block;
   transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
+
+/* Hover */
 .about-gallery-img:hover {
   transform: scale(1.03);
   box-shadow: var(--shadow-md);
@@ -1674,110 +1881,163 @@ section {
   font-size: 1.05rem;
 }
 
-/* TABLET & MOBILE MODE (< 992px covers Tablets portrait and Phones) */
+/* =========================================================
+   TABLET & MOBILE (≤992px)
+   ========================================================= */
 @media (max-width: 992px) {
   .about-content {
     display: flex;
     flex-direction: column;
     gap: 30px;
+    width: 100%;
+    padding-inline: 1.5rem;
   }
 
-  /* MAGIC TRICK for "Judul -> Gambar -> Deskripsi -> Tombol" order:
-     We use 'display: contents' on .about-text to unwrap it.
-     This allows its children (Heading, P, Btn) to be ordered individually
-     alongside the .about-gallery div in the main flex container.
-  */
   .about-text {
-    display: contents; 
+    display: contents;
   }
 
-  /* 1. JUDUL (assuming h2/h3 is used for "Tentang Kami") */
   .about-text h1,
   .about-text h2,
   .about-text h3 {
     order: 1;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     width: 100%;
   }
 
-  /* 2. GAMBAR */
   .about-gallery {
     order: 2;
-    width: 100%;
-    /* Optional: Ensure images aren't too huge on mobile */
-    max-width: 500px; 
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
     margin: 0 auto;
   }
+
+  /* ✅ Fluid images on tablet with limit to prevent overflow */
   .about-gallery-img {
-    height: 180px; /* Slightly smaller on mobile for compactness */
+    aspect-ratio: 3 / 2;
+    width: 100%;
+    height: auto;
+    max-height: 240px;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
   }
 
-  /* 3. DESKRIPSI */
   .about-paragraph,
   .about-text p {
     order: 3;
-    text-align: justify; /* Often preferred for neatness on small screens */
+    text-align: justify;
+    width: 100%;
+    margin-bottom: 20px;
   }
 
-  /* 4. TOMBOL (Custom Style Requested) */
   .about-text .btn {
     order: 4;
     width: 100%;
     display: block;
     text-align: center;
-    
-    /* "tanpa background warna" */
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    
-    /* "tulisan agak hitam (jangan ful hitam) agak samar" */
-    color: var(--text-light) !important; /* Uses your gray variable, or use #4b5563 */
-    opacity: 0.85; /* The "samar" effect */
-    
+    color: var(--text-light) !important;
+    opacity: 0.85;
     font-weight: 600;
     padding: 15px 0;
-    margin-top: 5px;
+    margin-top: 20px;
     transition: all 0.3s ease;
   }
-  
-  /* Subtle interaction for the text button */
+
   .about-text .btn:hover,
   .about-text .btn:active {
     opacity: 1;
-    color: var(--primary-color) !important; /* Slightly darker on interaction */
-    background-color: rgba(0,0,0,0.03) !important; /* Very subtle touch feedback */
+    color: var(--primary-color) !important;
+    background-color: rgba(0, 0, 0, 0.03) !important;
   }
 }
 
-/* Other sections (unchanged mostly, just ensuring they don't break) */
-.about-section { margin-bottom: 70px; }
-.about-section:last-child { margin-bottom: 0; }
+/* =========================================================
+   SMALL MOBILE (≤480px)
+   ========================================================= */
+@media (max-width: 480px) {
+  .about-gallery {
+    grid-template-columns: 1fr; /* ✅ Gambar menumpuk satu kolom */
+    gap: 10px;
+  }
 
-/* Vision Mission & Teams (kept standard responsive) */
-.vision-mission, .team-grid, .core-values-grid {
+  /* ✅ Full-width fluid images, always proportional */
+  .about-gallery-img {
+    aspect-ratio: 16 / 10;
+    width: 100%;
+    height: auto;
+    max-height: none; /* biarkan mengikuti rasio */
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+  }
+}
+
+/* =========================================================
+   SECTION WRAPPER SPACING
+   ========================================================= */
+.about-section {
+  margin-bottom: 70px;
+  width: 100%;
+  padding: 0 1.5rem;
+}
+
+.about-section:last-child {
+  margin-bottom: 0;
+}
+
+
+
+
+/* =========================================================
+   PAGE-SPECIFIC: VISION, MISSION & TEAM SECTION
+   ========================================================= */
+.vision-mission,
+.team-grid,
+.core-values-grid {
   display: grid;
   gap: 30px;
   margin-top: 40px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
-.vision-mission { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-.core-values-grid, .team-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
 
-.vision-box, .mission-box, .core-value-card, .team-card {
+.vision-mission {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+.core-values-grid,
+.team-grid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.vision-box,
+.mission-box,
+.core-value-card,
+.team-card {
   background: var(--bg-white);
   padding: 30px;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
-.vision-box:hover, .mission-box:hover, .core-value-card:hover, .team-card:hover {
+
+.vision-box:hover,
+.mission-box:hover,
+.core-value-card:hover,
+.team-card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-md);
 }
 
 .team-photo {
-  width: 120px; height: 120px;
+  width: 120px;
+  height: 120px;
+  max-width: 100%;
   border-radius: 50%;
   margin: 0 auto 20px;
   object-fit: cover;

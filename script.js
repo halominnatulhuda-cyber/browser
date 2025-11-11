@@ -362,6 +362,9 @@ function populateFAQ() {
   `).join('');
 }
 
+/* ---------------------------
+   POPULATE ABOUT DETAIL PAGE
+----------------------------*/
 function populateAboutDetail() {
     if (!siteData || !siteData.aboutPage) {
         console.warn("⚠️ aboutPage data not found in package.json");
@@ -426,7 +429,6 @@ function populateAboutDetail() {
         aboutProfile.innerHTML = `<p>${about.profile}</p>`;
     }
 }
-
 
 function populateFooter() {
     const footerTagline = document.getElementById('footerTagline');

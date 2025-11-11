@@ -362,9 +362,6 @@ function populateFAQ() {
   `).join('');
 }
 
-/* ---------------------------
-   POPULATE ABOUT DETAIL PAGE
-----------------------------*/
 function populateAboutDetail() {
     if (!siteData || !siteData.aboutPage) {
         console.warn("⚠️ aboutPage data not found in package.json");
@@ -373,54 +370,60 @@ function populateAboutDetail() {
 
     const about = siteData.aboutPage;
 
-    // === Visi & Misi ===
-    if (safeQuery("#visionText")) {
-        safeQuery("#visionText").textContent = about.vision || "Visi belum tersedia.";
+    // === Visi ===
+    const visionTextEl = safeQuery("#visionText");
+    if (visionTextEl) {
+        visionTextEl.textContent = about.vision || "Visi belum tersedia.";
     }
 
-    if (safeQuery("#missionList") && Array.isArray(about.mission)) {
-        safeQuery("#missionList").innerHTML = about.mission
-            .map(m => `<li>${m}</li>`)
+    // === Misi (seperti teks visi, bukan list) ===
+    const missionContainer = safeQuery("#missionTextContainer");
+    if (missionContainer && Array.isArray(about.mission)) {
+        missionContainer.innerHTML = about.mission
+            .map(m => `<p>${m}</p>`)
             .join("");
     }
 
-    // === Nilai Inti ===
-    if (safeQuery("#coreValuesGrid") && Array.isArray(about.coreValues)) {
-        safeQuery("#coreValuesGrid").innerHTML = about.coreValues
-            .map(
-                v => `
-        <div class="core-value-card">
-          <h4>${v.title}</h4>
-          <p>${v.desc}</p>
-        </div>
-      `
-            )
+    // === Nilai Inti (dengan ikon) ===
+    const coreValuesGrid = safeQuery("#coreValuesGrid");
+    if (coreValuesGrid && Array.isArray(about.coreValues)) {
+        coreValuesGrid.innerHTML = about.coreValues
+            .map(v => `
+                <div class="core-value-card">
+                    <img src="${v.icon || ''}" alt="${v.title}" class="core-value-icon">
+                    <div class="core-value-card-content">
+                        <h4 class="core-value-title">${v.title}</h4>
+                        <p class="core-value-desc">${v.desc}</p>
+                    </div>
+                </div>
+            `)
             .join("");
     }
 
     // === Kurikulum ===
-    if (safeQuery("#curriculumText")) {
-        safeQuery("#curriculumText").textContent = about.curriculum || "Kurikulum belum tersedia.";
+    const curriculumTextEl = safeQuery("#curriculumText");
+    if (curriculumTextEl) {
+        curriculumTextEl.textContent = about.curriculum || "Kurikulum belum tersedia.";
     }
 
     // === Tim Kami ===
-    if (safeQuery("#teamGrid") && Array.isArray(about.team)) {
-        safeQuery("#teamGrid").innerHTML = about.team
-            .map(
-                t => `
-        <div class="team-card">
-          <img src="${t.photo}" alt="${t.name}" class="team-photo">
-          <h4 class="team-name">${t.name}</h4>
-          <p class="team-role">${t.role}</p>
-        </div>
-      `
-            )
+    const teamGrid = safeQuery("#teamGrid");
+    if (teamGrid && Array.isArray(about.team)) {
+        teamGrid.innerHTML = about.team
+            .map(t => `
+                <div class="team-card">
+                    <img src="${t.photo}" alt="${t.name}" class="team-photo">
+                    <h4 class="team-name">${t.name}</h4>
+                    <p class="team-role">${t.role}</p>
+                </div>
+            `)
             .join("");
     }
 
-    // === Profil (opsional jika kamu mau tampilkan di sini juga) ===
-    if (safeQuery("#aboutProfile") && about.profile) {
-        safeQuery("#aboutProfile").innerHTML = `<p>${about.profile}</p>`;
+    // === Profil (opsional) ===
+    const aboutProfile = safeQuery("#aboutProfile");
+    if (aboutProfile && about.profile) {
+        aboutProfile.innerHTML = `<p>${about.profile}</p>`;
     }
 }
 

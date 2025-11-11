@@ -2364,56 +2364,200 @@ header {
 
 
 /* =========================================================
-   PAGE-SPECIFIC: VISION, MISSION & TEAM SECTION
+   🌿 ABOUT PAGE — VISI, MISI, NILAI INTI, TIM
    ========================================================= */
-.vision-mission,
-.team-grid,
-.core-values-grid {
-  display: grid;
-  gap: 30px;
-  margin-top: 40px;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
+
+.about-section {
+  margin-bottom: 80px;
+  padding: 0 20px;
 }
 
-.vision-mission {
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+.section-title {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 10px;
 }
-.core-values-grid,
-.team-grid {
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+
+.section-divider {
+  width: 80px;
+  height: 4px;
+  background: var(--primary-color, #007bff);
+  border-radius: 4px;
+  margin: 0 auto 30px;
+}
+
+/* =========================================================
+   VISI & MISI SECTION
+   ========================================================= */
+.vision-mission {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
 }
 
 .vision-box,
-.mission-box,
-.core-value-card,
-.team-card {
-  background: var(--bg-white);
+.mission-box {
+  background: var(--bg-white, #fff);
   padding: 30px;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: var(--shadow-sm, 0 2px 6px rgba(0,0,0,0.08));
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  width: 100%;
-  box-sizing: border-box;
 }
 
 .vision-box:hover,
-.mission-box:hover,
-.core-value-card:hover,
+.mission-box:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0,0,0,0.12));
+}
+
+.vision-box h3,
+.mission-box h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: var(--text-dark, #222);
+}
+
+.vision-box p,
+.mission-box p {
+  color: var(--text-muted, #555);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Untuk daftar misi bergaya sama seperti teks visi */
+#missionTextContainer p {
+  margin-bottom: 12px;
+  padding-left: 20px;
+  position: relative;
+}
+
+#missionTextContainer p::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--primary-color, #007bff);
+  font-weight: bold;
+}
+
+/* =========================================================
+   NILAI INTI (CORE VALUES)
+   ========================================================= */
+.core-values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 25px;
+  margin-top: 40px;
+}
+
+.core-value-card {
+  background: var(--bg-white, #fff);
+  padding: 25px;
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: var(--shadow-sm, 0 2px 6px rgba(0,0,0,0.08));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.core-value-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0,0,0,0.12));
+}
+
+.core-value-icon {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  margin-bottom: 15px;
+}
+
+.core-value-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  color: var(--text-dark, #222);
+}
+
+.core-value-desc {
+  font-size: 0.95rem;
+  color: var(--text-muted, #555);
+  line-height: 1.6;
+}
+
+/* Mobile layout: icon kiri, teks kanan */
+@media (max-width: 768px) {
+  .core-value-card {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+    padding: 20px;
+  }
+
+  .core-value-icon {
+    margin: 0 15px 0 0;
+    width: 50px;
+    height: 50px;
+  }
+
+  .core-value-title {
+    margin-bottom: 6px;
+  }
+
+  .core-value-desc {
+    margin-bottom: 0;
+  }
+
+  .core-value-card-content {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* =========================================================
+   TIM KAMI (TEAM)
+   ========================================================= */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 25px;
+  margin-top: 40px;
+}
+
+.team-card {
+  background: var(--bg-white, #fff);
+  border-radius: var(--radius-lg, 12px);
+  padding: 25px;
+  text-align: center;
+  box-shadow: var(--shadow-sm, 0 2px 6px rgba(0,0,0,0.08));
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
 .team-card:hover {
   transform: translateY(-5px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0,0,0,0.12));
 }
 
 .team-photo {
   width: 120px;
   height: 120px;
-  max-width: 100%;
   border-radius: 50%;
-  margin: 0 auto 20px;
+  margin: 0 auto 15px;
   object-fit: cover;
-  border: 3px solid var(--bg-light);
+  border: 3px solid var(--bg-light, #f4f4f4);
+}
+
+.team-name {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.team-role {
+  font-size: 0.9rem;
+  color: var(--text-muted, #666);
 }
 
 /* ============================

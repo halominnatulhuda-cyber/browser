@@ -77,55 +77,92 @@
             </div>
         </header>
 
-    <section class="page-hero">
-        <div class="container">
-            <h1 class="page-title">Tentang Kami</h1>
-            <p class="page-subtitle">Mengenal lebih dekat Pondok Pesantren Minnatul Huda</p>
+    <!-- =========================================================
+     🌿 TENTANG KAMI PAGE
+     ========================================================= -->
+
+<section class="page-hero">
+  <div class="container">
+    <h1 class="page-title">Tentang Kami</h1>
+    <p class="page-subtitle">Mengenal lebih dekat Pondok Pesantren Minnatul Huda</p>
+  </div>
+</section>
+
+<section class="about-detail">
+  <div class="container">
+
+    <!-- =========================================================
+         VISI & MISI SECTION
+         ========================================================= -->
+    <div class="about-section">
+      <h2 class="section-title">Visi & Misi</h2>
+      <div class="section-divider"></div>
+
+      <div class="vision-mission">
+        <div class="vision-box">
+          <h3>Visi</h3>
+          <p id="visionText">Menjadi pusat pendidikan Islam terdepan yang mengintegrasikan ilmu agama dan sains untuk kemaslahatan umat.</p>
         </div>
-    </section>
 
-    <section class="about-detail">
-        <div class="container">
-            <div class="about-section">
-                <h2 class="section-title">Profil Kami</h2>
-                <div class="section-divider"></div>
-                <div id="aboutProfile"></div>
-            </div>
-
-            <div class="about-section">
-                <h2 class="section-title">Visi & Misi</h2>
-                <div class="section-divider"></div>
-                <div class="vision-mission">
-                    <div class="vision-box">
-                        <h3>Visi</h3>
-                        <p id="visionText"></p>
-                    </div>
-                    <div class="mission-box">
-                        <h3>Misi</h3>
-                        <ul id="missionList"></ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="about-section">
-                <h2 class="section-title">Nilai Inti</h2>
-                <div class="section-divider"></div>
-                <div class="core-values-grid" id="coreValuesGrid"></div>
-            </div>
-
-            <div class="about-section">
-                <h2 class="section-title">Kurikulum</h2>
-                <div class="section-divider"></div>
-                <p class="curriculum-text" id="curriculumText"></p>
-            </div>
-
-            <div class="about-section">
-                <h2 class="section-title">Tim Kami</h2>
-                <div class="section-divider"></div>
-                <div class="team-grid" id="teamGrid"></div>
-            </div>
+        <div class="mission-box">
+          <h3>Misi</h3>
+          <div id="missionTextContainer">
+            <!-- JS akan mengisi daftar misi sebagai paragraf -->
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+
+    <!-- =========================================================
+         NILAI INTI SECTION
+         ========================================================= -->
+    <div class="about-section">
+      <h2 class="section-title">Nilai Inti</h2>
+      <div class="section-divider"></div>
+
+      <div class="core-values-grid" id="coreValuesGrid">
+        <!-- Contoh static fallback (akan diganti JS) -->
+        <div class="core-value-card">
+          <img src="https://via.placeholder.com/64" alt="Religius" class="core-value-icon">
+          <div class="core-value-card-content">
+            <h4 class="core-value-title">Religius</h4>
+            <p class="core-value-desc">Menjadikan nilai-nilai Islam sebagai landasan dalam setiap aktivitas.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================
+         KURIKULUM SECTION
+         ========================================================= -->
+    <div class="about-section">
+      <h2 class="section-title">Kurikulum</h2>
+      <div class="section-divider"></div>
+      <p class="curriculum-text" id="curriculumText">
+        Kurikulum kami mengintegrasikan Kurikulum Nasional (Kemendikbud) dengan Kurikulum Pesantren Modern...
+      </p>
+    </div>
+
+    <!-- =========================================================
+         TIM KAMI SECTION
+         ========================================================= -->
+    <div class="about-section">
+      <h2 class="section-title">Tim Kami</h2>
+      <div class="section-divider"></div>
+
+      <div class="team-grid" id="teamGrid">
+        <!-- Contoh static fallback (akan diganti JS) -->
+        <div class="team-card">
+          <img src="https://i.pravatar.cc/150?img=11" alt="KH. Abdul Rahman" class="team-photo">
+          <h4 class="team-name">KH. Abdul Rahman, M.Pd.I</h4>
+          <p class="team-role">Pengasuh Pesantren</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 
     <footer class="footer" id="contact">
             <div class="container">
